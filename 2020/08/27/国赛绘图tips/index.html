@@ -1,0 +1,132 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width,initial-scale=1"><title>国赛绘图tips | M@tr1xの日常</title><meta name="description" content="Hey, password is required here.           df939cc7c0a002703483f40a7cea0c5cab8b27c489fd630cff9dfc1ccf3e6553ea186d783a19cecc53e94e5fcf2c940d1afeb0450369c41b74b15516e63acaa1c9bc6d74678ba2f6042"><meta name="keywords" content="数模,python,seaborn"><meta name="author" content="M@tr1x"><meta name="copyright" content="M@tr1x"><meta name="format-detection" content="telephone=no"><link rel="shortcut icon" href="/img/favicon.png"><link rel="canonical" href="https://www.blog.hackerjerry.top/2020/08/27/%E5%9B%BD%E8%B5%9B%E7%BB%98%E5%9B%BEtips/"><meta http-equiv="Cache-Control" content="no-transform"><meta http-equiv="Cache-Control" content="no-siteapp"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//fonts.googleapis.com" crossorigin="crossorigin"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><meta property="og:type" content="article"><meta property="og:title" content="国赛绘图tips"><meta property="og:url" content="https://www.blog.hackerjerry.top/2020/08/27/%E5%9B%BD%E8%B5%9B%E7%BB%98%E5%9B%BEtips/"><meta property="og:site_name" content="M@tr1xの日常"><meta property="og:description" content="Hey, password is required here.           df939cc7c0a002703483f40a7cea0c5cab8b27c489fd630cff9dfc1ccf3e6553ea186d783a19cecc53e94e5fcf2c940d1afeb0450369c41b74b15516e63acaa1c9bc6d74678ba2f6042"><meta property="og:image" content="https://image.hackerjerry.top/2427682894.jpeg"><meta property="article:published_time" content="2020-08-27T08:27:06.000Z"><meta property="article:modified_time" content="2020-08-27T10:03:07.643Z"><meta name="twitter:card" content="summary"><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.css"><link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Titillium+Web&amp;display=swap"><script>var GLOBAL_CONFIG = { 
+  root: '/',
+  hexoversion: '5.1.1',
+  algolia: undefined,
+  localSearch: {"path":"search.xml","languages":{"hits_empty":"找不到您查询的内容：${query}"}},
+  translate: undefined,
+  noticeOutdate: {"limitDay":500,"position":"top","messagePrev":"It has been","messageNext":"days since the last update, the content of the article may be outdated."},
+  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":true},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  bookmark: {
+    message_prev: '按',
+    message_next: '键将本页加入书签'
+  },
+  runtime: '天',
+  last_push_date: {"zeroDay":"今天","suffix":"天前"},
+  copyright: {"limitCount":50,"languages":{"author":"作者: M@tr1x","link":"链接: ","source":"来源: M@tr1xの日常","info":"著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。"}},
+  ClickShowText: undefined,
+  medium_zoom: false,
+  fancybox: true,
+  Snackbar: undefined,
+  justifiedGallery: {
+    js: 'https://cdn.jsdelivr.net/npm/justifiedGallery/dist/js/jquery.justifiedGallery.min.js',
+    css: 'https://cdn.jsdelivr.net/npm/justifiedGallery/dist/css/justifiedGallery.min.css'
+  },
+  baiduPush: false,
+  isPhotoFigcaption: true,
+  islazyload: true,
+  isanchor: false
+};
+
+var saveToLocal = {
+  set: function setWithExpiry(key, value, ttl) {
+      const now = new Date()
+      const expiryDay = ttl * 86400000
+      const item = {
+        value: value,
+        expiry: now.getTime() + expiryDay,
+      }
+      localStorage.setItem(key, JSON.stringify(item))
+    },
+  
+  get: function getWithExpiry(key) {
+    const itemStr = localStorage.getItem(key)
+
+    if (!itemStr) {
+      return undefined
+    }
+    const item = JSON.parse(itemStr)
+    const now = new Date()
+
+    if (now.getTime() > item.expiry) {
+      localStorage.removeItem(key)
+      return undefined
+    }
+    return item.value
+  }
+}</script><script id="config_change">var GLOBAL_CONFIG_SITE = { 
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isSidebar: true,
+  postUpdate: '2020-08-27 18:03:07'
+}</script><noscript><style type="text/css">
+#nav {
+  opacity: 1
+}
+.justified-gallery img {
+  opacity: 1
+}
+</style></noscript><script>var activateDarkMode = function () {
+  document.documentElement.setAttribute('data-theme', 'dark')
+  if (document.querySelector('meta[name="theme-color"]') !== null) {
+    document.querySelector('meta[name="theme-color"]').setAttribute('content', '#000')
+  }
+}
+var activateLightMode = function () {
+  document.documentElement.setAttribute('data-theme', 'light')
+  if (document.querySelector('meta[name="theme-color"]') !== null) {
+    document.querySelector('meta[name="theme-color"]').setAttribute('content', '#fff')
+  }
+}
+
+var autoChangeMode = 'false'
+var t = saveToLocal.get('theme')
+if (autoChangeMode === '1') {
+  var isDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches
+  var isLightMode = window.matchMedia('(prefers-color-scheme: light)').matches
+  var isNotSpecified = window.matchMedia('(prefers-color-scheme: no-preference)').matches
+  var hasNoSupport = !isDarkMode && !isLightMode && !isNotSpecified
+
+  if (t === undefined) {
+    if (isLightMode) activateLightMode()
+    else if (isDarkMode) activateDarkMode()
+    else if (isNotSpecified || hasNoSupport) {
+      console.log('You specified no preference for a color scheme or your browser does not support it. I Schedule dark mode during night time.')
+      var now = new Date()
+      var hour = now.getHours()
+      var isNight = hour <= 6 || hour >= 18
+      isNight ? activateDarkMode() : activateLightMode()
+    }
+    window.matchMedia('(prefers-color-scheme: dark)').addListener(function (e) {
+      if (saveToLocal.get('theme') === undefined) {
+        e.matches ? activateDarkMode() : activateLightMode()
+      }
+    })
+  } else if (t === 'light') activateLightMode()
+  else activateDarkMode()
+} else if (autoChangeMode === '2') {
+  now = new Date()
+  hour = now.getHours()
+  isNight = hour <= 6 || hour >= 18
+  if (t === undefined) isNight ? activateDarkMode() : activateLightMode()
+  else if (t === 'light') activateLightMode()
+  else activateDarkMode()
+} else {
+  if (t === 'dark') activateDarkMode()
+  else if (t === 'light') activateLightMode()
+}</script><meta name="generator" content="Hexo 5.1.1"><link rel="alternate" href="/atom.xml" title="M@tr1xの日常" type="application/atom+xml">
+</head><body><div id="mobile-sidebar"><div id="menu_mask"></div><div id="mobile-sidebar-menus"><div class="mobile_author_icon"><img class="avatar-img" data-lazy-src="/img/avatar.png" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="mobile_post_data"><div class="mobile_data_item is-center"><div class="mobile_data_link"><a href="/archives/"><div class="headline">文章</div><div class="length_num">3</div></a></div></div><div class="mobile_data_item is-center">      <div class="mobile_data_link"><a href="/tags/"><div class="headline">标签</div><div class="length_num">5</div></a></div></div><div class="mobile_data_item is-center">     <div class="mobile_data_link"><a href="/categories/"><div class="headline">分类</div><div class="length_num">2</div></a></div></div></div><hr/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fa fa-home"></i><span> Home</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fa fa-tags"></i><span> Tags</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fa fa-folder-open"></i><span> Categories</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fa fa-link"></i><span> Link</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fa fa-heart"></i><span> About</span></a></div><div class="menus_item"><a class="site-page" href="javascript:void(0);"><i class="fa-fw fa fa-list"></i><span> List</span><i class="fas fa-chevron-down expand"></i></a><ul class="menus_item_child"><li><a class="site-page" href="/bangumis/"><i class="fa-fw fa fa-film"></i><span> 追番</span></a></li><li><a class="site-page" href="/artalk/"><i class="fa-fw fa-fw fa fa-comment-alt"></i><span> 说说</span></a></li></ul></div></div></div></div><div id="body-wrap"><div id="sidebar"><i class="fas fa-arrow-right on" id="toggle-sidebar"></i><div class="sidebar-toc"><div class="sidebar-toc__title">目录</div><div class="sidebar-toc__progress"><span class="progress-notice">你已经读了</span><span class="progress-num">0</span><span class="progress-percentage">%</span><div class="sidebar-toc__progress-bar">     </div></div><div class="sidebar-toc__content toc-div-class" style="display:none"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E8%89%B2%E5%BD%A9%E7%AF%87"><span class="toc-number">1.</span> <span class="toc-text">色彩篇</span></a></li></ol></div></div></div><header class="post-bg" id="page-header" style="background-image: url(https://image.hackerjerry.top/2427682894.jpeg)"><nav id="nav"><span id="blog_name"><a id="site-name" href="/">M@tr1xの日常</a></span><span class="menus"><div id="search_button"><a class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> 搜索</span></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fa fa-home"></i><span> Home</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fa fa-tags"></i><span> Tags</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fa fa-folder-open"></i><span> Categories</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fa fa-link"></i><span> Link</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fa fa-heart"></i><span> About</span></a></div><div class="menus_item"><a class="site-page" href="javascript:void(0);"><i class="fa-fw fa fa-list"></i><span> List</span><i class="fas fa-chevron-down expand"></i></a><ul class="menus_item_child"><li><a class="site-page" href="/bangumis/"><i class="fa-fw fa fa-film"></i><span> 追番</span></a></li><li><a class="site-page" href="/artalk/"><i class="fa-fw fa-fw fa fa-comment-alt"></i><span> 说说</span></a></li></ul></div></div><span class="toggle-menu close"><a class="site-page"><i class="fas fa-bars fa-fw"></i></a></span></span></nav><div id="post-info"><div id="post-title"><div class="posttitle">国赛绘图tips</div></div><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2020-08-27T08:27:06.000Z" title="发表于 2020-08-27 16:27:06">2020-08-27</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2020-08-27T10:03:07.643Z" title="更新于 2020-08-27 18:03:07">2020-08-27</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E7%BB%98%E5%9B%BE/">绘图</a></span></div><div class="meta-secondline"> <span class="post-meta-separator">|</span><span class="post-meta-pv-cv"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">阅读量:</span><span id="busuanzi_value_page_pv"></span></span></div></div></div></header><main class="layout_post" id="content-inner"><article id="post"><div class="post-content" id="article-container"><div id="hexo-blog-encrypt" data-wpm="Oh, this is an invalid password. Check and try again, please." data-whm="OOPS, these decrypted content may changed, but you can still have a look.">
+  <div class="hbe-input-container">
+  <input type="password" id="hbePass" placeholder="" />
+    <label for="hbePass">Hey, password is required here.</label>
+    <div class="bottom-line"></div>
+  </div>
+  <script id="hbeData" type="hbeData" data-hmacdigest="beeb69abe5af3164fff92c19d1892e57a3fd70a030de95616521c0a959b42689">df939cc7c0a002703483f40a7cea0c5cab8b27c489fd630cff9dfc1ccf3e6553ea186d783a19cecc53e94e5fcf2c940d1afeb0450369c41b74b15516e63acaa1c9bc6d74678ba2f6042c0fb6d66d924c26541cbea64c22a157d062ab77e7ee2c376891897d0029724e6e37d6be43ce27658be8af2126708d0c13a1c6c49ac2ea11bde454a3afe00cc3a63957c1c2ee475b3807e646fb47efbdf6d0cb9485a092370f238ce1e66565ba5bb0cda72b5bb3a1d51dd503f03666a22d6c331c28451ed9de6a9452192c4ec5456ae4508dcf37ed13e192be41e2976d8128552a6f838105c47a57466c832d96d5152f1e673a2d5cb82927598e1401dc7051b86bafa3c9c4a40aa8731ad0c28c7db88b8210c0f13ea148dc3ac99e9b45ba4ff4b85a8c10c143e7fc3e039b2f7f40578fb65272f00eab3b572797d3e289d49ccbee3337cf64cc61b5a8a8df0c3169f09133c77085cd89a599caaf478ce9b781502ae843780ff7a9a213e863b502f7b4facf60667b6527c065db36d3c705e93ac8b07541d5b663027ddf0d3c3146746fe9f2eea0806742b0316f4f64418dc461687c3fc9b3f995e48ee46329bdce01dbf0e1cb80be78fcf5a822c041be81c51714b44386c5a4d9819d44aa370c37e22473f52dc999e81609a312618c2e1974d71c498f9c4e4ab4a673fbd2eddedadd6b92c44e2d0adfe239b00977ff0783e38b625197e49b41a75fd9980066789fe37a26983032a3906646a7eeb97b2e38a6fe7787841a2ee86627733e2756d71aecb0669f687d437aebc5c8ad32e3fe2a76b8d81beea993c83ab2b217b167f610f4243e7cdb034485951b2bce55bf426ba124d3c6ee58e8d359b37084caae5cb8ef3a90f91d64bff84ce1b612385dbb12c82033f73fe9e02d5e4dcbbae2ec276f8ec57ec053559e3e6e456dc3384f25e51e54a85fc48471dc9f0d51b1c595bb094d44f4945d354095b6419874799baa4fcf50623f8015b1ea97aed3e1329141fe51f02ce4b4d34c0ad895071f5814dd4f664fe911b8fc85acebce2346459f4020090055b7306625fc45a0287aeaf220264b44ac5cca4d820980f1462e8afce38a8025eefe80803b34e72fbf0c5f6ba2c094a020cf3d0eac0039621809cd95bd1c0af0f8213bbbf06056c9924c7b07cbb61f33ebb746b932ef55ed02b7727aa9b442d29f88f2de811fa1c31d0fc9d4025c44d8e62e5c03a0c9935e176fdc65faad6577186c99514ca6c033c5617a76e1b95009d8b7ca942670763680641e1e2d520b442b3b1540a44229ead46d3548da790adaf99ec1c02c65c0a881ac655c59fdb8320a58da59a3a43abc8a7f985aad0b763ab32e9fd76ed2714b628b6e285ba64615d81e3355bd9e741e2a1103cb9909e1341ac35c8b2913ed66f2fd1370950aac5eac1f75fcb5d48812d5f1370e8cdfa29b0a17a4ddddce374c85478a6c8c9fd892113d65aadd767059b231809118bdfc33033da669bd1466871b2d8bd8a6e8cdae98b082f8f1799aa43d933235999f3f4f6bc603e59f51b815ebbb7b51c4ef5b8a2cb995e1469c97fdfb438ac2b1d33c044944fcbab16ce876885aed0b88c24933a3291af92f289838b1c58e91b57cdbc061a75c50bc970e0db292a411ab71eb67c4d6d6d5a572214b53f31bec1b62de83eac014317c83232583d2df9d13e060bbcdec197f3aa5f35109d2db192bb8146d68f4979de9f0ee223604cb02cbc468b90e263753daf4f2bed3b4bbd3f178468d43d02fa6a94b0b6d6accd9f1e117873359c4066ea6703c628dae2f4378482b39a9c5940ecab2ae084a0a16117f2a4caeed1e44fbcdac32e68c0841df1a5fe13a5122dc598f1d7f669e882671f6d2cbdb16eddb085caa981a62ee46407b99606dec6575b42f2b9cdc3d9a2c2be977925f9d30ae0f50f0efe04616337d7690a43a2554c0541efcb907403e213b43c6a18b9d6f5892b2291c68e97a25e4b9159371fa9318b476a5bc1a572212016379568b2296bcc81afeb6c50ffbb625f322a8a5b2a8cb1e6fc55fac3d7d6e08e3de166d01ef3863eac0947425dcce7db20ddb671f106300d54f89fdcedbd5deac5376c783b88d3c2587e57b6f647fa1399143d411157f0d299440ec960f78ce4f25f25aa8f0ae281606c7b641803fdbb3fd0ddb837e6dc5cc415d84ca69b69b9cf62bd4796a7f5e3ca8e2660d0801b68f68f2edc6b6b2411915229b4e01729cd7f9910ce72a316adcb6a85d4638f9cb5cf579c857ae1c442b04850b2add6338b900c825b54a7dbc7f3544b8ae550eaa36f7c4cab919300b2662a0a50f6942da33fd70f7a1c21a3316bfbcd40f469d93c629d9821e28751bb02ccf1445cf1b327aa288e21bb3736ebc82a94412f4c103742811719d6644c363a3a608a74be1f5547f8d0975bdd6cd8d5e1567882f098e97566c1363901b74f3b396c76438ed73403c3d30f15a255144a03d208bf645dab7343209cac337c5888acd2ff5da182f7db841ad9c0471b9039f112357c3a8ca53a585b7c0c8858b00ddf9cb7b8ec14d7ab59bb72dc9ff57a5fe058e1e8f07e63a0f1648ca1b147ba1e5a2067b44ab6bd43a4c2254fb7f79bceb0ff01e8c6df5bd6a6b53b1be812ce86ba05c37fe34d9fb0e242ab1f8b940d23e90ebc668f09da5b6313931394a9ee7f9e854fef1ea2555777dcdbc5786b2ac9d7f654c08af788fcf7a65fcc5bc9c4a79e4a280cc05a68c700a81a5ee78669edcdbac33ef8e139ef7be6a41c222a7ab</script>
+</div>
+<script src="/lib/blog-encrypt.js"></script><link href="/css/blog-encrypt.css" rel="stylesheet" type="text/css"></div><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">文章作者: </span><span class="post-copyright-info"><a href="mailto:undefined">M@tr1x</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">文章链接: </span><span class="post-copyright-info"><a href="https://www.blog.hackerjerry.top/2020/08/27/%E5%9B%BD%E8%B5%9B%E7%BB%98%E5%9B%BEtips/">https://www.blog.hackerjerry.top/2020/08/27/%E5%9B%BD%E8%B5%9B%E7%BB%98%E5%9B%BEtips/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="https://www.blog.hackerjerry.top" target="_blank">M@tr1xの日常</a>！</span></div></div><meta name="referrer" content="no-referrer" /><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/%E6%95%B0%E6%A8%A1/">数模</a><a class="post-meta__tags" href="/tags/python/">python</a><a class="post-meta__tags" href="/tags/seaborn/">seaborn</a></div><div class="post_share"><div class="social-share" data-image="https://image.hackerjerry.top/2427682894.jpeg" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/social-share.js/dist/css/share.min.css"><script src="https://cdn.jsdelivr.net/npm/social-share.js/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><div class="next-post pull-full"><a href="/2020/08/26/Title/"><img class="next-cover" data-lazy-src="https://image.hackerjerry.top/2427682894.jpeg" onerror="onerror=null;src='/img/404.jpg'"><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">Title</div></div></a></div></nav></article></main><footer id="footer" data-type="color"><div id="footer-wrap"><div class="copyright">&copy;2019 - 2020 By M@tr1x</div><div class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div><div class="footer_custom_text">冷風熱血，荡涤乾坤</div><div class="icp"><a target="_blank" rel="noopener" href="http://www.beian.miit.gov.cn"><img class="icp-icon" src="/img/icp.png"/><span>陕ICP备19023179号</span></a></div></div></footer></div><section id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="设置"><i class="fas fa-cog"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="回到顶部"><i class="fas fa-arrow-up"></i></button></div></section><div class="search-dialog" id="local-search"><div class="search-dialog__title" id="local-search-title">本地搜索</div><div id="local-input-panel"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="搜索文章" type="text"/></div></div></div><hr/><div id="local-search-results"><div id="local-hits"></div><div id="local-stats"><div class="local-search-stats__hr" id="hr"><span>由</span> <a target="_blank" rel="noopener" href="https://github.com/wzpan/hexo-generator-search" style="color:#49B1F5;">hexo-generator-search</a>
+ <span>提供支持</span></div></div></div><span class="search-close-button"><i class="fas fa-times"></i></span></div><div id="search-mask"></div><div><script src="https://cdn.jsdelivr.net/npm/jquery@latest/dist/jquery.min.js"></script><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.js"></script><script src="https://cdn.jsdelivr.net/npm/instant.page/instantpage.min.js" type="module" defer></script><script src="https://cdn.jsdelivr.net/npm/vanilla-lazyload/dist/lazyload.iife.min.js" async></script><script src="/js/search/local-search.js"></script><div class="js-pjax"><script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></div></body></html>
