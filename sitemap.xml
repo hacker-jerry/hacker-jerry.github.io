@@ -30,6 +30,13 @@
   </url>
   
   <url>
+    <loc>https://www.blog.hackerjerry.top/2020/09/02/Interpolation-and-fitting_new/</loc>
+    
+    <lastmod>2020-09-02</lastmod>
+    
+  </url>
+  
+  <url>
     <loc>https://www.blog.hackerjerry.top/2020/08/27/Mathematical-modeling-national-competition-drawing-tips_new/</loc>
     
     <lastmod>2020-09-02</lastmod>
@@ -102,6 +109,27 @@
   </url>
   
   <url>
+    <loc>https://www.blog.hackerjerry.top/tags/%E6%95%B0%E6%A8%A1/</loc>
+    <lastmod>2020-09-02</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://www.blog.hackerjerry.top/tags/matlab/</loc>
+    <lastmod>2020-09-02</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://www.blog.hackerjerry.top/tags/python/</loc>
+    <lastmod>2020-09-02</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
     <loc>https://www.blog.hackerjerry.top/tags/%E6%95%B0%E5%AD%A6%E5%BB%BA%E6%A8%A1/</loc>
     <lastmod>2020-09-02</lastmod>
     <changefreq>daily</changefreq>
@@ -138,20 +166,6 @@
   
   <url>
     <loc>https://www.blog.hackerjerry.top/tags/seaborn/</loc>
-    <lastmod>2020-09-02</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>https://www.blog.hackerjerry.top/tags/%E6%95%B0%E6%A8%A1/</loc>
-    <lastmod>2020-09-02</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>https://www.blog.hackerjerry.top/tags/python/</loc>
     <lastmod>2020-09-02</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
