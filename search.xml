@@ -4,6 +4,62 @@
   
     
     <entry>
+      <title>Sklearn-Draws-in-authority-Examples</title>
+      <link href="/2020/09/08/Sklearn-Draws-in-authority-Examples_new/"/>
+      <url>/2020/09/08/Sklearn-Draws-in-authority-Examples_new/</url>
+      
+        <content type="html"><![CDATA[<p>从 sklearn 官方文档中找到的一些比较精选的样例</p><a id="more"></a><h1 id="Demonstration-of-multi-metric-evaluation-on-cross-val-score-and-GridSearchCV"><a href="#Demonstration-of-multi-metric-evaluation-on-cross-val-score-and-GridSearchCV" class="headerlink" title="Demonstration of multi-metric evaluation on cross_val_score and GridSearchCV"></a>Demonstration of multi-metric evaluation on cross_val_score and GridSearchCV</h1><p>Cross_val_score 和 GridSearchCV 的多指标评价示范<br><a href="https://scikit-learn.org/stable/auto_examples/model_selection/plot_multi_metric_evaluation.html#sphx-glr-auto-examples-model-selection-plot-multi-metric-evaluation-py">https://scikit-learn.org/stable/auto_examples/model_selection/plot_multi_metric_evaluation.html#sphx-glr-auto-examples-model-selection-plot-multi-metric-evaluation-py</a></p><p><img src="https://image.hackerjerry.top/Sklearn-Draws-in-authority-Examples-1.png#align=left&display=inline&height=491&margin=%5Bobject%20Object%5D&name=image.png&originHeight=981&originWidth=998&size=139692&status=done&style=none&width=499" alt="image.png"></p><h1 id="Lasso-and-Elastic-Net-for-Sparse-Signals"><a href="#Lasso-and-Elastic-Net-for-Sparse-Signals" class="headerlink" title="Lasso and Elastic Net for Sparse Signals"></a>Lasso and Elastic Net for Sparse Signals</h1><p><a href="https://scikit-learn.org/stable/auto_examples/linear_model/plot_lasso_and_elasticnet.html#sphx-glr-auto-examples-linear-model-plot-lasso-and-elasticnet-py">https://scikit-learn.org/stable/auto_examples/linear_model/plot_lasso_and_elasticnet.html#sphx-glr-auto-examples-linear-model-plot-lasso-and-elasticnet-py</a><br>用于稀疏信号的套索和弹性网<br><img src="https://image.hackerjerry.top/Sklearn-Draws-in-authority-Examples-2.png#align=left&display=inline&height=275&margin=%5Bobject%20Object%5D&name=image.png&originHeight=550&originWidth=726&size=66600&status=done&style=none&width=363" alt="image.png"></p><h1 id="Comparing-anomaly-detection-algorithms-for-outlier-detection-on-toy-datasets"><a href="#Comparing-anomaly-detection-algorithms-for-outlier-detection-on-toy-datasets" class="headerlink" title="Comparing anomaly detection algorithms for outlier detection on toy datasets"></a>Comparing anomaly detection algorithms for outlier detection on toy datasets</h1><p><a href="https://scikit-learn.org/stable/auto_examples/miscellaneous/plot_anomaly_comparison.html#sphx-glr-auto-examples-miscellaneous-plot-anomaly-comparison-py">https://scikit-learn.org/stable/auto_examples/miscellaneous/plot_anomaly_comparison.html#sphx-glr-auto-examples-miscellaneous-plot-anomaly-comparison-py</a><br>玩具数据集异常检测算法的比较</p><p><img src="https://image.hackerjerry.top/Sklearn-Draws-in-authority-Examples-3.png#align=left&display=inline&height=436&margin=%5Bobject%20Object%5D&name=image.png&originHeight=872&originWidth=1116&size=342005&status=done&style=none&width=558" alt="image.png"></p><h1 id="Species-distribution-modeling"><a href="#Species-distribution-modeling" class="headerlink" title="Species distribution modeling"></a>Species distribution modeling</h1><p><a href="https://scikit-learn.org/stable/auto_examples/applications/plot_species_distribution_modeling.html#sphx-glr-auto-examples-applications-plot-species-distribution-modeling-py">https://scikit-learn.org/stable/auto_examples/applications/plot_species_distribution_modeling.html#sphx-glr-auto-examples-applications-plot-species-distribution-modeling-py</a><br>物种分布建模<br><img src="https://image.hackerjerry.top/Sklearn-Draws-in-authority-Examples-4.png#align=left&display=inline&height=262&margin=%5Bobject%20Object%5D&name=image.png&originHeight=523&originWidth=704&size=135518&status=done&style=none&width=352" alt="image.png"></p><h1 id="Outlier-detection-on-a-real-data-set"><a href="#Outlier-detection-on-a-real-data-set" class="headerlink" title="Outlier detection on a real data set"></a>Outlier detection on a real data set</h1><p><a href="https://scikit-learn.org/stable/auto_examples/applications/plot_outlier_detection_wine.html#sphx-glr-auto-examples-applications-plot-outlier-detection-wine-py">https://scikit-learn.org/stable/auto_examples/applications/plot_outlier_detection_wine.html#sphx-glr-auto-examples-applications-plot-outlier-detection-wine-py</a><br>真实数据集上的异常值检测<br><img src="https://image.hackerjerry.top/Sklearn-Draws-in-authority-Examples-5.png#align=left&display=inline&height=295&margin=%5Bobject%20Object%5D&name=image.png&originHeight=590&originWidth=772&size=121357&status=done&style=none&width=386" alt="image.png"></p><h1 id="Single-estimator-versus-bagging-bias-variance-decomposition"><a href="#Single-estimator-versus-bagging-bias-variance-decomposition" class="headerlink" title="Single estimator versus bagging: bias-variance decomposition"></a>Single estimator versus bagging: bias-variance decomposition</h1><p><a href="https://scikit-learn.org/stable/auto_examples/ensemble/plot_bias_variance.html#sphx-glr-auto-examples-ensemble-plot-bias-variance-py">https://scikit-learn.org/stable/auto_examples/ensemble/plot_bias_variance.html#sphx-glr-auto-examples-ensemble-plot-bias-variance-py</a><br>单估计量对套袋: 偏差-方差分解<br><img src="https://image.hackerjerry.top/Sklearn-Draws-in-authority-Examples-6.png#align=left&display=inline&height=397&margin=%5Bobject%20Object%5D&name=image.png&originHeight=794&originWidth=1074&size=280946&status=done&style=none&width=537" alt="image.png"></p><h1 id="Feature-agglomeration-vs-univariate-selection"><a href="#Feature-agglomeration-vs-univariate-selection" class="headerlink" title="Feature agglomeration vs. univariate selection"></a>Feature agglomeration vs. univariate selection</h1><p>特征集聚与单变量选择<br><a href="https://scikit-learn.org/stable/auto_examples/cluster/plot_feature_agglomeration_vs_univariate_selection.html#sphx-glr-auto-examples-cluster-plot-feature-agglomeration-vs-univariate-selection-py">https://scikit-learn.org/stable/auto_examples/cluster/plot_feature_agglomeration_vs_univariate_selection.html#sphx-glr-auto-examples-cluster-plot-feature-agglomeration-vs-univariate-selection-py</a><br><img src="https://image.hackerjerry.top/Sklearn-Draws-in-authority-Examples-7.png#align=left&display=inline&height=171&margin=%5Bobject%20Object%5D&name=image.png&originHeight=341&originWidth=983&size=54942&status=done&style=none&width=491.5" alt="image.png"></p><h1 id="Demo-of-OPTICS-clustering-algorithm"><a href="#Demo-of-OPTICS-clustering-algorithm" class="headerlink" title="Demo of OPTICS clustering algorithm"></a>Demo of OPTICS clustering algorithm</h1><p><a href="https://scikit-learn.org/stable/auto_examples/cluster/plot_optics.html#sphx-glr-auto-examples-cluster-plot-optics-py">https://scikit-learn.org/stable/auto_examples/cluster/plot_optics.html#sphx-glr-auto-examples-cluster-plot-optics-py</a><br>光学聚类算法演示<br><img src="https://image.hackerjerry.top/Sklearn-Draws-in-authority-Examples-8.png#align=left&display=inline&height=417&margin=%5Bobject%20Object%5D&name=image.png&originHeight=834&originWidth=1181&size=288043&status=done&style=none&width=590.5" alt="image.png"></p>]]></content>
+      
+      
+      <categories>
+          
+          <category> python </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> sklearn </tag>
+            
+            <tag> 绘图 </tag>
+            
+            <tag> 评价指标 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>Beautiful&amp;amp;Powerful-Sentences</title>
+      <link href="/2020/09/08/Beautiful&amp;Powerful-Sentences_new/"/>
+      <url>/2020/09/08/Beautiful&amp;Powerful-Sentences_new/</url>
+      
+        <content type="html"><![CDATA[<a id="more"></a><p><img src="https://image.hackerjerry.top/Beautiful&Powerful-Sentences-1.png#align=left&display=inline&height=231&margin=%5Bobject%20Object%5D&name=image.png&originHeight=462&originWidth=1092&size=1125669&status=done&style=none&width=546" alt="image.png"><br><img src="https://image.hackerjerry.top/Beautiful&Powerful-Sentences-2.png#align=left&display=inline&height=243&margin=%5Bobject%20Object%5D&name=image.png&originHeight=485&originWidth=1355&size=1436066&status=done&style=none&width=677.5" alt="image.png"><br><img src="https://image.hackerjerry.top/Beautiful&Powerful-Sentences-3.png#align=left&display=inline&height=202&margin=%5Bobject%20Object%5D&name=image.png&originHeight=403&originWidth=1461&size=1255212&status=done&style=none&width=730.5" alt="image.png"></p>]]></content>
+      
+      
+      <categories>
+          
+          <category> 文艺 </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> 文艺 </tag>
+            
+            <tag> 句子 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
       <title>Summary-of-common-python-operations-2</title>
       <link href="/2020/09/08/Summary-of-common-python-operations-2_new/"/>
       <url>/2020/09/08/Summary-of-common-python-operations-2_new/</url>
