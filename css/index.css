@@ -3128,7 +3128,7 @@ blockquote footer cite:before {
 }
 #footer-wrap {
   position: relative;
-  padding: 2rem 1rem;
+  padding: 1.16rem 1rem;
   color: var(--light-grey);
   text-align: center;
 }
