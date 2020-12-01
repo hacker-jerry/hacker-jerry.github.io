@@ -212,13 +212,6 @@
   </url>
   
   <url>
-    <loc>https://www.blog.hackerjerry.top/about/index.html</loc>
-    
-    <lastmod>2020-12-01</lastmod>
-    
-  </url>
-  
-  <url>
     <loc>https://www.blog.hackerjerry.top/artalk/index.html</loc>
     
     <lastmod>2020-12-01</lastmod>
@@ -248,6 +241,13 @@
   
   <url>
     <loc>https://www.blog.hackerjerry.top/tags/index.html</loc>
+    
+    <lastmod>2020-12-01</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://www.blog.hackerjerry.top/about/index.html</loc>
     
     <lastmod>2020-12-01</lastmod>
     
