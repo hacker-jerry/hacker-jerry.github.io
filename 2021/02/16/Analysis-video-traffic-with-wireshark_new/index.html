@@ -1,0 +1,316 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Analysis-video-traffic-with-wireshark | M@tr1xの日常</title><meta name="description" content="准备在本次分析中，我选择了腾讯视频流量进行抓包分析。首先，腾讯视频的流量是走的 tcp 协议，而且全站 https 加密，因此报文内容是乱码，需要解码。以 windows 系统+Chrome 浏览器为例，首先要导出浏览器存储的密钥，通过计算机属性——高级系统设置——环境变量，新建一个变量名“SSLKEYLOGFILE”的变量，变量值是导出的密钥具体文件地址。经测试，chrome 和 firef"><meta name="keywords" content="wireshark,视频流量分析"><meta name="author" content="M@tr1x"><meta name="copyright" content="M@tr1x"><meta name="format-detection" content="telephone=no"><link rel="shortcut icon" href="/img/favicon.png"><link rel="canonical" href="https://www.blog.hackerjerry.top/2021/02/16/Analysis-video-traffic-with-wireshark_new/"><meta http-equiv="Cache-Control" content="no-transform"><meta http-equiv="Cache-Control" content="no-siteapp"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//fonts.googleapis.com" crossorigin="crossorigin"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><meta name="google-site-verification" content="UA-157542666-1"/><meta property="og:type" content="article"><meta property="og:title" content="Analysis-video-traffic-with-wireshark"><meta property="og:url" content="https://www.blog.hackerjerry.top/2021/02/16/Analysis-video-traffic-with-wireshark_new/"><meta property="og:site_name" content="M@tr1xの日常"><meta property="og:description" content="准备在本次分析中，我选择了腾讯视频流量进行抓包分析。首先，腾讯视频的流量是走的 tcp 协议，而且全站 https 加密，因此报文内容是乱码，需要解码。以 windows 系统+Chrome 浏览器为例，首先要导出浏览器存储的密钥，通过计算机属性——高级系统设置——环境变量，新建一个变量名“SSLKEYLOGFILE”的变量，变量值是导出的密钥具体文件地址。经测试，chrome 和 firef"><meta property="og:image" content="https://image.hackerjerry.top/2427682894.jpeg"><meta property="article:published_time" content="2021-02-16T14:36:42.000Z"><meta property="article:modified_time" content="2021-02-16T15:23:57.741Z"><meta name="twitter:card" content="summary"><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.css"><link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Titillium+Web&amp;display=swap"><script>var GLOBAL_CONFIG = { 
+  root: '/',
+  hexoversion: '5.1.1',
+  algolia: undefined,
+  localSearch: {"path":"search.xml","languages":{"hits_empty":"找不到您查询的内容：${query}"}},
+  translate: undefined,
+  noticeOutdate: {"limitDay":500,"position":"top","messagePrev":"It has been","messageNext":"days since the last update, the content of the article may be outdated."},
+  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":true},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  bookmark: {
+    message_prev: '按',
+    message_next: '键将本页加入书签'
+  },
+  runtime: '天',
+  last_push_date: {"zeroDay":"今天","suffix":"天前"},
+  copyright: {"limitCount":50,"languages":{"author":"作者: M@tr1x","link":"链接: ","source":"来源: M@tr1xの日常","info":"著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。"}},
+  ClickShowText: undefined,
+  medium_zoom: false,
+  fancybox: true,
+  Snackbar: undefined,
+  justifiedGallery: {
+    js: 'https://cdn.jsdelivr.net/npm/justifiedGallery/dist/js/jquery.justifiedGallery.min.js',
+    css: 'https://cdn.jsdelivr.net/npm/justifiedGallery/dist/css/justifiedGallery.min.css'
+  },
+  baiduPush: false,
+  isPhotoFigcaption: false,
+  islazyload: true,
+  isanchor: false
+};
+
+var saveToLocal = {
+  set: function setWithExpiry(key, value, ttl) {
+      const now = new Date()
+      const expiryDay = ttl * 86400000
+      const item = {
+        value: value,
+        expiry: now.getTime() + expiryDay,
+      }
+      localStorage.setItem(key, JSON.stringify(item))
+    },
+  
+  get: function getWithExpiry(key) {
+    const itemStr = localStorage.getItem(key)
+
+    if (!itemStr) {
+      return undefined
+    }
+    const item = JSON.parse(itemStr)
+    const now = new Date()
+
+    if (now.getTime() > item.expiry) {
+      localStorage.removeItem(key)
+      return undefined
+    }
+    return item.value
+  }
+}</script><script id="config_change">var GLOBAL_CONFIG_SITE = { 
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isSidebar: true,
+  postUpdate: '2021-02-16 23:23:57'
+}</script><noscript><style type="text/css">
+#nav {
+  opacity: 1
+}
+.justified-gallery img {
+  opacity: 1
+}
+</style></noscript><script>var activateDarkMode = function () {
+  document.documentElement.setAttribute('data-theme', 'dark')
+  if (document.querySelector('meta[name="theme-color"]') !== null) {
+    document.querySelector('meta[name="theme-color"]').setAttribute('content', '#000')
+  }
+}
+var activateLightMode = function () {
+  document.documentElement.setAttribute('data-theme', 'light')
+  if (document.querySelector('meta[name="theme-color"]') !== null) {
+    document.querySelector('meta[name="theme-color"]').setAttribute('content', '#fff')
+  }
+}
+
+var autoChangeMode = 'false'
+var t = saveToLocal.get('theme')
+if (autoChangeMode === '1') {
+  var isDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches
+  var isLightMode = window.matchMedia('(prefers-color-scheme: light)').matches
+  var isNotSpecified = window.matchMedia('(prefers-color-scheme: no-preference)').matches
+  var hasNoSupport = !isDarkMode && !isLightMode && !isNotSpecified
+
+  if (t === undefined) {
+    if (isLightMode) activateLightMode()
+    else if (isDarkMode) activateDarkMode()
+    else if (isNotSpecified || hasNoSupport) {
+      console.log('You specified no preference for a color scheme or your browser does not support it. I Schedule dark mode during night time.')
+      var now = new Date()
+      var hour = now.getHours()
+      var isNight = hour <= 6 || hour >= 18
+      isNight ? activateDarkMode() : activateLightMode()
+    }
+    window.matchMedia('(prefers-color-scheme: dark)').addListener(function (e) {
+      if (saveToLocal.get('theme') === undefined) {
+        e.matches ? activateDarkMode() : activateLightMode()
+      }
+    })
+  } else if (t === 'light') activateLightMode()
+  else activateDarkMode()
+} else if (autoChangeMode === '2') {
+  now = new Date()
+  hour = now.getHours()
+  isNight = hour <= 6 || hour >= 18
+  if (t === undefined) isNight ? activateDarkMode() : activateLightMode()
+  else if (t === 'light') activateLightMode()
+  else activateDarkMode()
+} else {
+  if (t === 'dark') activateDarkMode()
+  else if (t === 'light') activateLightMode()
+}</script><meta name="generator" content="Hexo 5.1.1"><link rel="alternate" href="/atom.xml" title="M@tr1xの日常" type="application/atom+xml">
+</head><body><div id="mobile-sidebar"><div id="menu_mask"></div><div id="mobile-sidebar-menus"><div class="mobile_author_icon"><img class="avatar-img" data-lazy-src="/img/avatar.png" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="mobile_post_data"><div class="mobile_data_item is-center"><div class="mobile_data_link"><a href="/archives/"><div class="headline">文章</div><div class="length_num">33</div></a></div></div><div class="mobile_data_item is-center">      <div class="mobile_data_link"><a href="/tags/"><div class="headline">标签</div><div class="length_num">40</div></a></div></div><div class="mobile_data_item is-center">     <div class="mobile_data_link"><a href="/categories/"><div class="headline">分类</div><div class="length_num">11</div></a></div></div></div><hr/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fa fa-home"></i><span> Home</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fa fa-tags"></i><span> Tags</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fa fa-folder-open"></i><span> Categories</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fa fa-link"></i><span> Link</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fa fa-heart"></i><span> About</span></a></div><div class="menus_item"><a class="site-page" href="javascript:void(0);"><i class="fa-fw fa fa-list"></i><span> List</span><i class="fas fa-chevron-down expand"></i></a><ul class="menus_item_child"><li><a class="site-page" href="/bangumis/"><i class="fa-fw fa fa-film"></i><span> 追番</span></a></li><li><a class="site-page" href="/artalk/"><i class="fa-fw fa-fw fa fa-comment-alt"></i><span> 说说</span></a></li></ul></div></div></div></div><div id="body-wrap"><div id="sidebar"><i class="fas fa-arrow-right" id="toggle-sidebar"></i><div class="sidebar-toc"><div class="sidebar-toc__title">目录</div><div class="sidebar-toc__progress"><span class="progress-notice">你已经读了</span><span class="progress-num">0</span><span class="progress-percentage">%</span><div class="sidebar-toc__progress-bar">     </div></div><div class="sidebar-toc__content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%87%86%E5%A4%87"><span class="toc-number">1.</span> <span class="toc-text">准备</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%B8%9A%E5%8A%A1%E6%B5%81%E7%A8%8B"><span class="toc-number">2.</span> <span class="toc-text">业务流程</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%80%9A%E4%BF%A1%E6%8A%A5%E6%96%87%E5%88%86%E6%9E%90"><span class="toc-number">2.1.</span> <span class="toc-text">通信报文分析</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%BD%BF%E7%94%A8-python-%E8%BF%9B%E8%A1%8C%E8%87%AA%E5%8A%A8%E5%8C%96%E5%88%86%E6%9E%90%E4%B8%8E%E7%89%B9%E5%BE%81%E6%8F%90%E5%8F%96"><span class="toc-number">3.</span> <span class="toc-text">使用 python 进行自动化分析与特征提取</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%8F%90%E5%8F%96%E7%89%B9%E5%BE%81"><span class="toc-number">3.1.</span> <span class="toc-text">提取特征</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E8%BF%87%E6%BB%A4-idea"><span class="toc-number">4.</span> <span class="toc-text">过滤 idea</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%8F%82%E8%80%83"><span class="toc-number">5.</span> <span class="toc-text">参考</span></a></li></ol></div></div></div><header class="post-bg" id="page-header" style="background-image: url(https://image.hackerjerry.top/2427682894.jpeg)"><nav id="nav"><span id="blog_name"><a id="site-name" href="/">M@tr1xの日常</a></span><span class="menus"><div id="search_button"><a class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> 搜索</span></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fa fa-home"></i><span> Home</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fa fa-tags"></i><span> Tags</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fa fa-folder-open"></i><span> Categories</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fa fa-link"></i><span> Link</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fa fa-heart"></i><span> About</span></a></div><div class="menus_item"><a class="site-page" href="javascript:void(0);"><i class="fa-fw fa fa-list"></i><span> List</span><i class="fas fa-chevron-down expand"></i></a><ul class="menus_item_child"><li><a class="site-page" href="/bangumis/"><i class="fa-fw fa fa-film"></i><span> 追番</span></a></li><li><a class="site-page" href="/artalk/"><i class="fa-fw fa-fw fa fa-comment-alt"></i><span> 说说</span></a></li></ul></div></div><span class="toggle-menu close"><a class="site-page"><i class="fas fa-bars fa-fw"></i></a></span></span></nav><div id="post-info"><div id="post-title"><div class="posttitle">Analysis-video-traffic-with-wireshark</div></div><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2021-02-16T14:36:42.000Z" title="发表于 2021-02-16 22:36:42">2021-02-16</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2021-02-16T15:23:57.741Z" title="更新于 2021-02-16 23:23:57">2021-02-16</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E6%B5%81%E9%87%8F%E5%88%86%E6%9E%90/">流量分析</a></span></div><div class="meta-secondline"> <span class="post-meta-separator">|</span><span class="post-meta-pv-cv"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">阅读量:</span><span id="busuanzi_value_page_pv"></span></span></div></div></div></header><main class="layout_post" id="content-inner"><article id="post"><div class="post-content" id="article-container"><a id="more"></a>
+
+<h1 id="准备"><a href="#准备" class="headerlink" title="准备"></a>准备</h1><p>在本次分析中，我选择了腾讯视频流量进行抓包分析。<br>首先，腾讯视频的流量是走的 tcp 协议，而且全站 https 加密，因此报文内容是乱码，需要解码。<br>以 windows 系统+Chrome 浏览器为例，首先要导出浏览器存储的密钥，通过计算机属性——高级系统设置——环境变量，新建一个变量名“SSLKEYLOGFILE”的变量，变量值是导出的密钥具体文件地址。<br><img src= "/img/loading.gif" data-lazy-src="https://image.hackerjerry.top/Analysis-video-traffic-with-wireshark-1.png#align=left&display=inline&height=174&margin=%5Bobject%20Object%5D&name=image.png&originHeight=347&originWidth=522&size=201841&status=done&style=none&width=261" alt="image.png"><br>经测试，chrome 和 firefox 均无法导出密钥，最终找到解决办法如下。<br>运行命令</p>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="string">&quot;C:\Program Files (x86)\Google\Chrome\Application\chrome.exe&quot;</span> --ssl-key-<span class="built_in">log</span>-file = <span class="string">&quot;E:\sslkey.log&quot;</span></span><br></pre></td></tr></table></figure>
+
+<p>即可。<br>然后再在 wireshark 中绑定<br><img src= "/img/loading.gif" data-lazy-src="https://image.hackerjerry.top/Analysis-video-traffic-with-wireshark-2.png#align=left&display=inline&height=255&margin=%5Bobject%20Object%5D&name=image.png&originHeight=509&originWidth=727&size=33775&status=done&style=none&width=363.5" alt="image.png"><br><del>但是还是不行，不知道什么原因，可能是没有重启电脑？协商的 sslkey 不能随时更新到 log 文件中，我也不知道为什么，就先不管它的传输层 tcp 报文原始信息了。</del><br><del>确实重启电脑就好了。</del></p>
+<h1 id="业务流程"><a href="#业务流程" class="headerlink" title="业务流程"></a>业务流程</h1><p>网络视频业务可以从 1.主页访问，2.外链链入。<br>不同网站视频页面的 url 格式不同。</p>
+<table>
+<thead>
+<tr>
+<th align="center"><strong>业务提供商</strong></th>
+<th align="center"><strong>视频页面的 url 正则表达式</strong></th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">优酷</td>
+<td align="center">v.youku.com/v<em>show/id</em>[A-Za-z0-9=]{17}.*</td>
+</tr>
+<tr>
+<td align="center">优酷移动端</td>
+<td align="center">.*api.(mobile</td>
+</tr>
+<tr>
+<td align="center">搜狐视频</td>
+<td align="center">tv.sohu.com/[0-9]{8}/n[0-9]{9}.*</td>
+</tr>
+<tr>
+<td align="center">腾讯视频</td>
+<td align="center">v.qq.com/x/cover/[a-z0-9]{15}.*</td>
+</tr>
+<tr>
+<td align="center">爱奇艺</td>
+<td align="center">www.iqiyi.com/[a-z]_[a-z0-9]{10}.*</td>
+</tr>
+<tr>
+<td align="center">CNTV</td>
+<td align="center">tv.cntv.cn/video/[A-Za-z0-9=]{16}/.*</td>
+</tr>
+<tr>
+<td align="center">PPTV</td>
+<td align="center">v.pptv.com/show/[A-Za-z0-9=]{16}/.*</td>
+</tr>
+</tbody></table>
+<p>用户在观看视频时，可能会有一系列交互动作，可以分成两类：播放操作与社交行为。<br>前者包括：</p>
+<ul>
+<li>暂停</li>
+<li>重新播放</li>
+<li>跳转</li>
+<li>调节清晰度</li>
+<li>静音</li>
+<li>调节播放速度等</li>
+</ul>
+<p>后者包括：</p>
+<ul>
+<li>评论</li>
+<li>收藏</li>
+<li>点赞</li>
+<li>分享等</li>
+</ul>
+<h2 id="通信报文分析"><a href="#通信报文分析" class="headerlink" title="通信报文分析"></a>通信报文分析</h2><p>【1】<a target="_blank" rel="noopener" href="https://segmentfault.com/a/1190000018746027">https://segmentfault.com/a/1190000018746027</a><br>【2】<a target="_blank" rel="noopener" href="https://www.jianshu.com/p/a3a25c6627ee">https://www.jianshu.com/p/a3a25c6627ee</a><br>【3】<a target="_blank" rel="noopener" href="https://www.dell.com/community/%E5%85%A5%E9%97%A8%E7%BA%A7%E5%92%8C%E4%B8%AD%E7%AB%AF/%E5%A6%82%E6%9E%9C%E7%9C%8B%E4%BA%86%E8%BF%99%E4%B8%AA%E4%BD%A0%E8%BF%98%E6%98%AF%E4%B8%8D%E4%BC%9A%E7%94%A8Wireshark-%E9%82%A3%E5%B0%B1%E6%9D%A5%E6%89%BE%E6%88%91%E5%90%A7-8%E6%9C%886%E6%97%A5%E5%AE%8C%E7%BB%93/td-p/7007033">https://www.dell.com/community/</a><br>【4】<a target="_blank" rel="noopener" href="https://imququ.com/post/http2-traffic-in-wireshark.html">https://imququ.com/post/http2-traffic-in-wireshark.html</a><br>对于腾讯视频 5 分钟的观看抓包。<br>得到以下结论：</p>
+<ul>
+<li>首先进行 TCP 三次握手</li>
+</ul>
+<p><img src= "/img/loading.gif" data-lazy-src="https://image.hackerjerry.top/Analysis-video-traffic-with-wireshark-3.png#align=left&display=inline&height=45&margin=%5Bobject%20Object%5D&name=image.png&originHeight=69&originWidth=1141&size=10848&status=done&style=none&width=746" alt="image.png"></p>
+<ul>
+<li>然后进行 ssl 层的 tls 连接。</li>
+</ul>
+<p><img src= "/img/loading.gif" data-lazy-src="https://image.hackerjerry.top/Analysis-video-traffic-with-wireshark-4.png#align=left&display=inline&height=53&margin=%5Bobject%20Object%5D&name=image.png&originHeight=91&originWidth=1287&size=15828&status=done&style=none&width=746" alt="image.png"></p>
+<ol>
+<li><strong>Client Hello</strong><ol>
+<li><strong>Client Hello</strong> 报文：客户端对加密算法的支持度不同，因此需要<strong>向服务端发送</strong>客户端支持的<strong>加密套件（Cipher Suite）</strong> ，同时还要生成一个 <strong>随机数</strong> 同时保存在客户端和发送给服务</li>
+</ol>
+</li>
+<li><strong>Server Hello</strong><ol>
+<li><strong>ServerCertificate</strong> 报文：服务端收到 Client Hello 之后，向客户端发送 <strong>CA 认证的数字证书</strong>，用来鉴别服务端身份信息，同时还要生成一个 <strong>随机数</strong> 同时保存在服务端和发送给客户端</li>
+<li><strong>Server Hello Done</strong> 报文：表示服务端宣告第一阶段的客户端服务端握手协商结束</li>
+<li>可选：<strong>Certificate Request</strong> 报文：必要情况下，要求客户端发送证书验证身份</li>
+<li>可选：<strong>Server Key Exchange</strong> 报文：如果 CA 认证的数字证书提供的信息不够，服务端还可发送提供补充信息</li>
+</ol>
+</li>
+<li><strong>Client Finish</strong><ol>
+<li><strong>Client Key Exchange</strong> 报文：客户端收到 CA 数字证书并通过验证，然后通过 CA 公钥解密获取到 <strong>服务端公钥</strong>。Client Key Exchange 报文包括有一个随机数，这个随机数被称为 <strong>Pre-master key/secret</strong>；一个表示随后的信息使用双方协商好的加密方法和密钥发送的 <strong>通知</strong> ；还有一个通过协商好的 HASH 算法对前面所有信息内容的 <strong>HASH 计算值</strong>，用来提供服务端校验。这些信息都通过服务端公钥加密传送给服务端</li>
+<li><strong>ClientCipherSpec</strong> 报文：该报文通知服务端，此后的通信都将使用协商好的加密算法计算对称密钥进行加密通信（也就是使用两个随机数以及第三个 Pre-master key/secret 随机数一起算出一个对称密钥 <strong>session key/secret</strong>）</li>
+<li><strong>Finished</strong> 报文：该报文包括连接至此的所有报文的校验值，使用服务端公钥进行加密</li>
+<li>可选：<strong>ClientCertificate</strong> 报文：如果服务端请求，客户端需要发送 CA 数字证书</li>
+<li>可选：<strong>CertificateVerify</strong> 报文：服务端如果要求 CA 数字证书，那么需要通过 HASH 算法计算一个服务端发送来的信息摘要</li>
+</ol>
+</li>
+<li><strong>Server Finish</strong><ol>
+<li>服务端最后对客户端发送过来的 <strong>Finished</strong> 报文使用服务端私钥进行解密校验</li>
+<li><strong>ClientCipherSpec</strong> 报文：报文通知服务端，此后的通信都将使用协商好的加密算法计算对称密钥 session key/secret 进行加密通信</li>
+<li><strong>Finished</strong> 报文：标志 TLS 连接建立成功</li>
+</ol>
+</li>
+<li>TLS 握手成功此后通过对称密钥 session key/secret 加密通信</li>
+</ol>
+<ul>
+<li>然后开始 http 请求对话，这里发出一个 GET 请求</li>
+</ul>
+<p><img src= "/img/loading.gif" data-lazy-src="https://image.hackerjerry.top/Analysis-video-traffic-with-wireshark-5.png#align=left&display=inline&height=33&margin=%5Bobject%20Object%5D&name=image.png&originHeight=65&originWidth=1572&size=15127&status=done&style=none&width=786" alt="image.png"><br><img src= "/img/loading.gif" data-lazy-src="https://image.hackerjerry.top/Analysis-video-traffic-with-wireshark-6.png#align=left&display=inline&height=366&margin=%5Bobject%20Object%5D&name=image.png&originHeight=474&originWidth=817&size=61104&status=done&style=none&width=631" alt="image.png"><br>可以看到目标 host 格式为 v.smtcdns.com，可见是一个 cdn 节点。<br>然后就是 TCP 流<br><img src= "/img/loading.gif" data-lazy-src="https://image.hackerjerry.top/Analysis-video-traffic-with-wireshark-7.png#align=left&display=inline&height=223&margin=%5Bobject%20Object%5D&name=image.png&originHeight=362&originWidth=1024&size=46560&status=done&style=none&width=631" alt="image.png"><br>这里无法解析 TCP 的报文具体信息，应该就是相应的视频流。<br>在所有 tcp 分片发完之后，然后服务器发送一个 http 200,返回的内容是 video,采用 MP2T 编码。<img src= "/img/loading.gif" data-lazy-src="https://cdn.nlark.com/yuque/0/2021/png/1629942/1612014103338-752dc6c7-7225-40ca-8136-445428457c5b.png#align=left&display=inline&height=21&margin=%5Bobject%20Object%5D&name=image.png&originHeight=41&originWidth=1459&size=7797&status=done&style=none&width=729.5" alt="image.png"><br><img src= "/img/loading.gif" data-lazy-src="https://image.hackerjerry.top/Analysis-video-traffic-with-wireshark-8.png#align=left&display=inline&height=333&margin=%5Bobject%20Object%5D&name=image.png&originHeight=435&originWidth=702&size=40911&status=done&style=none&width=537" alt="image.png"><br>然后再次重复上面的过程。<br>整个观看视频过程中产生的 http 报文过滤后如下<br><img src= "/img/loading.gif" data-lazy-src="https://image.hackerjerry.top/Analysis-video-traffic-with-wireshark-9.png#align=left&display=inline&height=228&margin=%5Bobject%20Object%5D&name=image.png&originHeight=347&originWidth=1053&size=44535&status=done&style=none&width=693" alt="image.png"></p>
+<h1 id="使用-python-进行自动化分析与特征提取"><a href="#使用-python-进行自动化分析与特征提取" class="headerlink" title="使用 python 进行自动化分析与特征提取"></a>使用 python 进行自动化分析与特征提取</h1><p>【1】<a target="_blank" rel="noopener" href="https://github.com/SewellDinG/scapy-ssl_tls-demo">https://github.com/SewellDinG/scapy-ssl_tls-demo</a><br>【2】<a target="_blank" rel="noopener" href="https://github.com/hackers-terabit/scapy-ssl_tls-python3">https://github.com/hackers-terabit/scapy-ssl_tls-python3</a><br>【3】<a target="_blank" rel="noopener" href="http://blog.whiterabbitxyj.com/2017/11/07/python-scapy/">http://blog.whiterabbitxyj.com/2017/11/07/python-scapy/</a><br>【4】<a target="_blank" rel="noopener" href="https://wizardforcel.gitbooks.io/scapy-docs/content/3.html">https://wizardforcel.gitbooks.io/scapy-docs/content/3.html</a><br>【5】<a target="_blank" rel="noopener" href="https://www.osgeo.cn/scapy/layers/http.html">https://www.osgeo.cn/scapy/layers/http.html</a><br>【6】<a target="_blank" rel="noopener" href="https://www.osgeo.cn/scapy/usage.html">https://www.osgeo.cn/scapy/usage.html</a><br>【7】<a target="_blank" rel="noopener" href="https://scapy.readthedocs.io/en/latest/api/scapy.layers.tls.html">https://scapy.readthedocs.io/en/latest/api/scapy.layers.tls.html</a><br>首先，scapy 在 2.4.0 已经开始支持 http 和 tls 的解析，但是在默认配置中没有添加，可以通过</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">from</span> scapy.all <span class="keyword">import</span> *</span><br><span class="line">load_layer(<span class="string">&#x27;tls&#x27;</span>)</span><br><span class="line">load_layer(<span class="string">&#x27;http&#x27;</span>)</span><br></pre></td></tr></table></figure>
+
+<p>进行手动导入。</p>
+<blockquote>
+<p>这里真的坑了我好久，我一直在安装那个 tls 的补充包，但安不上，读了很多文档才琢磨出来</p>
+</blockquote>
+<p>不过也仅仅是能解析到 tls 层，而 http 层由于加密仍然无法解析。</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="comment">###[ Ethernet ]###</span></span><br><span class="line">  dst       = <span class="number">54</span>:a7:<span class="number">03</span>:d3:a3:<span class="number">91</span></span><br><span class="line">  src       = <span class="number">42</span>:<span class="number">23</span>:<span class="number">09</span>:<span class="number">71</span>:f5:<span class="number">85</span></span><br><span class="line">  type      = IPv4</span><br><span class="line"><span class="comment">###[ IP ]###</span></span><br><span class="line">     version   = <span class="number">4</span></span><br><span class="line">     ihl       = <span class="number">5</span></span><br><span class="line">     tos       = <span class="number">0x0</span></span><br><span class="line">     len       = <span class="number">1033</span></span><br><span class="line">     id        = <span class="number">21817</span></span><br><span class="line">     flags     = DF &lt;--对应分片</span><br><span class="line">     frag      = <span class="number">0</span></span><br><span class="line">     ttl       = <span class="number">128</span></span><br><span class="line">     proto     = <span class="number">6</span></span><br><span class="line">     chksum    = <span class="number">0x9daf</span></span><br><span class="line">     src       = <span class="number">192.168</span><span class="number">.1</span><span class="number">.101</span></span><br><span class="line">     dst       = <span class="number">60.233</span><span class="number">.5</span><span class="number">.16</span></span><br><span class="line">     \options   \</span><br><span class="line"><span class="comment">###[ TCP ]###</span></span><br><span class="line">        sport     = <span class="number">50503</span></span><br><span class="line">        dport     = <span class="number">443</span></span><br><span class="line">        seq       = <span class="number">1900018089</span></span><br><span class="line">        ack       = <span class="number">3368278776</span></span><br><span class="line">        dataofs   = <span class="number">8</span></span><br><span class="line">        reserved  = <span class="number">0</span></span><br><span class="line">        flags     = PA &lt;--对应SYN, FIN, ACK, PSH, RST, URG</span><br><span class="line">        window    = <span class="number">4116</span></span><br><span class="line">        chksum    = <span class="number">0xe752</span></span><br><span class="line">        urgptr    = <span class="number">0</span></span><br><span class="line">        options   = [(<span class="string">&#x27;NOP&#x27;</span>, <span class="literal">None</span>), (<span class="string">&#x27;NOP&#x27;</span>, <span class="literal">None</span>), (<span class="string">&#x27;Timestamp&#x27;</span>, (<span class="number">2543536</span>, <span class="number">2295788294</span>))]</span><br><span class="line"><span class="comment">###[ TLS ]###</span></span><br><span class="line">           type      = application_data</span><br><span class="line">           version   = TLS <span class="number">1.2</span></span><br><span class="line">           len       = <span class="number">976</span>    [deciphered_len= <span class="number">976</span>]</span><br><span class="line">           iv        = <span class="string">b&#x27;&#x27;</span></span><br><span class="line">           \msg       \</span><br><span class="line">            |<span class="comment">###[ TLS Application Data ]###</span></span><br><span class="line">            |  data      = <span class="string">&#x27;\x00\x00\x00\x00\x00\x00\x00\x02\xf4\xae\x1e\x90P\x058\x0bd\xae\xae\x14\x86\xfd\xb4\x19\xb3E\xc3\x86\x1fg\xf5\x8a)\xdf@\xe4\xf0|Q%Ay\xb3\xb0^\xf1\xe2\r\xb3\xf7\xb0\xab\xb5eFe@\xe3\x9c\xf5o\xaa\xb3\x13\x8d\xc9^G\x10\xc7\x90\xf5\xe7FM\x80\xfcAH\xf88\xf5\xea\x86K%EB\xbft\xc23\xbavv\xae\xda\xbf\x07\x90\xc6\x12\x1f\x81v\xcdl\xd3\xb0\xe7p\xcf\xb1\xac\xceK\x1f\xdf4\xbb\xbc\x93\x81E\xdd\xda\x96\xd0\xae+\x80\xb3\x8e\x84\xdf^&quot;ig]w\xc0\xe8P\x92\x1a!3\xca\xb4\x0b\xc3\x83&lt;B\x10\x80\xa5\xeb9F\xde\xbc\xf1\xf6\x91\xaac\x15\x85\xc7rs\xfeP0\x15\x02H~Ba\x104\x89~MP&lt;x\xbc\xfe$|\xd6\x9de\xff\x9b\xfe\x11\xf2]\x87\xa9\xc1\x84yT\xe9R*\x9cVP-Q\x15\xeb\x99\xde@\xc4,\xads\xb1\xcd\x8f\xcb\x9e\xe8@PE\xdd\xab\x1b*\xd1I-\x96Oa\x8e\xc5\xbest\xd0\xbe\x03&#123;r\xe3f\x17\xebx\xbd\x8b\xde~B&amp;\xfe&quot;\xa9d\xd4\xdaZH|\xce\xdb$\xe2P7F\x83\x14\xa0i\x8f\x9a\xe5VL\xf9\x87U\x94\xf8\xe3]\xfd[\x84(\rOs\xc9CG\x9d\xe8\x8eo,\xed\x94\xe0\xfaT\x87\x9d\xe1e\x8d\xea\x19+\xed\x0b\xf9\xea\x8d\xdc\xca\x0c\xa8\x85_\x9aF\xaanF\xa6b\xd0\xc0\xe4B\xdb\xec\x13[\x14)\xcc\x7f\xb0\x83\xe7\xae\xb5b\x04;y\x83ZE\x19C\x18\x01#e\xc8f\xb7@\x86\xae\xd8u\x944f\xe1\x82\xec\xe8]\x0c\x8f&amp;\x8c\x9d\xe5&lt;\x88J2\xc4&quot;\rev&quot;\xe1@\x05\xbc\xc2\x7f\x98\x07\xae\x9e\xab\xa9\x892`%\xe7\xecxX\xb94\xb8:\xf3\xa3\x07\x18\xe4\xe9\x99N\xf0\xc3\x85\xca\xbe\x93\xc0~\xe6\xa5\xbaf\xc1\xdc\&#x27;\xb6\xf1W\xcf\xb7\x06\xf4`\x1d\xc4\xe6|\xd1\xd1\x05\x7f\x8f\x9d\x8c\xb5&amp;\x8btr\xc5=\xe0\x9f\xb4S\x93&lt;\x96/\xb8\xd1CE\x10\x82\x8a\xf7\xef\x9b\x81h\xa5y(\xedw\xe4[o\xaa\x1c\xe6\xed\xf0\xaa\x82t\xc5;\x8a\nk\x9a\xe1&lt;\xc6\x03L\xd8\xc1S\xd2\x08\x08\xaf\xa54%\xed\xed\xc8*\x95\xd4\xfd\xf8\xf9D\xdf6\x16\xf8\x11\t?\xbc\xe7\x1e\xcc&lt;\xff\xda\xe9\xa6\xd8 l\x83\xe8\xd93?C#&#125;7KI\xdeVt$\xa5\xdc\xba\x0fL\x9b\x19(\t\xb5U\xd5\x82\xc0*\xb7\xf2\xda2dW!\x7fRF\xcf\xa6Qk\xcfD\xf8G\xac\xee\xe8F\xe6\x8e(Q\x91\xd9\xeb^C\xb3I\xea\n\xc1\xd84\xd4\x9d\xcc=Yt\xf0&quot;|xo\xb4p\xaf\xc85\xad\r\xd4&amp;\xd9\xbd\x85\x8b&gt;Tv\\\x06\x19@G\x0f\xfdF\x7f\x174M+\x17/7\xb7\xe8!T\xf5h\xf3\xffQ\xdd\x1e\xfc\xe5\xc4L`\xf5\x12T\x14\xb1\\\xd3F\xb1\x95\xab)\x1at\xc0$\xca\x00\xf46\xc8\xc0\x94\xab(g\xb7.\xcf\xa0|%\xfe\xa6\xb2UJ\xbd\x1eZ2w2H(\xedz&gt;\x02\x11\xb2;\xbe\xe1\x1c\xc6\xe2\xfa\xb6\x19\xd5\xc0\xe2Z\x16\x87O8\xdcs\&#x27;\xc1:\xc8\xd4\x9e&amp;o\xc5\x1b;\x86\xb2\x00\xe50\xba&lt;\xbe\xa8\x14\xd2\xc9\xe7\xc1#\&#x27;\x8e\xaa\x82\xc9\xf1\xd0\xdak\xe5DS\x95\xc3k\x8f\xf1\xdaa\xbdC\xb2\xadk\x04\x024\\)\xa9\x86X\x0e\x99h\x93\xf8\x88\xba\xaf\x9f\xb6X(\xcep\xd3\x87\xba=\tr1k`&quot;\x94$4A\xf9(\x1e\xa9\x9f\x83\x8f\xe8YVOK\xa8_&#125;\xc0)-\x14\xf1\x15V[j,\xd3`\xa0\xeaD\xa2\x08N!\xd1\x92\xb8\xe0D\x86K.\xf8\xcfGb\x943mGB\x9b,~\xe4\xcdR\xd4s\x19\xd5\xfeb\x94\xd7u\xcd\xc5\xa4\x1f\xfbBS\x0c\x8e\x06\xf2\x95\xd05\x80\x08\xbdh\xbb\xd6\xe4\x04&amp;\xc4&#123;\x12&#125;\&#x27;-\xc7O&#125;]\xbd\xd0\xf8\xaep\x9c\xb6\rH\x0e6,\xab\xb0\xf3k\x00\xb4\x16\x04\x1b\x13:,=\x8d\xbf\x99\x03&#x27;</span></span><br><span class="line">           mac       = <span class="string">b&#x27;&#x27;</span></span><br><span class="line">           pad       = <span class="string">b&#x27;&#x27;</span></span><br><span class="line">           padlen    = <span class="literal">None</span></span><br><span class="line"></span><br><span class="line"><span class="literal">None</span></span><br></pre></td></tr></table></figure>
+
+<p>暂时没有找到如何像 wireshark 一样可以实时绑定密钥进行会话解密的 python 命令行方式，所以提取特征只限制在 tls 层及以下。也就是说，诸如 http 的状态码，请求类型，实体内容类型都无法解析</p>
+<h2 id="提取特征"><a href="#提取特征" class="headerlink" title="提取特征"></a>提取特征</h2><p>首先，确定提取的特征名称。<br>首先是五元组特征：(源 IP,目的 IP,源端口,目的端口,协议类型）</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">feature_name=[<span class="string">&#x27;fiat_mean&#x27;</span>,<span class="string">&#x27;fiat_min&#x27;</span>,<span class="string">&#x27;fiat_max&#x27;</span>,<span class="string">&#x27;fiat_std&#x27;</span>,<span class="string">&#x27;biat_mean&#x27;</span>,<span class="string">&#x27;biat_min&#x27;</span>,<span class="string">&#x27;biat_max&#x27;</span>,<span class="string">&#x27;biat_std&#x27;</span>,</span><br><span class="line">             <span class="string">&#x27;diat_mean&#x27;</span>,<span class="string">&#x27;diat_min&#x27;</span>,<span class="string">&#x27;diat_max&#x27;</span>,<span class="string">&#x27;diat_std&#x27;</span>,<span class="string">&#x27;duration&#x27;</span>,<span class="string">&#x27;fwin_total&#x27;</span>,<span class="string">&#x27;fwin_mean&#x27;</span>,<span class="string">&#x27;fwin_min&#x27;</span>,</span><br><span class="line">             <span class="string">&#x27;fwin_max&#x27;</span>,<span class="string">&#x27;fwin_std&#x27;</span>,<span class="string">&#x27;bwin_total&#x27;</span>,<span class="string">&#x27;bwin_mean&#x27;</span>,<span class="string">&#x27;bwin_min&#x27;</span>,<span class="string">&#x27;bwin_max&#x27;</span>,<span class="string">&#x27;bwin_std&#x27;</span>,<span class="string">&#x27;dwin_total&#x27;</span>,</span><br><span class="line">             <span class="string">&#x27;dwin_mean&#x27;</span>,<span class="string">&#x27;dwin_min&#x27;</span>,<span class="string">&#x27;dwin_max&#x27;</span>,<span class="string">&#x27;dwin_std&#x27;</span>,<span class="string">&#x27;fpnum&#x27;</span>,<span class="string">&#x27;bpnum&#x27;</span>,<span class="string">&#x27;dpnum&#x27;</span>,<span class="string">&#x27;bfpnum_rate&#x27;</span>,<span class="string">&#x27;fpnum_s&#x27;</span>,</span><br><span class="line">             <span class="string">&#x27;bpnum_s&#x27;</span>,<span class="string">&#x27;dpnum_s&#x27;</span>,<span class="string">&#x27;fpl_total&#x27;</span>,<span class="string">&#x27;fpl_mean&#x27;</span>,<span class="string">&#x27;fpl_min&#x27;</span>,<span class="string">&#x27;fpl_max&#x27;</span>,<span class="string">&#x27;fpl_std&#x27;</span>,<span class="string">&#x27;bpl_total&#x27;</span>,<span class="string">&#x27;bpl_mean&#x27;</span>,</span><br><span class="line">             <span class="string">&#x27;bpl_min&#x27;</span>,<span class="string">&#x27;bpl_max&#x27;</span>,<span class="string">&#x27;bpl_std&#x27;</span>,<span class="string">&#x27;dpl_total&#x27;</span>,<span class="string">&#x27;dpl_mean&#x27;</span>,<span class="string">&#x27;dpl_min&#x27;</span>,<span class="string">&#x27;dpl_max&#x27;</span>,<span class="string">&#x27;dpl_std&#x27;</span>,<span class="string">&#x27;bfpl_rate&#x27;</span>,</span><br><span class="line">             <span class="string">&#x27;fpl_s&#x27;</span>,<span class="string">&#x27;bpl_s&#x27;</span>,<span class="string">&#x27;dpl_s&#x27;</span>,<span class="string">&#x27;fin_cnt&#x27;</span>,<span class="string">&#x27;syn_cnt&#x27;</span>,<span class="string">&#x27;rst_cnt&#x27;</span>,<span class="string">&#x27;pst_cnt&#x27;</span>,<span class="string">&#x27;ack_cnt&#x27;</span>,<span class="string">&#x27;urg_cnt&#x27;</span>,<span class="string">&#x27;cwe_cnt&#x27;</span>,<span class="string">&#x27;ece_cnt&#x27;</span>,</span><br><span class="line">             <span class="string">&#x27;fwd_pst_cnt&#x27;</span>,<span class="string">&#x27;fwd_urg_cnt&#x27;</span>,<span class="string">&#x27;bwd_pst_cnt&#x27;</span>,<span class="string">&#x27;bwd_urg_cnt&#x27;</span>,<span class="string">&#x27;fp_hdr_len&#x27;</span>,<span class="string">&#x27;bp_hdr_len&#x27;</span>,<span class="string">&#x27;dp_hdr_len&#x27;</span>,<span class="string">&#x27;&#x27;</span></span><br><span class="line">            <span class="string">&#x27;f_ht_len&#x27;</span>,<span class="string">&#x27;b_ht_len&#x27;</span>,<span class="string">&#x27;d_ht_len&#x27;</span>]</span><br></pre></td></tr></table></figure>
+
+<p>其中</p>
+<ul>
+<li>13 个包的到达特征</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="comment"># feature about packet arrival interval 13</span></span><br><span class="line">        fiat_mean,fiat_min,fiat_max,fiat_std = packet_iat(fwd_flow)<span class="comment">#正向发送的两个数据包之间的平均时间,正向发送的两个数据包之间的最短时间,正向发送的两个数据包标准偏差</span></span><br><span class="line">        biat_mean,biat_min,biat_max,biat_std = packet_iat(bwd_flow)<span class="comment">#反向发送的两个数据包之间的平均时间,...</span></span><br><span class="line">        diat_mean,diat_min,diat_max,diat_std = packet_iat(pkts)<span class="comment">#两次流动之间的平均时间,...</span></span><br><span class="line">        duration = round(pkts[<span class="number">-1</span>].time - pkts[<span class="number">0</span>].time+ decimal.Decimal(<span class="number">0.0001</span>), <span class="number">6</span>) <span class="comment">#流动持续时间</span></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>15 个拥塞窗口特征</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 拥塞窗口大小特征 15</span></span><br><span class="line">        fwin_total,fwin_mean,fwin_min,fwin_max,fwin_std = packet_win(fwd_flow)</span><br><span class="line">        bwin_total,bwin_mean,bwin_min,bwin_max,bwin_std = packet_win(bwd_flow)</span><br><span class="line">        dwin_total,dwin_mean,dwin_min,dwin_max,dwin_std = packet_win(pkts)</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>7 个包的数量特征</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="comment"># feature about packet num  7</span></span><br><span class="line">        fpnum=len(fwd_flow) <span class="comment">#前向总包数</span></span><br><span class="line">        bpnum=len(bwd_flow) <span class="comment">#反向总包数</span></span><br><span class="line">        dpnum=fpnum+bpnum</span><br><span class="line">        bfpnum_rate = round(bpnum / (fpnum + <span class="number">0.001</span>), <span class="number">6</span>)</span><br><span class="line">        fpnum_s = round(fpnum / duration, <span class="number">6</span>)</span><br><span class="line">        bpnum_s = round(bpnum / duration, <span class="number">6</span>)</span><br><span class="line">        dpnum_s = round(dpnum / duration, <span class="number">6</span>) <span class="comment">#流数据包速率，即每秒传输的数据包数</span></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>19 个包的总长度特征</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 包的总长度 19</span></span><br><span class="line">        fpl_total,fpl_mean,fpl_min,fpl_max,fpl_std = packet_len(fwd_flow)<span class="comment">#正向报文总大小,正向报文的平均大小,...</span></span><br><span class="line">        bpl_total,bpl_mean,bpl_min,bpl_max,bpl_std = packet_len(bwd_flow)</span><br><span class="line">        dpl_total,dpl_mean,dpl_min,dpl_max,dpl_std = packet_len(pkts)</span><br><span class="line">        bfpl_rate = round(bpl_total / (fpl_total + <span class="number">0.001</span>), <span class="number">6</span>)</span><br><span class="line">        fpl_s = round(fpl_total / duration, <span class="number">6</span>)</span><br><span class="line">        bpl_s = round(bpl_total / duration, <span class="number">6</span>)</span><br><span class="line">        dpl_s = round(dpl_total / duration, <span class="number">6</span>) <span class="comment">#流字节率，即每秒传输的数据包数</span></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>12 个包的标志特征</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 包的标志特征 12</span></span><br><span class="line">       fin_cnt,syn_cnt,rst_cnt,pst_cnt,ack_cnt,urg_cnt,cwe_cnt,ece_cnt=packet_flags(pkts,<span class="number">0</span>)<span class="comment">#FIN的报文数,SYN报文数,...</span></span><br><span class="line">       fwd_pst_cnt,fwd_urg_cnt=packet_flags(fwd_flow,<span class="number">1</span>)<span class="comment">#在正向传输的数据包中设置PSH标志的次数,URG标志的次数</span></span><br><span class="line">       bwd_pst_cnt,bwd_urg_cnt=packet_flags(bwd_flow,<span class="number">1</span>)<span class="comment">#在反向传输的数据包中设置PSH标志的次数,URG标志的次数</span></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>6 个包的头部特征</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 包头部长度 6</span></span><br><span class="line">        fp_hdr_len=packet_hdr_len(fwd_flow)</span><br><span class="line">        bp_hdr_len=packet_hdr_len(bwd_flow)</span><br><span class="line">        dp_hdr_len=packet_hdr_len(pkts)</span><br><span class="line">        f_ht_len=round(fp_hdr_len /(fpl_total+<span class="number">1</span>), <span class="number">6</span>)</span><br><span class="line">        b_ht_len=round(bp_hdr_len /(bpl_total+<span class="number">1</span>), <span class="number">6</span>)</span><br><span class="line">        d_ht_len=round(dp_hdr_len /dpl_total, <span class="number">6</span>)</span><br></pre></td></tr></table></figure>
+
+<p>这里介绍一种快速过滤的方法。</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">from</span> scapy.all <span class="keyword">import</span> *</span><br><span class="line">packets = rdpcap(<span class="string">&#x27;/content/drive/MyDrive/network_trafic_analysis/qqlarge.pcap&#x27;</span>)</span><br><span class="line">tcp_p = packets.filter(<span class="keyword">lambda</span> x: x.haslayer(<span class="string">&#x27;TCP&#x27;</span>))</span><br><span class="line">--------------------------------------------------</span><br><span class="line">&lt;filtered qqlarge.pcap: TCP:<span class="number">9201</span> UDP:<span class="number">0</span> ICMP:<span class="number">0</span> Other:<span class="number">0</span>&gt;</span><br></pre></td></tr></table></figure>
+
+<p>然后对于已知的流量包，去 github 上找了现成的轮子<a target="_blank" rel="noopener" href="https://github.com/jiangph1001/flow-feature.git">https://github.com/jiangph1001/flow-feature.git</a>。提取效果如下。</p>
+<p><img src= "/img/loading.gif" data-lazy-src="https://image.hackerjerry.top/Analysis-video-traffic-with-wireshark-10.png#align=left&display=inline&height=196&margin=%5Bobject%20Object%5D&name=image.png&originHeight=414&originWidth=931&size=44543&status=done&style=none&width=440" alt="image.png"><br>可以看到，在观看视频的时间里，与服务器 ip 之间的数据流是最多的。</p>
+<h1 id="过滤-idea"><a href="#过滤-idea" class="headerlink" title="过滤 idea"></a>过滤 idea</h1><ol>
+<li>可以分析视频流 tcp 报文的频谱，进行傅里叶变换或者小波变换，得到正常情况下的能量谱特征。</li>
+<li>对于 DDos 等其他攻击情况下的频谱，也可以进行相关分析。</li>
+<li>对于正常的 TCP 流，可以使用<strong>梳状滤波器</strong>进行滤波，让 RTT 对应频带的频率通过，保证大部分正常 TCP 流量通过，然后将其余的归为灰流量。<blockquote>
+<p>见参考文献：基于频谱分析的 LDos 攻击流量过滤方法</p>
+</blockquote>
+</li>
+</ol>
+<h1 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h1><p>在查解析 pcap 包的时候发现了这样几个仓库，感觉很棒。<br>Joy <a target="_blank" rel="noopener" href="https://github.com/cisco/joy">https://github.com/cisco/joy</a><br>相关使用可参考<a target="_blank" rel="noopener" href="https://flashgene.com/archives/70939.html">https://flashgene.com/archives/70939.html</a><br><a target="_blank" rel="noopener" href="https://www.freebuf.com/sectool/161431.html">https://www.freebuf.com/sectool/161431.html</a><br>官方文档<a target="_blank" rel="noopener" href="https://github.com/cisco/joy/blob/master/doc/using-joy-05.pdf">https://github.com/cisco/joy/blob/master/doc/using-joy-05.pdf</a><br>更详细的使用可以见<a target="_blank" rel="noopener" href="https://github.com/cisco/joy/wiki">https://github.com/cisco/joy/wiki</a>，里面包括了搭建，捕获，特征提取的全过程</p>
+<p><a target="_blank" rel="noopener" href="https://asmcn.icopy.site/awesome/awesome-pcaptools/">https://asmcn.icopy.site/awesome/awesome-pcaptools/</a><br>这个是收录的所有和 pcap 相关的工具，包括抓取，解析，提取特征。而这个站点，真的是一个宝藏站点，里面啥都有…真的太强了。<br><a target="_blank" rel="noopener" href="https://asmcn.icopy.site/awesome/awesome-network-analysis/#software">https://asmcn.icopy.site/awesome/awesome-network-analysis/#software</a> 比如这个就是网络分析相关的软件大全（图论相关）</p>
+</div><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">文章作者: </span><span class="post-copyright-info"><a href="mailto:undefined">M@tr1x</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">文章链接: </span><span class="post-copyright-info"><a href="https://www.blog.hackerjerry.top/2021/02/16/Analysis-video-traffic-with-wireshark_new/">https://www.blog.hackerjerry.top/2021/02/16/Analysis-video-traffic-with-wireshark_new/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="https://www.blog.hackerjerry.top" target="_blank">M@tr1xの日常</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/wireshark/">wireshark</a><a class="post-meta__tags" href="/tags/%E8%A7%86%E9%A2%91%E6%B5%81%E9%87%8F%E5%88%86%E6%9E%90/">视频流量分析</a></div><div class="post_share"><div class="social-share" data-image="https://image.hackerjerry.top/2427682894.jpeg" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/social-share.js/dist/css/share.min.css"><script src="https://cdn.jsdelivr.net/npm/social-share.js/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><div class="next-post pull-full"><a href="/2021/02/04/python-faster-pandas-skills_new/"><img class="next-cover" data-lazy-src="https://image.hackerjerry.top/2427682894.jpeg" onerror="onerror=null;src='/img/404.jpg'"><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">python-faster-pandas-skills</div></div></a></div></nav><hr/><div id="post-comment"><div class="comment-head"><div class="comment-headline"><i class="fas fa-comments fa-fw"></i><span> 评论</span></div></div><div class="comment-wrap"><div><div class="vcomment" id="vcomment"></div></div></div></div></article></main><footer id="footer" data-type="color"><div id="footer-wrap"><div class="copyright">&copy;2019 - 2021 By M@tr1x</div><div class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div><div class="footer_custom_text">冷風熱血，荡涤乾坤</div><div class="icp"><a target="_blank" rel="noopener" href="http://www.beian.miit.gov.cn"><img class="icp-icon" src="/img/icp.png"/><span>陕ICP备19023179号</span></a></div><div class="cdn"><a href="https://www.upyun.com" target="_blank"></a><img src="https://image.hackerjerry.top/%E5%8F%88%E6%8B%8D%E4%BA%91_logo6.png" width="70px"/></div></div></footer></div><section id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="设置"><i class="fas fa-cog"></i></button><a id="to_comment" href="#post-comment" title="直达评论"><i class="fas fa-comments"></i></a><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="回到顶部"><i class="fas fa-arrow-up"></i></button></div></section><div class="search-dialog" id="local-search"><div class="search-dialog__title" id="local-search-title">本地搜索</div><div id="local-input-panel"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="搜索文章" type="text"/></div></div></div><hr/><div id="local-search-results"><div id="local-hits"></div><div id="local-stats"><div class="local-search-stats__hr" id="hr"><span>由</span> <a target="_blank" rel="noopener" href="https://github.com/wzpan/hexo-generator-search" style="color:#49B1F5;">hexo-generator-search</a>
+ <span>提供支持</span></div></div></div><span class="search-close-button"><i class="fas fa-times"></i></span></div><div id="search-mask"></div><div><script src="https://cdn.jsdelivr.net/npm/jquery@latest/dist/jquery.min.js"></script><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.js"></script><script src="https://cdn.jsdelivr.net/npm/instant.page/instantpage.min.js" type="module" defer></script><script src="https://cdn.jsdelivr.net/npm/vanilla-lazyload/dist/lazyload.iife.min.js" async></script><script src="/js/search/local-search.js"></script><div class="js-pjax"><script>function loadValine () {
+  function initValine () {
+    window.valine = new Valine({
+      el: '#vcomment',
+      appId: 'jApqS8Xxcc1eST53AyiAisFx-gzGzoHsz',
+      appKey: 'iyngroaUslATD8V4nOgOHowr',
+      placeholder: '说点什么呗~',
+      avatar: 'monsterid',
+      meta: 'nick,mail,link'.split(','),
+      pageSize: '10',
+      lang: 'zh-CN',
+      recordIP: false,
+      serverURLs: '',
+      emojiCDN: '',
+      emojiMaps: "",
+      enableQQ: true,
+      path: window.location.pathname,
+    });
+    if ('nick,mail') { valine.config.requiredFields= 'nick,mail'.split(',') }
+  }
+
+  if (typeof Valine === 'function') initValine() 
+  else $.getScript('https://cdn.jsdelivr.net/npm/valine/dist/Valine.min.js', initValine)
+}
+
+if ('Valine' === 'Valine' || !false) {
+  if (false) loadComment(document.querySelector('#vcomment'),loadValine)
+  else setTimeout(() => loadValine(), 0)
+} else {
+  function loadOtherComment () {
+    loadValine()
+  }
+}</script><script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></div></body></html>
