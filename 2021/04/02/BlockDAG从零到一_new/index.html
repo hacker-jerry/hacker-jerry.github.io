@@ -1,0 +1,250 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width,initial-scale=1"><title>BlockDAG从零到一 | M@tr1xの日常</title><meta name="description" content="加油！   项目结构 DAG  SPECTRE snapshot.go–生成快照 vote.go–投票 log.go–记录日志   accepttxs.go–维持可信交易集 blockdag.go–主程序 difficulty.go–动态调整 pow 困难度 error.go–错误信息 log.go–日志信息 process.go–将区块加入链？或者称检查块的合法性   minner  pow.g"><meta name="keywords" content="CTF,白帽子,Pwn,Web"><meta name="author" content="M@tr1x"><meta name="copyright" content="M@tr1x"><meta name="format-detection" content="telephone=no"><link rel="shortcut icon" href="/img/favicon.png"><link rel="canonical" href="https://www.blog.hackerjerry.top/2021/04/02/BlockDAG%E4%BB%8E%E9%9B%B6%E5%88%B0%E4%B8%80_new/"><meta http-equiv="Cache-Control" content="no-transform"><meta http-equiv="Cache-Control" content="no-siteapp"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//fonts.googleapis.com" crossorigin="crossorigin"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><meta name="google-site-verification" content="UA-157542666-1"/><meta property="og:type" content="article"><meta property="og:title" content="BlockDAG从零到一"><meta property="og:url" content="https://www.blog.hackerjerry.top/2021/04/02/BlockDAG%E4%BB%8E%E9%9B%B6%E5%88%B0%E4%B8%80_new/"><meta property="og:site_name" content="M@tr1xの日常"><meta property="og:description" content="加油！   项目结构 DAG  SPECTRE snapshot.go–生成快照 vote.go–投票 log.go–记录日志   accepttxs.go–维持可信交易集 blockdag.go–主程序 difficulty.go–动态调整 pow 困难度 error.go–错误信息 log.go–日志信息 process.go–将区块加入链？或者称检查块的合法性   minner  pow.g"><meta property="og:image" content="https://image.hackerjerry.top/2427682894.jpeg"><meta property="article:published_time" content="2021-04-02T12:04:25.000Z"><meta property="article:modified_time" content="2021-04-17T15:47:07.471Z"><meta name="twitter:card" content="summary"><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.css"><link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Titillium+Web&amp;display=swap"><script>var GLOBAL_CONFIG = { 
+  root: '/',
+  hexoversion: '5.1.1',
+  algolia: undefined,
+  localSearch: {"path":"search.xml","languages":{"hits_empty":"找不到您查询的内容：${query}"}},
+  translate: undefined,
+  noticeOutdate: {"limitDay":500,"position":"top","messagePrev":"It has been","messageNext":"days since the last update, the content of the article may be outdated."},
+  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":true},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  bookmark: {
+    message_prev: '按',
+    message_next: '键将本页加入书签'
+  },
+  runtime: '天',
+  last_push_date: {"zeroDay":"今天","suffix":"天前"},
+  copyright: {"limitCount":50,"languages":{"author":"作者: M@tr1x","link":"链接: ","source":"来源: M@tr1xの日常","info":"著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。"}},
+  ClickShowText: undefined,
+  medium_zoom: false,
+  fancybox: true,
+  Snackbar: undefined,
+  justifiedGallery: {
+    js: 'https://cdn.jsdelivr.net/npm/justifiedGallery/dist/js/jquery.justifiedGallery.min.js',
+    css: 'https://cdn.jsdelivr.net/npm/justifiedGallery/dist/css/justifiedGallery.min.css'
+  },
+  baiduPush: false,
+  isPhotoFigcaption: false,
+  islazyload: true,
+  isanchor: false
+};
+
+var saveToLocal = {
+  set: function setWithExpiry(key, value, ttl) {
+      const now = new Date()
+      const expiryDay = ttl * 86400000
+      const item = {
+        value: value,
+        expiry: now.getTime() + expiryDay,
+      }
+      localStorage.setItem(key, JSON.stringify(item))
+    },
+  
+  get: function getWithExpiry(key) {
+    const itemStr = localStorage.getItem(key)
+
+    if (!itemStr) {
+      return undefined
+    }
+    const item = JSON.parse(itemStr)
+    const now = new Date()
+
+    if (now.getTime() > item.expiry) {
+      localStorage.removeItem(key)
+      return undefined
+    }
+    return item.value
+  }
+}</script><script id="config_change">var GLOBAL_CONFIG_SITE = { 
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isSidebar: true,
+  postUpdate: '2021-04-17 23:47:07'
+}</script><noscript><style type="text/css">
+#nav {
+  opacity: 1
+}
+.justified-gallery img {
+  opacity: 1
+}
+</style></noscript><script>var activateDarkMode = function () {
+  document.documentElement.setAttribute('data-theme', 'dark')
+  if (document.querySelector('meta[name="theme-color"]') !== null) {
+    document.querySelector('meta[name="theme-color"]').setAttribute('content', '#000')
+  }
+}
+var activateLightMode = function () {
+  document.documentElement.setAttribute('data-theme', 'light')
+  if (document.querySelector('meta[name="theme-color"]') !== null) {
+    document.querySelector('meta[name="theme-color"]').setAttribute('content', '#fff')
+  }
+}
+
+var autoChangeMode = 'false'
+var t = saveToLocal.get('theme')
+if (autoChangeMode === '1') {
+  var isDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches
+  var isLightMode = window.matchMedia('(prefers-color-scheme: light)').matches
+  var isNotSpecified = window.matchMedia('(prefers-color-scheme: no-preference)').matches
+  var hasNoSupport = !isDarkMode && !isLightMode && !isNotSpecified
+
+  if (t === undefined) {
+    if (isLightMode) activateLightMode()
+    else if (isDarkMode) activateDarkMode()
+    else if (isNotSpecified || hasNoSupport) {
+      console.log('You specified no preference for a color scheme or your browser does not support it. I Schedule dark mode during night time.')
+      var now = new Date()
+      var hour = now.getHours()
+      var isNight = hour <= 6 || hour >= 18
+      isNight ? activateDarkMode() : activateLightMode()
+    }
+    window.matchMedia('(prefers-color-scheme: dark)').addListener(function (e) {
+      if (saveToLocal.get('theme') === undefined) {
+        e.matches ? activateDarkMode() : activateLightMode()
+      }
+    })
+  } else if (t === 'light') activateLightMode()
+  else activateDarkMode()
+} else if (autoChangeMode === '2') {
+  now = new Date()
+  hour = now.getHours()
+  isNight = hour <= 6 || hour >= 18
+  if (t === undefined) isNight ? activateDarkMode() : activateLightMode()
+  else if (t === 'light') activateLightMode()
+  else activateDarkMode()
+} else {
+  if (t === 'dark') activateDarkMode()
+  else if (t === 'light') activateLightMode()
+}</script><meta name="generator" content="Hexo 5.1.1"><link rel="alternate" href="/atom.xml" title="M@tr1xの日常" type="application/atom+xml">
+</head><body><div id="mobile-sidebar"><div id="menu_mask"></div><div id="mobile-sidebar-menus"><div class="mobile_author_icon"><img class="avatar-img" data-lazy-src="/img/avatar.png" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="mobile_post_data"><div class="mobile_data_item is-center"><div class="mobile_data_link"><a href="/archives/"><div class="headline">文章</div><div class="length_num">52</div></a></div></div><div class="mobile_data_item is-center">      <div class="mobile_data_link"><a href="/tags/"><div class="headline">标签</div><div class="length_num">43</div></a></div></div><div class="mobile_data_item is-center">     <div class="mobile_data_link"><a href="/categories/"><div class="headline">分类</div><div class="length_num">13</div></a></div></div></div><hr/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fa fa-home"></i><span> Home</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fa fa-tags"></i><span> Tags</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fa fa-folder-open"></i><span> Categories</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fa fa-link"></i><span> Link</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fa fa-heart"></i><span> About</span></a></div><div class="menus_item"><a class="site-page" href="javascript:void(0);"><i class="fa-fw fa fa-list"></i><span> List</span><i class="fas fa-chevron-down expand"></i></a><ul class="menus_item_child"><li><a class="site-page" href="/bangumis/"><i class="fa-fw fa fa-film"></i><span> 追番</span></a></li><li><a class="site-page" href="/artalk/"><i class="fa-fw fa-fw fa fa-comment-alt"></i><span> 说说</span></a></li></ul></div></div></div></div><div id="body-wrap"><div id="sidebar"><i class="fas fa-arrow-right" id="toggle-sidebar"></i><div class="sidebar-toc"><div class="sidebar-toc__title">目录</div><div class="sidebar-toc__progress"><span class="progress-notice">你已经读了</span><span class="progress-num">0</span><span class="progress-percentage">%</span><div class="sidebar-toc__progress-bar">     </div></div><div class="sidebar-toc__content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E9%A1%B9%E7%9B%AE%E7%BB%93%E6%9E%84"><span class="toc-number">1.</span> <span class="toc-text">项目结构</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#p2pnet"><span class="toc-number">2.</span> <span class="toc-text">p2pnet</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#mempool"><span class="toc-number">3.</span> <span class="toc-text">mempool</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#account"><span class="toc-number">4.</span> <span class="toc-text">account</span></a></li></ol></div></div></div><header class="post-bg" id="page-header" style="background-image: url(https://image.hackerjerry.top/2427682894.jpeg)"><nav id="nav"><span id="blog_name"><a id="site-name" href="/">M@tr1xの日常</a></span><span class="menus"><div id="search_button"><a class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> 搜索</span></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fa fa-home"></i><span> Home</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fa fa-tags"></i><span> Tags</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fa fa-folder-open"></i><span> Categories</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fa fa-link"></i><span> Link</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fa fa-heart"></i><span> About</span></a></div><div class="menus_item"><a class="site-page" href="javascript:void(0);"><i class="fa-fw fa fa-list"></i><span> List</span><i class="fas fa-chevron-down expand"></i></a><ul class="menus_item_child"><li><a class="site-page" href="/bangumis/"><i class="fa-fw fa fa-film"></i><span> 追番</span></a></li><li><a class="site-page" href="/artalk/"><i class="fa-fw fa-fw fa fa-comment-alt"></i><span> 说说</span></a></li></ul></div></div><span class="toggle-menu close"><a class="site-page"><i class="fas fa-bars fa-fw"></i></a></span></span></nav><div id="post-info"><div id="post-title"><div class="posttitle">BlockDAG从零到一</div></div><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2021-04-02T12:04:25.000Z" title="发表于 2021-04-02 20:04:25">2021-04-02</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2021-04-17T15:47:07.471Z" title="更新于 2021-04-17 23:47:07">2021-04-17</time></span></div><div class="meta-secondline"> <span class="post-meta-separator">|</span><span class="post-meta-pv-cv"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">阅读量:</span><span id="busuanzi_value_page_pv"></span></span></div></div></div></header><main class="layout_post" id="content-inner"><article id="post"><div class="post-content" id="article-container"><p>加油！</p>
+<a id="more"></a>
+
+<h1 id="项目结构"><a href="#项目结构" class="headerlink" title="项目结构"></a>项目结构</h1><ul>
+<li><p>DAG</p>
+<ul>
+<li>SPECTRE<ul>
+<li>snapshot.go–生成快照</li>
+<li>vote.go–投票</li>
+<li>log.go–记录日志</li>
+</ul>
+</li>
+<li>accepttxs.go–维持可信交易集</li>
+<li>blockdag.go–主程序</li>
+<li>difficulty.go–动态调整 pow 困难度</li>
+<li>error.go–错误信息</li>
+<li>log.go–日志信息</li>
+<li>process.go–将区块加入链？或者称检查块的合法性</li>
+</ul>
+</li>
+<li><p>minner</p>
+<ul>
+<li>pow.go–工作量证明</li>
+<li>worker.go</li>
+</ul>
+</li>
+<li><p>account</p>
+<ul>
+<li>user.go–用户相关，身份认定，发送交易</li>
+</ul>
+</li>
+<li><p>bloom</p>
+<ul>
+<li>timebloom.go–时间布隆过滤器</li>
+<li>rangebloom.go–范围布隆过滤器</li>
+</ul>
+</li>
+<li><p>p2pnet</p>
+<ul>
+<li>libp2p–p2p 网络对等节点发现</li>
+</ul>
+</li>
+<li><p>mempool–内存池</p>
+</li>
+<li><p>crypto–密码学模块</p>
+<ul>
+<li>pkcs12–引用 gmsm <a target="_blank" rel="noopener" href="https://github.com/tjfoc/gmsm">https://github.com/tjfoc/gmsm</a> 好像性能有点问题？ 这里有另外一个<a target="_blank" rel="noopener" href="https://github.com/rongzer/gm">https://github.com/rongzer/gm</a> 看情况吧</li>
+<li>sm2<ul>
+<li>p256.go</li>
+<li>sm2.go</li>
+<li>utils.go</li>
+</ul>
+</li>
+<li>sm3<ul>
+<li>sm3.go</li>
+<li>ifile</li>
+</ul>
+</li>
+<li>sm4<ul>
+<li>sm4.go</li>
+<li>sm4_gcm.go</li>
+<li>utils.go</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>database-存储 <a target="_blank" rel="noopener" href="https://github.com/vldmkr/merkle-patricia-trie">https://github.com/vldmkr/merkle-patricia-trie</a></p>
+<ul>
+<li><p>mpt</p>
+<ul>
+<li>node.go</li>
+<li>tire.go</li>
+<li>type.go</li>
+</ul>
+</li>
+<li><p>storage</p>
+<ul>
+<li>adapter.go</li>
+<li>leveldb.go</li>
+<li>memory.go</li>
+</ul>
+</li>
+<li><p>database.go–利用 leveldb 存储交易（MPT），在区块中只存储根节点 hsha。</p>
+</li>
+<li><p>merkletire.go–MPT 树存储</p>
+</li>
+<li><p>可以先尝试安装<a target="_blank" rel="noopener" href="https://github.com/soteria-dag/soterd/tree/master/database">https://github.com/soteria-dag/soterd/tree/master/database</a>，看看能不能保存交易</p>
+</li>
+</ul>
+</li>
+</ul>
+<h1 id="p2pnet"><a href="#p2pnet" class="headerlink" title="p2pnet"></a>p2pnet</h1><p><a target="_blank" rel="noopener" href="https://segmentfault.com/a/1190000018590682">区块链中的 P2P</a><br><a target="_blank" rel="noopener" href="https://www.shangmayuan.com/a/61258d114131449994f5278e.html">使用 Go 语言编写区块链 P2P 网络</a>–项目：<a target="_blank" rel="noopener" href="https://github.com/nosequeldeebee/blockchain-tutorial/blob/master/p2p/main.go">https://github.com/nosequeldeebee/blockchain-tutorial/blob/master/p2p/main.go</a><br><a target="_blank" rel="noopener" href="https://github.com/Blockchain-CN/blockchain">https://github.com/Blockchain-CN/blockchain</a> –实现了对等协议的<br><a target="_blank" rel="noopener" href="https://bbbob.win/b6edc29f/">利用 go-libp2p 实现在区块链上的 p2p</a>–里面目录分的挺清楚的</p>
+<h1 id="mempool"><a href="#mempool" class="headerlink" title="mempool"></a>mempool</h1><p><a target="_blank" rel="noopener" href="https://learnblockchain.cn/books/geth/part2/txpool/txpool.html">以太坊交易池架构设计</a>–这一系列很全<br><a target="_blank" rel="noopener" href="https://blog.csdn.net/loy_184548/article/details/86178255">【区块链】比特币学习 - 4 - 交易池</a><br><a target="_blank" rel="noopener" href="https://segmentfault.com/a/1190000017333194">以太坊源码分析：交易缓冲池 txpool</a><br><a target="_blank" rel="noopener" href="https://github.com/lianxiangcloud/linkchain/tree/release/v0.1.3/mempool">https://github.com/lianxiangcloud/linkchain/tree/release/v0.1.3/mempool</a><br><a target="_blank" rel="noopener" href="https://www.jianshu.com/p/521a0926303a">btcd 源码分析系列：6 - mempool</a><br><a target="_blank" rel="noopener" href="https://github.com/wupeaking/tendermint_code_analysis/blob/master/Mempool%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90.md">Mempool 源码分析</a><br><a target="_blank" rel="noopener" href="https://github.com/letsfire/factory">https://github.com/letsfire/factory</a> –单纯的内存池，而非交易池<br><img src= "/img/loading.gif" data-lazy-src="https://image.hackerjerry.top/BlockDAG%E4%BB%8E%E9%9B%B6%E5%88%B0%E4%B8%80-1.png#align=left&display=inline&height=299&margin=%5Bobject%20Object%5D&name=image.png&originHeight=598&originWidth=1303&size=258120&status=done&style=none&width=651.5" alt="image.png"><br>说实话，这个有点难，可能暂时不考虑实现了。</p>
+<h1 id="account"><a href="#account" class="headerlink" title="account"></a>account</h1><p><img src= "/img/loading.gif" data-lazy-src="https://image.hackerjerry.top/BlockDAG%E4%BB%8E%E9%9B%B6%E5%88%B0%E4%B8%80-2.png#align=left&display=inline&height=288&margin=%5Bobject%20Object%5D&name=image.png&originHeight=576&originWidth=626&size=139030&status=done&style=none&width=313" alt="image.png"><br>来自白皮书：<a target="_blank" rel="noopener" href="https://www.lianxiangcloud.com/static/download/%E4%BA%AB%E4%BA%91%E9%93%BE%E7%99%BD%E7%9A%AE%E4%B9%A61.0.pdf">享云链白皮书 1.0</a><br><a target="_blank" rel="noopener" href="https://learnblockchain.cn/books/geth/part3/sign-and-valid.html">签名与校验</a></p>
+</div><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">文章作者: </span><span class="post-copyright-info"><a href="mailto:undefined">M@tr1x</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">文章链接: </span><span class="post-copyright-info"><a href="https://www.blog.hackerjerry.top/2021/04/02/BlockDAG%E4%BB%8E%E9%9B%B6%E5%88%B0%E4%B8%80_new/">https://www.blog.hackerjerry.top/2021/04/02/BlockDAG%E4%BB%8E%E9%9B%B6%E5%88%B0%E4%B8%80_new/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="https://www.blog.hackerjerry.top" target="_blank">M@tr1xの日常</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"></div><div class="post_share"><div class="social-share" data-image="https://image.hackerjerry.top/2427682894.jpeg" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/social-share.js/dist/css/share.min.css"><script src="https://cdn.jsdelivr.net/npm/social-share.js/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><div class="prev-post pull-left"><a href="/2021/04/09/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E4%B9%8B%E9%9A%8F%E6%9C%BA%E6%A3%AE%E6%9E%97_new/"><img class="prev-cover" data-lazy-src="https://image.hackerjerry.top/2427682894.jpeg" onerror="onerror=null;src='/img/404.jpg'"><div class="pagination-info"><div class="label">上一篇</div><div class="prev_info">机器学习之随机森林</div></div></a></div><div class="next-post pull-right"><a href="/2021/04/02/GO%E5%BC%80%E5%8F%91%E6%8C%87%E5%8D%97_new/"><img class="next-cover" data-lazy-src="https://image.hackerjerry.top/2427682894.jpeg" onerror="onerror=null;src='/img/404.jpg'"><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">GO开发指南</div></div></a></div></nav><hr/><div id="post-comment"><div class="comment-head"><div class="comment-headline"><i class="fas fa-comments fa-fw"></i><span> 评论</span></div></div><div class="comment-wrap"><div><div class="vcomment" id="vcomment"></div></div></div></div></article></main><footer id="footer" data-type="color"><div id="footer-wrap"><div class="copyright">&copy;2019 - 2021 By M@tr1x</div><div class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div><div class="footer_custom_text">冷風熱血，荡涤乾坤</div><div class="icp"><a target="_blank" rel="noopener" href="http://www.beian.miit.gov.cn"><img class="icp-icon" src="/img/icp.png"/><span>陕ICP备19023179号</span></a></div><div class="cdn"><a href="https://www.upyun.com/?utm_source=lianmeng&amp;utm_medium=referral" target="_blank"><img src="/img/upyun.png" width="70px"/><span></span></a></div></div></footer></div><section id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="设置"><i class="fas fa-cog"></i></button><a id="to_comment" href="#post-comment" title="直达评论"><i class="fas fa-comments"></i></a><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="回到顶部"><i class="fas fa-arrow-up"></i></button></div></section><div class="search-dialog" id="local-search"><div class="search-dialog__title" id="local-search-title">本地搜索</div><div id="local-input-panel"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="搜索文章" type="text"/></div></div></div><hr/><div id="local-search-results"><div id="local-hits"></div><div id="local-stats"><div class="local-search-stats__hr" id="hr"><span>由</span> <a target="_blank" rel="noopener" href="https://github.com/wzpan/hexo-generator-search" style="color:#49B1F5;">hexo-generator-search</a>
+ <span>提供支持</span></div></div></div><span class="search-close-button"><i class="fas fa-times"></i></span></div><div id="search-mask"></div><div><script src="https://cdn.jsdelivr.net/npm/jquery@latest/dist/jquery.min.js"></script><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.js"></script><script src="https://cdn.jsdelivr.net/npm/instant.page/instantpage.min.js" type="module" defer></script><script src="https://cdn.jsdelivr.net/npm/vanilla-lazyload/dist/lazyload.iife.min.js" async></script><script src="/js/search/local-search.js"></script><div class="js-pjax"><script>function loadValine () {
+  function initValine () {
+    window.valine = new Valine({
+      el: '#vcomment',
+      appId: 'jApqS8Xxcc1eST53AyiAisFx-gzGzoHsz',
+      appKey: 'iyngroaUslATD8V4nOgOHowr',
+      placeholder: '说点什么呗~',
+      avatar: 'monsterid',
+      meta: 'nick,mail,link'.split(','),
+      pageSize: '10',
+      lang: 'zh-CN',
+      recordIP: false,
+      serverURLs: '',
+      emojiCDN: '',
+      emojiMaps: "",
+      enableQQ: true,
+      path: window.location.pathname,
+    });
+    if ('nick,mail') { valine.config.requiredFields= 'nick,mail'.split(',') }
+  }
+
+  if (typeof Valine === 'function') initValine() 
+  else $.getScript('https://cdn.jsdelivr.net/npm/valine/dist/Valine.min.js', initValine)
+}
+
+if ('Valine' === 'Valine' || !false) {
+  if (false) loadComment(document.querySelector('#vcomment'),loadValine)
+  else setTimeout(() => loadValine(), 0)
+} else {
+  function loadOtherComment () {
+    loadValine()
+  }
+}</script><script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></div></body></html>

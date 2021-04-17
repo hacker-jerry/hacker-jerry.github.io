@@ -1,0 +1,215 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width,initial-scale=1"><title>机器学习之随机森林 | M@tr1xの日常</title><meta name="description" content="这里记录一下 AI 作品赛里接触到的随机森林算法。   决策树随机森林由许多决策树（decision tree）组成，我们可以将决策树视为一系列关于数据的是&#x2F;否问题，从而最终得出一个预测类别（或回归情况下的连续值）。 这是一个可解释的模型，因为它非常像我们人类进行分类的过程：在我们做出决定之前（在理想世界中），我们会对可用数据进行一系列的询问。当我们训练决策树时到底发生了什么？可视化可以帮助我们更"><meta name="keywords" content="CTF,白帽子,Pwn,Web"><meta name="author" content="M@tr1x"><meta name="copyright" content="M@tr1x"><meta name="format-detection" content="telephone=no"><link rel="shortcut icon" href="/img/favicon.png"><link rel="canonical" href="https://www.blog.hackerjerry.top/2021/04/09/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E4%B9%8B%E9%9A%8F%E6%9C%BA%E6%A3%AE%E6%9E%97_new/"><meta http-equiv="Cache-Control" content="no-transform"><meta http-equiv="Cache-Control" content="no-siteapp"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//fonts.googleapis.com" crossorigin="crossorigin"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><meta name="google-site-verification" content="UA-157542666-1"/><meta property="og:type" content="article"><meta property="og:title" content="机器学习之随机森林"><meta property="og:url" content="https://www.blog.hackerjerry.top/2021/04/09/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E4%B9%8B%E9%9A%8F%E6%9C%BA%E6%A3%AE%E6%9E%97_new/"><meta property="og:site_name" content="M@tr1xの日常"><meta property="og:description" content="这里记录一下 AI 作品赛里接触到的随机森林算法。   决策树随机森林由许多决策树（decision tree）组成，我们可以将决策树视为一系列关于数据的是&#x2F;否问题，从而最终得出一个预测类别（或回归情况下的连续值）。 这是一个可解释的模型，因为它非常像我们人类进行分类的过程：在我们做出决定之前（在理想世界中），我们会对可用数据进行一系列的询问。当我们训练决策树时到底发生了什么？可视化可以帮助我们更"><meta property="og:image" content="https://image.hackerjerry.top/2427682894.jpeg"><meta property="article:published_time" content="2021-04-09T12:33:30.000Z"><meta property="article:modified_time" content="2021-04-17T15:52:06.744Z"><meta name="twitter:card" content="summary"><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.css"><link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Titillium+Web&amp;display=swap"><script>var GLOBAL_CONFIG = { 
+  root: '/',
+  hexoversion: '5.1.1',
+  algolia: undefined,
+  localSearch: {"path":"search.xml","languages":{"hits_empty":"找不到您查询的内容：${query}"}},
+  translate: undefined,
+  noticeOutdate: {"limitDay":500,"position":"top","messagePrev":"It has been","messageNext":"days since the last update, the content of the article may be outdated."},
+  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":true},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  bookmark: {
+    message_prev: '按',
+    message_next: '键将本页加入书签'
+  },
+  runtime: '天',
+  last_push_date: {"zeroDay":"今天","suffix":"天前"},
+  copyright: {"limitCount":50,"languages":{"author":"作者: M@tr1x","link":"链接: ","source":"来源: M@tr1xの日常","info":"著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。"}},
+  ClickShowText: undefined,
+  medium_zoom: false,
+  fancybox: true,
+  Snackbar: undefined,
+  justifiedGallery: {
+    js: 'https://cdn.jsdelivr.net/npm/justifiedGallery/dist/js/jquery.justifiedGallery.min.js',
+    css: 'https://cdn.jsdelivr.net/npm/justifiedGallery/dist/css/justifiedGallery.min.css'
+  },
+  baiduPush: false,
+  isPhotoFigcaption: false,
+  islazyload: true,
+  isanchor: false
+};
+
+var saveToLocal = {
+  set: function setWithExpiry(key, value, ttl) {
+      const now = new Date()
+      const expiryDay = ttl * 86400000
+      const item = {
+        value: value,
+        expiry: now.getTime() + expiryDay,
+      }
+      localStorage.setItem(key, JSON.stringify(item))
+    },
+  
+  get: function getWithExpiry(key) {
+    const itemStr = localStorage.getItem(key)
+
+    if (!itemStr) {
+      return undefined
+    }
+    const item = JSON.parse(itemStr)
+    const now = new Date()
+
+    if (now.getTime() > item.expiry) {
+      localStorage.removeItem(key)
+      return undefined
+    }
+    return item.value
+  }
+}</script><script id="config_change">var GLOBAL_CONFIG_SITE = { 
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isSidebar: true,
+  postUpdate: '2021-04-17 23:52:06'
+}</script><noscript><style type="text/css">
+#nav {
+  opacity: 1
+}
+.justified-gallery img {
+  opacity: 1
+}
+</style></noscript><script>var activateDarkMode = function () {
+  document.documentElement.setAttribute('data-theme', 'dark')
+  if (document.querySelector('meta[name="theme-color"]') !== null) {
+    document.querySelector('meta[name="theme-color"]').setAttribute('content', '#000')
+  }
+}
+var activateLightMode = function () {
+  document.documentElement.setAttribute('data-theme', 'light')
+  if (document.querySelector('meta[name="theme-color"]') !== null) {
+    document.querySelector('meta[name="theme-color"]').setAttribute('content', '#fff')
+  }
+}
+
+var autoChangeMode = 'false'
+var t = saveToLocal.get('theme')
+if (autoChangeMode === '1') {
+  var isDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches
+  var isLightMode = window.matchMedia('(prefers-color-scheme: light)').matches
+  var isNotSpecified = window.matchMedia('(prefers-color-scheme: no-preference)').matches
+  var hasNoSupport = !isDarkMode && !isLightMode && !isNotSpecified
+
+  if (t === undefined) {
+    if (isLightMode) activateLightMode()
+    else if (isDarkMode) activateDarkMode()
+    else if (isNotSpecified || hasNoSupport) {
+      console.log('You specified no preference for a color scheme or your browser does not support it. I Schedule dark mode during night time.')
+      var now = new Date()
+      var hour = now.getHours()
+      var isNight = hour <= 6 || hour >= 18
+      isNight ? activateDarkMode() : activateLightMode()
+    }
+    window.matchMedia('(prefers-color-scheme: dark)').addListener(function (e) {
+      if (saveToLocal.get('theme') === undefined) {
+        e.matches ? activateDarkMode() : activateLightMode()
+      }
+    })
+  } else if (t === 'light') activateLightMode()
+  else activateDarkMode()
+} else if (autoChangeMode === '2') {
+  now = new Date()
+  hour = now.getHours()
+  isNight = hour <= 6 || hour >= 18
+  if (t === undefined) isNight ? activateDarkMode() : activateLightMode()
+  else if (t === 'light') activateLightMode()
+  else activateDarkMode()
+} else {
+  if (t === 'dark') activateDarkMode()
+  else if (t === 'light') activateLightMode()
+}</script><meta name="generator" content="Hexo 5.1.1"><link rel="alternate" href="/atom.xml" title="M@tr1xの日常" type="application/atom+xml">
+</head><body><div id="mobile-sidebar"><div id="menu_mask"></div><div id="mobile-sidebar-menus"><div class="mobile_author_icon"><img class="avatar-img" data-lazy-src="/img/avatar.png" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="mobile_post_data"><div class="mobile_data_item is-center"><div class="mobile_data_link"><a href="/archives/"><div class="headline">文章</div><div class="length_num">52</div></a></div></div><div class="mobile_data_item is-center">      <div class="mobile_data_link"><a href="/tags/"><div class="headline">标签</div><div class="length_num">43</div></a></div></div><div class="mobile_data_item is-center">     <div class="mobile_data_link"><a href="/categories/"><div class="headline">分类</div><div class="length_num">13</div></a></div></div></div><hr/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fa fa-home"></i><span> Home</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fa fa-tags"></i><span> Tags</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fa fa-folder-open"></i><span> Categories</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fa fa-link"></i><span> Link</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fa fa-heart"></i><span> About</span></a></div><div class="menus_item"><a class="site-page" href="javascript:void(0);"><i class="fa-fw fa fa-list"></i><span> List</span><i class="fas fa-chevron-down expand"></i></a><ul class="menus_item_child"><li><a class="site-page" href="/bangumis/"><i class="fa-fw fa fa-film"></i><span> 追番</span></a></li><li><a class="site-page" href="/artalk/"><i class="fa-fw fa-fw fa fa-comment-alt"></i><span> 说说</span></a></li></ul></div></div></div></div><div id="body-wrap"><div id="sidebar"><i class="fas fa-arrow-right" id="toggle-sidebar"></i><div class="sidebar-toc"><div class="sidebar-toc__title">目录</div><div class="sidebar-toc__progress"><span class="progress-notice">你已经读了</span><span class="progress-num">0</span><span class="progress-percentage">%</span><div class="sidebar-toc__progress-bar">     </div></div><div class="sidebar-toc__content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%86%B3%E7%AD%96%E6%A0%91"><span class="toc-number">1.</span> <span class="toc-text">决策树</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BF%A1%E6%81%AF%E5%A2%9E%E7%9B%8A"><span class="toc-number">1.1.</span> <span class="toc-text">信息增益</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BF%A1%E6%81%AF%E5%A2%9E%E7%9B%8A%E7%8E%87"><span class="toc-number">1.2.</span> <span class="toc-text">信息增益率</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%9F%BA%E5%B0%BC%E4%B8%8D%E7%BA%AF%E5%BA%A6%EF%BC%88Gini-Impurity%EF%BC%89"><span class="toc-number">1.3.</span> <span class="toc-text">基尼不纯度（Gini Impurity）</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%86%B3%E7%AD%96%E6%A0%91%E5%89%AA%E6%9E%9D"><span class="toc-number">1.4.</span> <span class="toc-text">决策树剪枝</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#CART-%E7%AE%97%E6%B3%95"><span class="toc-number">1.5.</span> <span class="toc-text">CART 算法</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%BF%87%E6%8B%9F%E5%90%88%E2%80%93%E4%B8%BA%E4%BB%80%E4%B9%88%E6%A3%AE%E6%9E%97%E6%AF%94%E4%B8%80%E6%A3%B5%E6%A0%91%E6%9B%B4%E5%A5%BD"><span class="toc-number">1.6.</span> <span class="toc-text">过拟合–为什么森林比一棵树更好</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E9%9A%8F%E6%9C%BA%E6%A3%AE%E6%9E%97"><span class="toc-number">2.</span> <span class="toc-text">随机森林</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%9A%8F%E6%9C%BA%E6%8A%BD%E6%A0%B7%E8%AE%AD%E7%BB%83%E8%A7%82%E6%B5%8B%E6%95%B0%E6%8D%AE"><span class="toc-number">2.1.</span> <span class="toc-text">随机抽样训练观测数据</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%94%A8%E4%BA%8E%E6%8B%86%E5%88%86%E8%8A%82%E7%82%B9%E7%9A%84%E9%9A%8F%E6%9C%BA%E7%89%B9%E5%BE%81%E5%AD%90%E9%9B%86"><span class="toc-number">2.2.</span> <span class="toc-text">用于拆分节点的随机特征子集</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%AE%97%E6%B3%95%E7%89%B9%E7%82%B9"><span class="toc-number">2.3.</span> <span class="toc-text">算法特点</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E6%A8%A1%E5%9E%8B%E8%AF%84%E4%BB%B7"><span class="toc-number">3.</span> <span class="toc-text">模型评价</span></a></li></ol></div></div></div><header class="post-bg" id="page-header" style="background-image: url(https://image.hackerjerry.top/2427682894.jpeg)"><nav id="nav"><span id="blog_name"><a id="site-name" href="/">M@tr1xの日常</a></span><span class="menus"><div id="search_button"><a class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> 搜索</span></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fa fa-home"></i><span> Home</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fa fa-tags"></i><span> Tags</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fa fa-folder-open"></i><span> Categories</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fa fa-link"></i><span> Link</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fa fa-heart"></i><span> About</span></a></div><div class="menus_item"><a class="site-page" href="javascript:void(0);"><i class="fa-fw fa fa-list"></i><span> List</span><i class="fas fa-chevron-down expand"></i></a><ul class="menus_item_child"><li><a class="site-page" href="/bangumis/"><i class="fa-fw fa fa-film"></i><span> 追番</span></a></li><li><a class="site-page" href="/artalk/"><i class="fa-fw fa-fw fa fa-comment-alt"></i><span> 说说</span></a></li></ul></div></div><span class="toggle-menu close"><a class="site-page"><i class="fas fa-bars fa-fw"></i></a></span></span></nav><div id="post-info"><div id="post-title"><div class="posttitle">机器学习之随机森林</div></div><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2021-04-09T12:33:30.000Z" title="发表于 2021-04-09 20:33:30">2021-04-09</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2021-04-17T15:52:06.744Z" title="更新于 2021-04-17 23:52:06">2021-04-17</time></span></div><div class="meta-secondline"> <span class="post-meta-separator">|</span><span class="post-meta-pv-cv"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">阅读量:</span><span id="busuanzi_value_page_pv"></span></span></div></div></div></header><main class="layout_post" id="content-inner"><article id="post"><div class="post-content" id="article-container"><p>这里记录一下 AI 作品赛里接触到的随机森林算法。</p>
+<a id="more"></a>
+
+<h1 id="决策树"><a href="#决策树" class="headerlink" title="决策树"></a>决策树</h1><p>随机森林由许多决策树（decision tree）组成，我们可以将决策树视为一系列关于数据的是/否问题，从而最终得出一个预测类别（或回归情况下的连续值）。 这是一个可解释的模型，因为它非常像我们人类进行分类的过程：在我们做出决定之前（在理想世界中），我们会对可用数据进行一系列的询问。<br>当我们训练决策树时到底发生了什么？可视化可以帮助我们更好地理解决策树，这可以通过 Scikit-Learn 的一个功能来实现（详细信息，请查看 notebook 或这篇文章）。<br><img src= "/img/loading.gif" data-lazy-src="https://image.hackerjerry.top/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E4%B9%8B%E9%9A%8F%E6%9C%BA%E6%A3%AE%E6%9E%97-1.png#align=left&display=inline&height=732&margin=%5Bobject%20Object%5D&name=image.png&originHeight=732&originWidth=837&size=369303&status=done&style=none&width=837" alt="image.png"><br>除叶子节点（彩色终端节点）外，所有节点都有 5 个部分：</p>
+<ul>
+<li>基于某个特征的一个值对数据进行的提问，每个提问都有一个真或假的答案可以分裂节点。根据答案，数据点相应地向下移动。</li>
+<li><strong>gini：</strong>节点的 Gini 不纯度。当我们沿着树向下移动时，平均加权基尼不纯度会减少。</li>
+<li><strong>samples</strong>：节点中的观测数据数量。</li>
+<li><strong>value：</strong>每个类中的样本数。例如，根节点中有 2 个样本属于类 0，有 4 个样本属于类 1。</li>
+<li><strong>class：</strong>该节点中大多数点的分类。在叶节点中，即是对节点中所有样本的预测。</li>
+</ul>
+<p><strong>决策树的特征选择</strong>一般有 3 种量化方法：<strong>信息增益、信息增益率、基尼指数</strong>。</p>
+<h2 id="信息增益"><a href="#信息增益" class="headerlink" title="信息增益"></a>信息增益</h2><p>在信息论中，<strong>熵</strong>表示随机变量不确定性的度量。假设随机变量 X 有有限个取值，取值 <img src= "/img/loading.gif" data-lazy-src="https://cdn.nlark.com/yuque/0/2021/svg/1629942/1618020812451-b0b3a075-5dcb-42d8-bf97-78aa34e4b86e.svg#align=left&display=inline&height=18&margin=%5Bobject%20Object%5D&originHeight=18&originWidth=19&size=0&status=done&style=none&width=19"> 对应的概率为 <img src= "/img/loading.gif" data-lazy-src="https://cdn.nlark.com/yuque/0/2021/svg/1629942/1618020812589-b6f620aa-d6a0-4990-8de0-93dcf01f721e.svg#align=left&display=inline&height=18&margin=%5Bobject%20Object%5D&originHeight=18&originWidth=19&size=0&status=done&style=none&width=19"> ，则 X 的熵定义为：<br><img src= "/img/loading.gif" data-lazy-src="https://image.hackerjerry.top/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E4%B9%8B%E9%9A%8F%E6%9C%BA%E6%A3%AE%E6%9E%97-2.svg#align=left&display=inline&height=62&margin=%5Bobject%20Object%5D&originHeight=62&originWidth=196&size=0&status=done&style=none&width=196"><br>如果某件事<strong>一定发生</strong>（太阳东升西落）或<strong>一定不发生</strong>（钓鱼岛是日本的），则概率为 1 或 0，对应的<strong>熵均为 0</strong>。<br>如果某件事可能发生可能不发生（天要下雨，娘要嫁人），概率介于 0 到 1 之间，熵大于 0。<br>由此可见，<strong>熵越大，随机性越大，结果越不确定</strong>。<br>我们再来看一看<strong>条件熵</strong> <img src= "/img/loading.gif" data-lazy-src="https://cdn.nlark.com/yuque/0/2021/svg/1629942/1618020812831-53a78260-e1f7-4fe9-bd8b-1b6cbdd6d85d.svg#align=left&display=inline&height=26&margin=%5Bobject%20Object%5D&originHeight=26&originWidth=74&size=0&status=done&style=none&width=74"> ，<strong>表示引入随机变量 Y 对于消除 X 不确定性的程度</strong>。假如 X、Y 相互独立，则 X 的条件熵和熵有相同的值；否则条件熵一定小于熵。<br>明确了这两个概念，理解信息增益就比较方便了。现在我们有一份数据集 D（例如贷款信息登记表）和特征 A（例如年龄），则<strong>A 的信息增益就是 D 本身的熵与特征 A 给定条件下 D 的条件熵之差</strong>，即：<br><img src= "/img/loading.gif" data-lazy-src="https://image.hackerjerry.top/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E4%B9%8B%E9%9A%8F%E6%9C%BA%E6%A3%AE%E6%9E%97-3.svg#align=left&display=inline&height=26&margin=%5Bobject%20Object%5D&originHeight=26&originWidth=248&size=0&status=done&style=none&width=248"><br>数据集 D 的熵是一个常量。信息增益越大，表示条件熵 <img src= "/img/loading.gif" data-lazy-src="https://cdn.nlark.com/yuque/0/2021/svg/1629942/1618020812738-fffb9065-834c-444d-9a51-8881c89e799f.svg#align=left&display=inline&height=26&margin=%5Bobject%20Object%5D&originHeight=26&originWidth=74&size=0&status=done&style=none&width=74"> 越小，A 消除 D 的不确定性的功劳越大。<br>所以要<strong>优先选择信息增益大的特征，它们具有更强的分类能力。</strong>由此生成决策树，称为<strong>ID3 算法</strong>。</p>
+<h2 id="信息增益率"><a href="#信息增益率" class="headerlink" title="信息增益率"></a><strong>信息增益率</strong></h2><p>当某个特征具有多种候选值时，信息增益容易偏大，造成误差。引入信息增益率可以校正这一问题。<br>信息增益率 <img src= "/img/loading.gif" data-lazy-src="https://cdn.nlark.com/yuque/0/2021/svg/1629942/1618020812748-d95f3fa5-1a2f-4372-ad0b-78d11ef80423.svg#align=left&display=inline&height=18&margin=%5Bobject%20Object%5D&originHeight=18&originWidth=23&size=0&status=done&style=none&width=23"> 为信息增益与数据集 D 的熵之比：<br><img src= "/img/loading.gif" data-lazy-src="https://image.hackerjerry.top/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E4%B9%8B%E9%9A%8F%E6%9C%BA%E6%A3%AE%E6%9E%97-4.svg#align=left&display=inline&height=59&margin=%5Bobject%20Object%5D&originHeight=59&originWidth=186&size=0&status=done&style=none&width=186"><br>同样，我们<strong>优先选择信息增益率最大的特征，</strong>由此生成决策树，称为<strong>C4.5 算法。</strong><br>**</p>
+<h2 id="基尼不纯度（Gini-Impurity）"><a href="#基尼不纯度（Gini-Impurity）" class="headerlink" title="基尼不纯度（Gini Impurity）"></a><strong>基尼不纯度（Gini Impurity）</strong></h2><p>节点的基尼不纯度是指，根据节点中样本的分布对样本分类时，从节点中随机选择的样本被分错的概率。<br>如，在根节点中，根据节点中的样本标签有 44.4％的可能性错误地对某个随机选择的数据点进行分类。可以      使用以下等式得出这个值：</p>
+<p><img src= "/img/loading.gif" data-lazy-src="https://image.hackerjerry.top/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E4%B9%8B%E9%9A%8F%E6%9C%BA%E6%A3%AE%E6%9E%97-5.png#align=left&display=inline&height=56&margin=%5Bobject%20Object%5D&originHeight=242&originWidth=757&size=0&status=done&style=none&width=176"><br>节点 n 的基尼不纯度是<strong>1 减去每个类（二元分类任务中是 2）的样本比例的平方和</strong>。</p>
+<p>例如根节点的基尼不纯度：<br><img src= "/img/loading.gif" data-lazy-src="https://image.hackerjerry.top/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E4%B9%8B%E9%9A%8F%E6%9C%BA%E6%A3%AE%E6%9E%97-6.png#align=left&display=inline&height=73&margin=%5Bobject%20Object%5D&originHeight=73&originWidth=1080&size=0&status=done&style=none&width=1080"></p>
+<p>在每个节点，决策树要在所有特征中搜索用于拆分的值，从而可以<strong>最大限度地减少基尼不纯度</strong>。（拆分节点的另一个<strong>替代方法</strong>是使用<strong>信息增益</strong>）。<br>然后，它以贪婪递归的过程重复这种拆分，直到达到最大深度，或者每个节点仅包含同类的样本。<br>树每层的加权总基尼不纯度（每个节点的基尼不纯度按照该节点中来自父节点的点的比例进行加权）一定是减少的。在树的第二层，总加权基尼不纯度值为 0.333：<br><img src= "/img/loading.gif" data-lazy-src="https://image.hackerjerry.top/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E4%B9%8B%E9%9A%8F%E6%9C%BA%E6%A3%AE%E6%9E%97-7.png#align=left&display=inline&height=58&margin=%5Bobject%20Object%5D&name=image.png&originHeight=77&originWidth=845&size=17368&status=done&style=none&width=641" alt="image.png"><br>最终，最后一层的加权总基尼不纯度变为 0，也意味着每个节点都是完全纯粹的，从节点中随机选择的点不会被错误分类。虽然这一切看起来挺好的，但这意味着模型可能过拟合，因为所有节点都是仅仅使用训练数据构建的。</p>
+<h2 id="决策树剪枝"><a href="#决策树剪枝" class="headerlink" title="决策树剪枝"></a>决策树剪枝</h2><p>决策树生成算法递归产生一棵决策树，直到结束划分。什么时候结束呢？</p>
+<ul>
+<li>样本属于同一种类型</li>
+<li>没有特征可以分割</li>
+</ul>
+<p>这样得到的决策树往往对训练数据分类非常精准，但是对于未知数据表现比较差。<br>原因在于基于训练集构造的决策树过于复杂，产生过拟合。所以需要对决策树简化，砍掉多余的分支，提高泛化能力。<br>决策树剪枝一般有两种方法：</p>
+<ul>
+<li><strong>预剪枝</strong>：在树的生成过程中剪枝。<strong>基于贪心策略，可能造成局部最优</strong></li>
+<li><strong>后剪枝</strong>：等树全部生成后剪枝。<strong>运算量较大，但是比较精准</strong></li>
+</ul>
+<p>决策树剪枝往往通过<strong>极小化决策树整体的损失函数实现</strong>。</p>
+<p><img src= "/img/loading.gif" data-lazy-src="https://image.hackerjerry.top/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E4%B9%8B%E9%9A%8F%E6%9C%BA%E6%A3%AE%E6%9E%97-8.png#align=left&display=inline&height=281&margin=%5Bobject%20Object%5D&name=image.png&originHeight=561&originWidth=731&size=122786&status=done&style=none&width=365.5" alt="image.png"><br>假设树 T 有|T|个叶子节点，某一个叶子节点 t 上有 <img src= "/img/loading.gif" data-lazy-src="https://cdn.nlark.com/yuque/0/2021/svg/1629942/1618021002264-6488bff2-9519-4ecc-bbdd-6f2f86c34189.svg#align=left&display=inline&height=23&margin=%5Bobject%20Object%5D&originHeight=23&originWidth=24&size=0&status=done&style=none&width=24"> 个样本，其中 k 类的样本有 <img src= "/img/loading.gif" data-lazy-src="https://cdn.nlark.com/yuque/0/2021/svg/1629942/1618021002341-9e586245-0eb4-43f1-ab4b-e9d2f1514bd9.svg#align=left&display=inline&height=23&margin=%5Bobject%20Object%5D&originHeight=23&originWidth=32&size=0&status=done&style=none&width=32"> 个，<img src= "/img/loading.gif" data-lazy-src="https://cdn.nlark.com/yuque/0/2021/svg/1629942/1618021002330-b42005d2-d60f-4e39-927c-852a31a4810e.svg#align=left&display=inline&height=26&margin=%5Bobject%20Object%5D&originHeight=26&originWidth=56&size=0&status=done&style=none&width=56"> 为叶子节点 t 的熵， <img src= "/img/loading.gif" data-lazy-src="https://cdn.nlark.com/yuque/0/2021/svg/1629942/1618021002461-670ab097-97d8-4674-b83a-a27eed267988.svg#align=left&display=inline&height=21&margin=%5Bobject%20Object%5D&originHeight=21&originWidth=52&size=0&status=done&style=none&width=52"> 是参数，则决策树的<strong>损失函数</strong>定义为：<br><img src= "/img/loading.gif" data-lazy-src="https://image.hackerjerry.top/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E4%B9%8B%E9%9A%8F%E6%9C%BA%E6%A3%AE%E6%9E%97-9.svg#align=left&display=inline&height=69&margin=%5Bobject%20Object%5D&originHeight=69&originWidth=264&size=0&status=done&style=none&width=264"><br>其中熵为：<br><img src= "/img/loading.gif" data-lazy-src="https://image.hackerjerry.top/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E4%B9%8B%E9%9A%8F%E6%9C%BA%E6%A3%AE%E6%9E%97-10.svg#align=left&display=inline&height=57&margin=%5Bobject%20Object%5D&originHeight=57&originWidth=246&size=0&status=done&style=none&width=246"><br><strong>损失函数第一项为训练误差，第二项为模型复杂度，</strong>用参数 <img src= "/img/loading.gif" data-lazy-src="https://cdn.nlark.com/yuque/0/2021/svg/1629942/1618021002545-b6955ef3-85ad-4594-9a5e-f5a27be46475.svg#align=left&display=inline&height=15&margin=%5Bobject%20Object%5D&originHeight=15&originWidth=13&size=0&status=done&style=none&width=13"> 来衡量二者的比重。</p>
+<h2 id="CART-算法"><a href="#CART-算法" class="headerlink" title="CART 算法"></a>CART 算法</h2><p>CART 表示分类回归决策树，同样由特征选择、树的生成及剪枝组成，可以处理分类和回归任务。<br>相比之下，<strong>ID3 和 C4.5 算法只能处理分类任务</strong>。<br>CART 假设决策树是二叉树，内部结点特征的取值为“是”和“否”，依次递归地二分每个特征。<br><strong>CART 对回归树采用平方误差最小化准则，对分类树用基尼指数最小化准则</strong>。</p>
+<h2 id="过拟合–为什么森林比一棵树更好"><a href="#过拟合–为什么森林比一棵树更好" class="headerlink" title="过拟合–为什么森林比一棵树更好"></a>过拟合–为什么森林比一棵树更好</h2><p><strong>因为这棵树是在训练数据上没有犯错，我们没有限制最大深度（树的层数），因此泛化能力差。</strong><br>过拟合发生在当我们有一个非常灵活的模型（模型具有高能力）时，其本质上是通过紧密拟合来记住训练数据。这样的问题是模型不仅学到了训练数据中的实际关系，还学习了存在的噪声。灵活的模型具有高方差<strong>（variance）</strong>，因为学到的参数（例如决策树的结构）将随着训练数据的不同而变化很大。</p>
+<p>当我们<strong>不限制最大深度时决策树容易过拟合的原因</strong>是它<strong>具有无限的灵活性</strong>，这意味着它可以持续生长，直到它为每个单独的观察点都生成一个叶节点，<strong>达到完美地分类</strong>。<br>如果返回到之前决策树的图像并将最大深度限制为 2（仅进行一次拆分），则分类不再 100％正确。我们减少了决策树的方差，但代价是增加了偏差。<br><strong>限制树的深度</strong>可以<strong>减少方差（好）</strong>并且<strong>增加偏差（坏）</strong>，一种替代方案是，我们可以将许多决策树组合成一个称为随机森林的集成模型（ensemble model）。</p>
+<h1 id="随机森林"><a href="#随机森林" class="headerlink" title="随机森林"></a>随机森林</h1><p>我们将<strong>使用 CART 决策树作为弱学习器的 bagging 方法称为随机森林</strong>。<br>bagging 是一种在原始数据集上，通过<strong>有放回抽样</strong>分别选出 k 个新数据集，来训练分类器的集成算法。分类器之间没有依赖关系。<br><img src= "/img/loading.gif" data-lazy-src="https://image.hackerjerry.top/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E4%B9%8B%E9%9A%8F%E6%9C%BA%E6%A3%AE%E6%9E%97-11.png#align=left&display=inline&height=162&margin=%5Bobject%20Object%5D&name=image.png&originHeight=323&originWidth=799&size=117004&status=done&style=none&width=399.5" alt="image.png"><br>随机森林是由许多决策树组成的模型。这个模型不是简单地平均所有树（我们可以称之为“森林”）的预测，而是使用了两个关键概念，名字中的随机二字也是由此而来：</p>
+<ul>
+<li>在构建树时对训练数据点进行随机抽样</li>
+<li>分割节点时考虑特征的随机子集</li>
+</ul>
+<h2 id="随机抽样训练观测数据"><a href="#随机抽样训练观测数据" class="headerlink" title="随机抽样训练观测数据"></a><strong>随机抽样训练观测数据</strong></h2><p>在训练时，随机森林中的<strong>每棵树</strong>都会<strong>从数据点的随机样本中学习</strong>。<strong>样本被有放回的抽样</strong>，称为<strong>自助抽样法</strong>（<strong>bootstrapping</strong>），这意味着<strong>一些样本将在一棵树中被多次使用</strong>。背后的<strong>想法</strong>是<strong>在不同样本上训练每棵树，尽管每棵树相对于特定训练数据集可能具有高方差，但总体而言，整个森林将具有较低的方差，同时不以增加偏差为代价。</strong><br>在测试时，通过<strong>平均每个决策树的预测</strong>来进行预测。这种<strong>在不同的自助抽样数据子集上训练单个学习器，然后对预测进行平均的过程称为 bagging</strong>，是 bootstrap aggregating 的缩写。</p>
+<h2 id="用于拆分节点的随机特征子集"><a href="#用于拆分节点的随机特征子集" class="headerlink" title="用于拆分节点的随机特征子集"></a><strong>用于拆分节点的随机特征子集</strong></h2><p>随机森林中的另一个主要概念是，<strong>只考虑所有特征的一个子集来拆分每个决策树中的每个节点</strong>。通常将<strong>其设置为 sqrt（n_features）</strong>以进行分类，这意味着<strong>如果有 16 个特征</strong>，则在<strong>每个树中的每个节点处</strong>，<strong>只考虑 4 个随机特征</strong>来拆分节点。（随机森林也可以在每个节点处考虑所有的特征，如回归中常见的那样。这些选项可以在 Scikit-Learn Random Forest 的实现中控制）。<br>如果你能理解一棵单独的决策树，bagging 的理念，以及随机的特征子集，那么你对随机森林的工作方式也就有了很好的理解：</p>
+<p>随机森林将成百上千棵决策树组合在一起，在略微不同的观察集上训练每个决策树，在每棵树中仅考虑有限数量的特征来拆分节点。&gt; <strong>随机森林的最终预测是通过平均每棵树的预测来得到的</strong>。</p>
+<p>想理解为什么随机森林优于单一的决策树，请想象以下场景：你要判断特斯拉的股票是否上涨，现在你身边有十几位对该公司都没有先验知识的分析师。每个分析师都有较低的偏见，因为他们没有任何假设，并且可以从新闻报道的数据集中学习。<br>这似乎是一个理想的情况，但问题是报道中除了真实的信号外也可能包含噪音。 因为分析师们完全根据数据做出预测，即他们具有很高的灵活性，也就意味着他们可能会被无关的信息所左右。分析师们可能会从同一数据集中得出不同的预测。此外，如果提供不同的报道训练集，每个分析师都有高方差，并得出截然不同的预测。<br>解决方案是不依赖于任何一个人，而是汇集每个分析师的投票。此外，与随机森林一样，允许每个分析师仅使用一部分报道，并希望通过采样来消除噪声信息的影响。在现实生活中，我们也依赖于多种信息来源（从不信任亚马逊的单独评论），因此，不仅决策树的思想很直观，而且将它们组合在一起成为随机森林的想法同样如此。</p>
+<h2 id="算法特点"><a href="#算法特点" class="headerlink" title="算法特点"></a>算法特点</h2><p>由于随机性，<strong>随机森林对于降低模型方差效果显著</strong>。故随机森林一般不需要额外剪枝，就能取得较好的泛化性能。</p>
+<p>相对而言，模型对于训练集的拟合程度就会差一些，相比于基于 boosting 的 GBDT 模型，偏差会大一些。</p>
+<p>另外，<strong>随机森林中的树一般会比较深，以尽可能地降低偏差；而 GBDT 树的深度会比较浅，通过减少模型复杂度来降低方差</strong>。</p>
+<p>最后，我们总结一下随机森林都有哪些优点：</p>
+<ul>
+<li>采用了集成算法，精度优于大多数单模型算法</li>
+<li>在测试集上表现良好，两个随机性的引入降低了过拟合风险</li>
+<li>树的组合可以让随机森林处理非线性数据</li>
+<li>训练过程中能检测特征重要性，是常见的<strong>特征筛选</strong>方法</li>
+<li>每棵树可以同时生成，并行效率高，训练速度快</li>
+<li>可以自动处理缺省值</li>
+</ul>
+<h1 id="模型评价"><a href="#模型评价" class="headerlink" title="模型评价"></a>模型评价</h1><p>AUC(area under the curve)是 ROC 曲线下的面积。所以，在理解 AUC 之前，要先了解 ROC 是什么。而 ROC 的计算又需要借助混淆矩阵。</p>
+<blockquote>
+<p>AUC 是一个从 0（最差）到 1（最佳）的度量值，</p>
+</blockquote>
+<p>我们还可以绘制单个决策树（顶部）和随机森林（底部）的 ROC 曲线。<strong>靠近左上角的曲线代表着更好的模型：</strong><br><img src= "/img/loading.gif" data-lazy-src="https://image.hackerjerry.top/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E4%B9%8B%E9%9A%8F%E6%9C%BA%E6%A3%AE%E6%9E%97-12.png#align=left&display=inline&height=271&margin=%5Bobject%20Object%5D&name=image.png&originHeight=542&originWidth=777&size=81703&status=done&style=none&width=388.5" alt="image.png"></p>
+</div><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">文章作者: </span><span class="post-copyright-info"><a href="mailto:undefined">M@tr1x</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">文章链接: </span><span class="post-copyright-info"><a href="https://www.blog.hackerjerry.top/2021/04/09/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E4%B9%8B%E9%9A%8F%E6%9C%BA%E6%A3%AE%E6%9E%97_new/">https://www.blog.hackerjerry.top/2021/04/09/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E4%B9%8B%E9%9A%8F%E6%9C%BA%E6%A3%AE%E6%9E%97_new/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="https://www.blog.hackerjerry.top" target="_blank">M@tr1xの日常</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"></div><div class="post_share"><div class="social-share" data-image="https://image.hackerjerry.top/2427682894.jpeg" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/social-share.js/dist/css/share.min.css"><script src="https://cdn.jsdelivr.net/npm/social-share.js/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><div class="prev-post pull-left"><a href="/2021/04/10/wireshark%E6%8A%93%E5%8C%85%E5%8E%9F%E7%90%86_new/"><img class="prev-cover" data-lazy-src="https://image.hackerjerry.top/2427682894.jpeg" onerror="onerror=null;src='/img/404.jpg'"><div class="pagination-info"><div class="label">上一篇</div><div class="prev_info">wireshark抓包原理</div></div></a></div><div class="next-post pull-right"><a href="/2021/04/02/BlockDAG%E4%BB%8E%E9%9B%B6%E5%88%B0%E4%B8%80_new/"><img class="next-cover" data-lazy-src="https://image.hackerjerry.top/2427682894.jpeg" onerror="onerror=null;src='/img/404.jpg'"><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">BlockDAG从零到一</div></div></a></div></nav><hr/><div id="post-comment"><div class="comment-head"><div class="comment-headline"><i class="fas fa-comments fa-fw"></i><span> 评论</span></div></div><div class="comment-wrap"><div><div class="vcomment" id="vcomment"></div></div></div></div></article></main><footer id="footer" data-type="color"><div id="footer-wrap"><div class="copyright">&copy;2019 - 2021 By M@tr1x</div><div class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div><div class="footer_custom_text">冷風熱血，荡涤乾坤</div><div class="icp"><a target="_blank" rel="noopener" href="http://www.beian.miit.gov.cn"><img class="icp-icon" src="/img/icp.png"/><span>陕ICP备19023179号</span></a></div><div class="cdn"><a href="https://www.upyun.com/?utm_source=lianmeng&amp;utm_medium=referral" target="_blank"><img src="/img/upyun.png" width="70px"/><span></span></a></div></div></footer></div><section id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="设置"><i class="fas fa-cog"></i></button><a id="to_comment" href="#post-comment" title="直达评论"><i class="fas fa-comments"></i></a><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="回到顶部"><i class="fas fa-arrow-up"></i></button></div></section><div class="search-dialog" id="local-search"><div class="search-dialog__title" id="local-search-title">本地搜索</div><div id="local-input-panel"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="搜索文章" type="text"/></div></div></div><hr/><div id="local-search-results"><div id="local-hits"></div><div id="local-stats"><div class="local-search-stats__hr" id="hr"><span>由</span> <a target="_blank" rel="noopener" href="https://github.com/wzpan/hexo-generator-search" style="color:#49B1F5;">hexo-generator-search</a>
+ <span>提供支持</span></div></div></div><span class="search-close-button"><i class="fas fa-times"></i></span></div><div id="search-mask"></div><div><script src="https://cdn.jsdelivr.net/npm/jquery@latest/dist/jquery.min.js"></script><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.js"></script><script src="https://cdn.jsdelivr.net/npm/instant.page/instantpage.min.js" type="module" defer></script><script src="https://cdn.jsdelivr.net/npm/vanilla-lazyload/dist/lazyload.iife.min.js" async></script><script src="/js/search/local-search.js"></script><div class="js-pjax"><script>function loadValine () {
+  function initValine () {
+    window.valine = new Valine({
+      el: '#vcomment',
+      appId: 'jApqS8Xxcc1eST53AyiAisFx-gzGzoHsz',
+      appKey: 'iyngroaUslATD8V4nOgOHowr',
+      placeholder: '说点什么呗~',
+      avatar: 'monsterid',
+      meta: 'nick,mail,link'.split(','),
+      pageSize: '10',
+      lang: 'zh-CN',
+      recordIP: false,
+      serverURLs: '',
+      emojiCDN: '',
+      emojiMaps: "",
+      enableQQ: true,
+      path: window.location.pathname,
+    });
+    if ('nick,mail') { valine.config.requiredFields= 'nick,mail'.split(',') }
+  }
+
+  if (typeof Valine === 'function') initValine() 
+  else $.getScript('https://cdn.jsdelivr.net/npm/valine/dist/Valine.min.js', initValine)
+}
+
+if ('Valine' === 'Valine' || !false) {
+  if (false) loadComment(document.querySelector('#vcomment'),loadValine)
+  else setTimeout(() => loadValine(), 0)
+} else {
+  function loadOtherComment () {
+    loadValine()
+  }
+}</script><script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></div></body></html>
