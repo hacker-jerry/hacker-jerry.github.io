@@ -1,164 +1,617 @@
-<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width,initial-scale=1"><title>MCM-Post-Competition-Summary | M@tr1xの日常</title><meta name="description" content="Hey, password is required here.           a878aca5d3b74c79800e37344b48042a3a0d18554ca21b5fd44c4d78137a316babb46472e9e3c4f755bacbb652b3430253655000fdeb7e959a657e3a9b050071912b5febe9679c83972"><meta name="keywords" content="数模,绘图"><meta name="author" content="M@tr1x"><meta name="copyright" content="M@tr1x"><meta name="format-detection" content="telephone=no"><link rel="shortcut icon" href="/img/favicon.png"><link rel="canonical" href="https://www.blog.hackerjerry.top/2021/02/17/MCM-Post-Competition-Summary_new/"><meta http-equiv="Cache-Control" content="no-transform"><meta http-equiv="Cache-Control" content="no-siteapp"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//fonts.googleapis.com" crossorigin="crossorigin"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><meta name="google-site-verification" content="UA-157542666-1"/><meta property="og:type" content="article"><meta property="og:title" content="MCM-Post-Competition-Summary"><meta property="og:url" content="https://www.blog.hackerjerry.top/2021/02/17/MCM-Post-Competition-Summary_new/"><meta property="og:site_name" content="M@tr1xの日常"><meta property="og:description" content="Hey, password is required here.           a878aca5d3b74c79800e37344b48042a3a0d18554ca21b5fd44c4d78137a316babb46472e9e3c4f755bacbb652b3430253655000fdeb7e959a657e3a9b050071912b5febe9679c83972"><meta property="og:image" content="https://image.hackerjerry.top/2427682894.jpeg"><meta property="article:published_time" content="2021-02-17T02:41:29.000Z"><meta property="article:modified_time" content="2021-10-08T04:04:52.930Z"><meta name="twitter:card" content="summary"><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.css"><link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Titillium+Web&amp;display=swap"><script>var GLOBAL_CONFIG = { 
-  root: '/',
-  hexoversion: '5.1.1',
-  algolia: undefined,
-  localSearch: {"path":"search.xml","languages":{"hits_empty":"找不到您查询的内容：${query}"}},
-  translate: undefined,
-  noticeOutdate: {"limitDay":500,"position":"top","messagePrev":"It has been","messageNext":"days since the last update, the content of the article may be outdated."},
-  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":true},
-  copy: {
-    success: '复制成功',
-    error: '复制错误',
-    noSupport: '浏览器不支持'
-  },
-  bookmark: {
-    message_prev: '按',
-    message_next: '键将本页加入书签'
-  },
-  runtime: '天',
-  last_push_date: {"zeroDay":"今天","suffix":"天前"},
-  copyright: {"limitCount":50,"languages":{"author":"作者: M@tr1x","link":"链接: ","source":"来源: M@tr1xの日常","info":"著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。"}},
-  ClickShowText: undefined,
-  medium_zoom: false,
-  fancybox: true,
-  Snackbar: undefined,
-  justifiedGallery: {
-    js: 'https://cdn.jsdelivr.net/npm/justifiedGallery/dist/js/jquery.justifiedGallery.min.js',
-    css: 'https://cdn.jsdelivr.net/npm/justifiedGallery/dist/css/justifiedGallery.min.css'
-  },
-  baiduPush: false,
-  isPhotoFigcaption: false,
-  islazyload: true,
-  isanchor: false
-};
 
-var saveToLocal = {
-  set: function setWithExpiry(key, value, ttl) {
-      const now = new Date()
-      const expiryDay = ttl * 86400000
-      const item = {
-        value: value,
-        expiry: now.getTime() + expiryDay,
-      }
-      localStorage.setItem(key, JSON.stringify(item))
-    },
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/favicon.png">
+  <link rel="icon" href="/img/favicon.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
   
-  get: function getWithExpiry(key) {
-    const itemStr = localStorage.getItem(key)
+  <meta name="theme-color" content="#2f4154">
+  <meta name="description" content="Here&#39;s something encrypted, password is required to continue reading.">
+  <meta name="author" content="M@tr1x">
+  <meta name="keywords" content="CTF,白帽子,Pwn,Web">
+  <meta name="description" content="Here&#39;s something encrypted, password is required to continue reading.">
+<meta property="og:type" content="article">
+<meta property="og:title" content="MCM-Post-Competition-Summary">
+<meta property="og:url" content="https://www.blog.hackerjerry.top/2021/02/17/MCM-Post-Competition-Summary_new/index.html">
+<meta property="og:site_name" content="M@tr1xの日常">
+<meta property="og:description" content="Here&#39;s something encrypted, password is required to continue reading.">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2021-02-17T02:41:29.000Z">
+<meta property="article:modified_time" content="2021-11-08T13:30:12.191Z">
+<meta property="article:author" content="M@tr1x">
+<meta property="article:tag" content="数模">
+<meta property="article:tag" content="绘图">
+<meta name="twitter:card" content="summary_large_image">
+  
+  <title>MCM-Post-Competition-Summary - M@tr1xの日常</title>
 
-    if (!itemStr) {
-      return undefined
-    }
-    const item = JSON.parse(itemStr)
-    const now = new Date()
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4/dist/css/bootstrap.min.css" />
 
-    if (now.getTime() > item.expiry) {
-      localStorage.removeItem(key)
-      return undefined
-    }
-    return item.value
-  }
-}</script><script id="config_change">var GLOBAL_CONFIG_SITE = { 
-  isPost: true,
-  isHome: false,
-  isHighlightShrink: false,
-  isSidebar: true,
-  postUpdate: '2021-10-08 12:04:52'
-}</script><noscript><style type="text/css">
-#nav {
-  opacity: 1
-}
-.justified-gallery img {
-  opacity: 1
-}
-</style></noscript><script>var activateDarkMode = function () {
-  document.documentElement.setAttribute('data-theme', 'dark')
-  if (document.querySelector('meta[name="theme-color"]') !== null) {
-    document.querySelector('meta[name="theme-color"]').setAttribute('content', '#000')
-  }
-}
-var activateLightMode = function () {
-  document.documentElement.setAttribute('data-theme', 'light')
-  if (document.querySelector('meta[name="theme-color"]') !== null) {
-    document.querySelector('meta[name="theme-color"]').setAttribute('content', '#fff')
-  }
-}
 
-var autoChangeMode = 'false'
-var t = saveToLocal.get('theme')
-if (autoChangeMode === '1') {
-  var isDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches
-  var isLightMode = window.matchMedia('(prefers-color-scheme: light)').matches
-  var isNotSpecified = window.matchMedia('(prefers-color-scheme: no-preference)').matches
-  var hasNoSupport = !isDarkMode && !isLightMode && !isNotSpecified
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/github-markdown-css@4/github-markdown.min.css" />
+  <link  rel="stylesheet" href="/lib/hint/hint.min.css" />
 
-  if (t === undefined) {
-    if (isLightMode) activateLightMode()
-    else if (isDarkMode) activateDarkMode()
-    else if (isNotSpecified || hasNoSupport) {
-      console.log('You specified no preference for a color scheme or your browser does not support it. I Schedule dark mode during night time.')
-      var now = new Date()
-      var hour = now.getHours()
-      var isNight = hour <= 6 || hour >= 18
-      isNight ? activateDarkMode() : activateLightMode()
-    }
-    window.matchMedia('(prefers-color-scheme: dark)').addListener(function (e) {
-      if (saveToLocal.get('theme') === undefined) {
-        e.matches ? activateDarkMode() : activateLightMode()
-      }
-    })
-  } else if (t === 'light') activateLightMode()
-  else activateDarkMode()
-} else if (autoChangeMode === '2') {
-  now = new Date()
-  hour = now.getHours()
-  isNight = hour <= 6 || hour >= 18
-  if (t === undefined) isNight ? activateDarkMode() : activateLightMode()
-  else if (t === 'light') activateLightMode()
-  else activateDarkMode()
-} else {
-  if (t === 'dark') activateDarkMode()
-  else if (t === 'light') activateLightMode()
-}</script><meta name="generator" content="Hexo 5.1.1"><link rel="alternate" href="/atom.xml" title="M@tr1xの日常" type="application/atom+xml">
-</head><body><div id="mobile-sidebar"><div id="menu_mask"></div><div id="mobile-sidebar-menus"><div class="mobile_author_icon"><img class="avatar-img" data-lazy-src="/img/avatar.png" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="mobile_post_data"><div class="mobile_data_item is-center"><div class="mobile_data_link"><a href="/archives/"><div class="headline">文章</div><div class="length_num">78</div></a></div></div><div class="mobile_data_item is-center">      <div class="mobile_data_link"><a href="/tags/"><div class="headline">标签</div><div class="length_num">45</div></a></div></div><div class="mobile_data_item is-center">     <div class="mobile_data_link"><a href="/categories/"><div class="headline">分类</div><div class="length_num">16</div></a></div></div></div><hr/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fa fa-home"></i><span> Home</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fa fa-tags"></i><span> Tags</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fa fa-folder-open"></i><span> Categories</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fa fa-link"></i><span> Link</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fa fa-heart"></i><span> About</span></a></div><div class="menus_item"><a class="site-page" href="javascript:void(0);"><i class="fa-fw fa fa-list"></i><span> List</span><i class="fas fa-chevron-down expand"></i></a><ul class="menus_item_child"><li><a class="site-page" href="/bangumis/"><i class="fa-fw fa fa-film"></i><span> 追番</span></a></li><li><a class="site-page" href="/artalk/"><i class="fa-fw fa-fw fa fa-comment-alt"></i><span> 说说</span></a></li></ul></div></div></div></div><div id="body-wrap"><div id="sidebar"><i class="fas fa-arrow-right" id="toggle-sidebar"></i><div class="sidebar-toc"><div class="sidebar-toc__title">目录</div><div class="sidebar-toc__progress"><span class="progress-notice">你已经读了</span><span class="progress-num">0</span><span class="progress-percentage">%</span><div class="sidebar-toc__progress-bar">     </div></div><div class="sidebar-toc__content toc-div-class" style="display:none"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E9%AB%98%E6%95%88%E4%BD%BF%E7%94%A8-AxGlyph"><span class="toc-number">1.</span> <span class="toc-text">高效使用 AxGlyph</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%9C%A8%E7%BA%BF%E4%BD%9C%E5%9B%BE-VP"><span class="toc-number">2.</span> <span class="toc-text">在线作图 VP</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%B8%80%E7%82%B9%E5%B0%8F%E6%80%BB%E7%BB%93"><span class="toc-number">3.</span> <span class="toc-text">一点小总结</span></a></li></ol></div></div></div><header class="post-bg" id="page-header" style="background-image: url(https://image.hackerjerry.top/2427682894.jpeg)"><nav id="nav"><span id="blog_name"><a id="site-name" href="/">M@tr1xの日常</a></span><span class="menus"><div id="search_button"><a class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> 搜索</span></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fa fa-home"></i><span> Home</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fa fa-tags"></i><span> Tags</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fa fa-folder-open"></i><span> Categories</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fa fa-link"></i><span> Link</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fa fa-heart"></i><span> About</span></a></div><div class="menus_item"><a class="site-page" href="javascript:void(0);"><i class="fa-fw fa fa-list"></i><span> List</span><i class="fas fa-chevron-down expand"></i></a><ul class="menus_item_child"><li><a class="site-page" href="/bangumis/"><i class="fa-fw fa fa-film"></i><span> 追番</span></a></li><li><a class="site-page" href="/artalk/"><i class="fa-fw fa-fw fa fa-comment-alt"></i><span> 说说</span></a></li></ul></div></div><span class="toggle-menu close"><a class="site-page"><i class="fas fa-bars fa-fw"></i></a></span></span></nav><div id="post-info"><div id="post-title"><div class="posttitle">MCM-Post-Competition-Summary</div></div><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2021-02-17T02:41:29.000Z" title="发表于 2021-02-17 10:41:29">2021-02-17</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2021-10-08T04:04:52.930Z" title="更新于 2021-10-08 12:04:52">2021-10-08</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E7%BB%98%E5%9B%BE/">绘图</a></span></div><div class="meta-secondline"> <span class="post-meta-separator">|</span><span class="post-meta-pv-cv"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">阅读量:</span><span id="busuanzi_value_page_pv"></span></span></div></div></div></header><main class="layout_post" id="content-inner"><article id="post"><div class="post-content" id="article-container"><div id="hexo-blog-encrypt" data-wpm="Oh, this is an invalid password. Check and try again, please." data-whm="OOPS, these decrypted content may changed, but you can still have a look.">
+  
+    
+    
+      
+      <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@10/styles/github-gist.min.css" />
+    
+  
+
+  
+    <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3/dist/jquery.fancybox.min.css" />
+  
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_ba1fz6golrf.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_kmeydafke9r.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+<!-- 自定义样式保持在最底部 -->
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    var CONFIG = {"hostname":"www.blog.hackerjerry.top","root":"/","version":"1.8.12","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"right","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"copy_btn":true,"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":1},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname"}},"search_path":"/local-search.xml"};
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+<meta name="generator" content="Hexo 5.1.1"><link rel="alternate" href="/atom.xml" title="M@tr1xの日常" type="application/atom+xml">
+</head>
+
+
+<body>
+  <header style="height: 70vh;">
+    <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>M@tr1xの日常</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                首页
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                归档
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                分类
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                标签
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                关于
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/links/">
+                <i class="iconfont icon-link-fill"></i>
+                友链
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/bangumis/">
+                <i class="fa-fw fa fa-film"></i>
+                追番
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/artalk/">
+                <i class="iconfont icon-comment"></i>
+                说说
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              &nbsp;<i class="iconfont icon-search"></i>&nbsp;
+            </a>
+          </li>
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">&nbsp;<i
+                class="iconfont icon-dark" id="color-toggle-icon"></i>&nbsp;</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+    <div class="banner" id="banner" parallax=true
+         style="background: url('/img/default.png') no-repeat center center;
+           background-size: cover;">
+      <div class="full-bg-img">
+        <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+          <div class="page-header text-center fade-in-up">
+            <span class="h2" id="subtitle" title="MCM-Post-Competition-Summary">
+              
+            </span>
+
+            
+              <div class="mt-3">
+  
+  
+    <span class="post-meta">
+      <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+      <time datetime="2021-02-17 10:41" pubdate>
+        2021年2月17日 上午
+      </time>
+    </span>
+  
+</div>
+
+<div class="mt-1">
+  
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-chart"></i>
+      301 字
+    </span>
+  
+
+  
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-clock-fill"></i>
+      
+      
+      1 分钟
+    </span>
+  
+
+  
+  
+    
+      <!-- 不蒜子统计文章PV -->
+      <span id="busuanzi_container_page_pv" style="display: none">
+        <i class="iconfont icon-eye" aria-hidden="true"></i>
+        <span id="busuanzi_value_page_pv"></span> 次
+      </span>
+    
+  
+</div>
+
+            
+          </div>
+
+          
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="d-none d-lg-block col-lg-2"></div>
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div class="py-5" id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">MCM-Post-Competition-Summary</h1>
+            
+              <p class="note note-info">
+                
+                  本文最后更新于：2021年11月8日 晚上
+                
+              </p>
+            
+            <div class="markdown-body">
+              <div id="hexo-blog-encrypt" data-wpm="Oh, this is an invalid password. Check and try again, please." data-whm="OOPS, these decrypted content may changed, but you can still have a look.">
   <div class="hbe-input-container">
   <input type="password" id="hbePass" placeholder="" />
     <label for="hbePass">Hey, password is required here.</label>
     <div class="bottom-line"></div>
   </div>
-  <script id="hbeData" type="hbeData" data-hmacdigest="6097722c53be929503d56efd0eeb57b0024678b899d66bda914c23b394501294">a878aca5d3b74c79800e37344b48042a3a0d18554ca21b5fd44c4d78137a316babb46472e9e3c4f755bacbb652b3430253655000fdeb7e959a657e3a9b050071912b5febe9679c83972b4d8edb9cfdb0bf46c25efdbf3ae545b93b5a29eb74d99a885d5df78a2cb6293e9e07f9883c33d9ed0fbd23e6eab0a3938275447c858465831d943441e3dd745cbb40db1150b44a9c2c52e76dc2226001d100703e8dd92d46d517a81bda16fd2851d02a061ede99f5dd25cb7854cea96f1c8ca504e13c77d189daa18ecbc891108be2e7cad89e6f92ae8f2a029bac6af1210637a925802f6ead7b4e147859c847ef33906b7447d7d093375f04bda88b2f838068f0547af55f61d3b786830f3afef1920ae0e23eab0b38fa0b78f09852eec6885e8e99770dc7e7bbc64aad1f946266481e455a0ef2622c08e648d559cd699427720b4179b307360941bed5dbff1fa6337d05a6fe8af779a86746549a0b2a02951f3f09573e42c7c016e3763abd69ae6f4877d5ec1bfdcd18c31edd8369466f56bbdda5f911d71531a51ecc1e515b5203fa4f3637da658df2a90f26582ead62ae67d7d1c85f374e6913ab035aac483ce1b982930d0a3cf981835c7de6aedf7145a0729b6b092aad30a0256696f7133033ee6ddaf81f490476760c361ed3ae70e6869eea9ab257b9d3ef0beff84cdba32b912ffaef1a864c4bc2e7384735b22393507133e917799237113157fe218c7c456435bee0d74f0de73785d0f68ae74e5ed6bbaeae59f8d2f0bef1fe612d20aab3f4c45c045853e6ffd464ef8fb46b87603590610ed1b69694ec42744a4b4b73496c414944f9beb9644df4adae18c4da7612a4a028bd90a8d8037a25d4b5e1081ffc55d8f4bf10f87e08b47f7fd229f2481f100c51555fd477eec223b47c3ecc38501228287153799395ca2f061ada46d58f8fd0c30c58483dc35cb5966a6ecb6089a761e74f9f2748bf284dfafbacb74513251439ac641aa7773688ac552d1e945e64236d93be873719586f6d39a27124af6f98a28c5b5ebec1ac57d0b0cc33b4327ff851cf48eadb646c7278b6f0aca878db806c1a221c892473aa0f396c5925e3b7dd3cc04405d42fbf731d4377d500ab991d08adb3947e8a19612606977c4db09182014fd3e597bab44ca755ece5a1809bd6e61fbdc1946326ecb33ea6eda6a1d0d7b3dd68a504261dc90e82aa241c8435f7e9799b06b05e9178dd38ee6b80f3bbb777455e81075caae1fc043ac362a089f2e985c5cd680d0dec4975c41d70cca5dd0095ef90ba149d23352766def41160fdfb1431e828f5e60dfffdf64f2993be6b9ec90c69e184eaca63e95fe8c67b2d2800ae6fdbe6511cf812b6cbdd9a50bb3418add23cad9074443e9acf957c1398795ae38cdab2a3497cd5c1d6ff9de5a5d1805026aec5756ab43410ee22fe6811425132bae5054f73233ea19987888719cbf3ec0ed37729c5d6c2308cd869b2dbc0d557af82ac11b6a1aaf1bbd26c9ae3925e51d5c1753d05a31747af0d7cdf71e94e1b61d39c046cf56fde9be80a560ed225d1754a533835d1cab2bc0c0d814349c0c25e0c2f33d5a27544e2aba3b8ab1125539216972f33046690860ca6751f690d8ddd561461ce5b26b2997b03d7de123d1ad87415740f9f063c4f5e3dc59eb3585dfe39399fe2320f5d96f198bc84b3807162f661cc466b3412a801d2bed4577d4e88d51773e1d998b7d21654805858247a8c72e266bfbb373982c4f8f2c62c244861c6c2b9101ce1323b355886f08cad879f642d7e4988b1842245d639cbe176c6bea3dbe23ef99a9d109012e05a6c479758e18617bdcf50610b430c2835db36845a895ebd167395bc009f0745862695927a23a79152d96e9f61a46cf636c26fa9c201208495244b9133dcbc87b46de6497f576d749feea784277c776e3e5b70ce585f008c0472a2db9fd02b314d64a1e6bd5b2340a97bc55cd9bb320d7780262ae49f47ff3d3f45c2873b3f93473a1bd76b2e7d92fc3dd5a3329d92683d2de5ba9be73895b3e8c240da7f5ca021fc49b6d88f3f1074304ba5cb8a4aa835c8fa4ec4ff0a04bfcc4b57ad73c1ae568c8e722cdf39bd38525d3076f2e1791f30f8</script>
+  <script id="hbeData" type="hbeData" data-hmacdigest="418ec512379f3d8a17628f703531e3e1d91386cb9735a4ab5e3e078d2dedc932">a878aca5d3b74c79800e37344b48042a3a0d18554ca21b5fd44c4d78137a316babb46472e9e3c4f755bacbb652b3430253655000fdeb7e959a657e3a9b050071912b5febe9679c83972b4d8edb9cfdb0bf46c25efdbf3ae545b93b5a29eb74d99a885d5df78a2cb6293e9e07f9883c33d9ed0fbd23e6eab0a3938275447c858465831d943441e3dd745cbb40db1150b44a9c2c52e76dc2226001d100703e8dd92d46d517a81bda16fd2851d02a061ede99f5dd25cb7854cea96f1c8ca504e13c77d189daa18ecbc891108be2e7cad89e6f92ae8f2a029bac6af1210637a925802f6ead7b4e147859c847ef33906b7447d7d093375f04bda88b2f838068f0547af55f61d3b786830f3afef1920ae0e23eab0b38fa0b78f09852eec6885e8e99770dc7e7bbc64aad1f946266481e455a0ef2622c08e648d559cd699427720b4179b307360941bed5dbff1fa6337d05a6fe8af779a86746549a0b2a02951f3f09573e42c7c016e3763abd69ae6f4877d5ec1bfdcd18c31edd8369466f56bbdda5f911d71531a51ecc1e515b5203fa4f3637da658df2a90f26582ead62ae67d7d1c85f374e6913ab035aac483ce1b982930d0a3cf981835c7de6aedf7145a0729b6bf10f45e6a44680d75ef3dd253b09da4dab350ca34a3afe77639bb605802cfb20d3953079a22c0c4d0acd530f2e03de5dd9bef59f228f29e3a5125c5fed03fd3c71596a99f64bd775f17241ac5d68c2e5b94837724a4d3c7e01c51bf4572f0b428b395c52e04ca58432b2846cb76710c2b01855e74fba759ca4df34f3e25d631cd005ad9fd8779a37359afd7f4a78b219bf530557d3dbbc0fa4ead2d8108e39fae3d52e7ae900a9a42e145e39686830f3c52ec20d572fb9739e71ebdf97f3961a41a58a08fc1a32dd7e0612c68a6fa4392f5619ef5e5cd75c908136923ce12ae9edb22174a3630eb722e4e0ceb6c1b044fa75f74367765aaff7eeff84d616d50f89fef743b1cef70bb55c0e7d6cea93b4f36d3696624f950ccad4c5c9d633d6fbd2da0294fd9d7b702914d23776d74f1e9fa9602eb35d3d5649b0a460bbd70f0cd5a264353f09e2a9b9f0322d4be48dc1360e45955dd9b58c57b670b4f1f3b53d998cbf2e693ad7e368405b789e325e9f1b7f3b55d2d0fb72780a0376f7cd825d3e5a642efc346bfd195495b9a8f4a035824582c4dd66e3b5945f1421961486bddfcd9f0131c4a204f0d6444cb9b943f3231058cd7f73c663b3231247ed18e1b6810ee3b9b998e04090116147acdee7a6d0949c21fef93c948348e92365c48316c080ea540d5de126d33eee8e53fbc394071a21896fb913bd33cfd74e47a15ede594931846cd793dcfcce419894e8d8f5cc1e53d477759662c34edd3f916c5d0ca51fb16c1ab9bfb49783be6e96220a4cc430bf001fb01b007e77f9d90a23213734e2295d2b16e4ab9b284285a8c856f8d0712de8fbcdd518500e69932b60517a82588b8d05ddbcd1bcd000f39450448e73e175d05b1c4718287ded9fcebd41e916e455984a6132e4832d1d0f29ffc145482c159b1479e25f2fe9984e8a5be9cf4a355e98f1625db7533de3a2d8393472ee561b212d84f8f83a89ffbfb2606c5cf4b2c016d17a6c5c755d215accaa1919234c1521f5a84b4d005df458da5ca73deeb725489cdadfe2b9c87e580cfef588573c04088eaf403e231fe195d19bc0bec6e8e9c6f14a86ad5eee7a66645ebae38457272f881707428e5fe023fa602bacb15dc4b003ef37fb957566b82abec5a5038566e865afeb41ab6ee14b454b31254f3b7c6e98b14c806dab9a4b0b4b94d2ec611f7a5ba203054b5e7058ececc740ab277771ddd47a2e8a398b71494ec49121b0cb00e9c0967a09dfe7b1f1297016b24026a019a49bfbe2927bdb7ba9b8d99708b833c22258e11ebaecef3068343ed4ca7058f6560a19d4fd63549863e8477b5ce9619a17790b2669398193bebf3ec6d5993b41f4b04c5440aa92a7dc68aca6d9ea43fd787c1a874d7e794fd00381c47f342483b47847124cd63eb5424d94</script>
 </div>
-<script src="/lib/blog-encrypt.js"></script><link href="/css/blog-encrypt.css" rel="stylesheet" type="text/css"></div><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">文章作者: </span><span class="post-copyright-info"><a href="mailto:undefined">M@tr1x</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">文章链接: </span><span class="post-copyright-info"><a href="https://www.blog.hackerjerry.top/2021/02/17/MCM-Post-Competition-Summary_new/">https://www.blog.hackerjerry.top/2021/02/17/MCM-Post-Competition-Summary_new/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="https://www.blog.hackerjerry.top" target="_blank">M@tr1xの日常</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/%E6%95%B0%E6%A8%A1/">数模</a><a class="post-meta__tags" href="/tags/%E7%BB%98%E5%9B%BE/">绘图</a></div><div class="post_share"><div class="social-share" data-image="https://image.hackerjerry.top/2427682894.jpeg" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/social-share.js/dist/css/share.min.css"><script src="https://cdn.jsdelivr.net/npm/social-share.js/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><div class="prev-post pull-left"><a href="/2021/02/22/Pyramid-space-encoding_new/"><img class="prev-cover" data-lazy-src="https://image.hackerjerry.top/2427682894.jpeg" onerror="onerror=null;src='/img/404.jpg'"><div class="pagination-info"><div class="label">上一篇</div><div class="prev_info">Pyramid-space-encoding</div></div></a></div><div class="next-post pull-right"><a href="/2021/02/16/Analysis-video-traffic-with-wireshark_new/"><img class="next-cover" data-lazy-src="https://image.hackerjerry.top/wallpaper-39.jpg" onerror="onerror=null;src='/img/404.jpg'"><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">Analysis-video-traffic-with-wireshark</div></div></a></div></nav><hr/><div id="post-comment"><div class="comment-head"><div class="comment-headline"><i class="fas fa-comments fa-fw"></i><span> 评论</span></div></div><div class="comment-wrap"><div><div class="vcomment" id="vcomment"></div></div></div></div></article></main><footer id="footer" data-type="color"><div id="footer-wrap"><div class="copyright">&copy;2019 - 2021 By M@tr1x</div><div class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div><div class="footer_custom_text">冷風熱血，荡涤乾坤</div><div class="icp"><a target="_blank" rel="noopener" href="http://www.beian.miit.gov.cn"><img class="icp-icon" src="/img/icp.png"/><span>陕ICP备19023179号</span></a></div><div class="cdn"><a href="https://www.upyun.com/?utm_source=lianmeng&amp;utm_medium=referral" target="_blank"><img src="/img/upyun.png" width="70px"/><span></span></a></div></div></footer></div><section id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="设置"><i class="fas fa-cog"></i></button><a id="to_comment" href="#post-comment" title="直达评论"><i class="fas fa-comments"></i></a><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="回到顶部"><i class="fas fa-arrow-up"></i></button></div></section><div class="search-dialog" id="local-search"><div class="search-dialog__title" id="local-search-title">本地搜索</div><div id="local-input-panel"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="搜索文章" type="text"/></div></div></div><hr/><div id="local-search-results"><div id="local-hits"></div><div id="local-stats"><div class="local-search-stats__hr" id="hr"><span>由</span> <a target="_blank" rel="noopener" href="https://github.com/wzpan/hexo-generator-search" style="color:#49B1F5;">hexo-generator-search</a>
- <span>提供支持</span></div></div></div><span class="search-close-button"><i class="fas fa-times"></i></span></div><div id="search-mask"></div><div><script src="https://cdn.jsdelivr.net/npm/jquery@latest/dist/jquery.min.js"></script><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.js"></script><script src="https://cdn.jsdelivr.net/npm/instant.page/instantpage.min.js" type="module" defer></script><script src="https://cdn.jsdelivr.net/npm/vanilla-lazyload/dist/lazyload.iife.min.js" async></script><script src="/js/search/local-search.js"></script><div class="js-pjax"><script>function loadValine () {
-  function initValine () {
-    window.valine = new Valine({
-      el: '#vcomment',
-      appId: 'jApqS8Xxcc1eST53AyiAisFx-gzGzoHsz',
-      appKey: 'iyngroaUslATD8V4nOgOHowr',
-      placeholder: '说点什么呗~',
-      avatar: 'monsterid',
-      meta: 'nick,mail,link'.split(','),
-      pageSize: '10',
-      lang: 'zh-CN',
-      recordIP: false,
-      serverURLs: '',
-      emojiCDN: '',
-      emojiMaps: "",
-      enableQQ: true,
-      path: window.location.pathname,
+<script src="/lib/blog-encrypt.js"></script><link href="/css/blog-encrypt.css" rel="stylesheet" type="text/css">
+            </div>
+            <hr>
+            <div>
+              <div class="post-metas mb-3">
+                
+                  <div class="post-meta mr-3">
+                    <i class="iconfont icon-category"></i>
+                    
+                      <a class="hover-with-bg" href="/categories/%E7%BB%98%E5%9B%BE/">绘图</a>
+                    
+                  </div>
+                
+                
+                  <div class="post-meta">
+                    <i class="iconfont icon-tags"></i>
+                    
+                      <a class="hover-with-bg" href="/tags/%E6%95%B0%E6%A8%A1/">数模</a>
+                    
+                      <a class="hover-with-bg" href="/tags/%E7%BB%98%E5%9B%BE/">绘图</a>
+                    
+                  </div>
+                
+              </div>
+              
+                <p class="note note-warning">
+                  
+                    本博客所有文章除特别声明外，均采用 <a target="_blank" href="https://creativecommons.org/licenses/by-sa/4.0/deed.zh" rel="nofollow noopener noopener">CC BY-SA 4.0 协议</a> ，转载请注明出处！
+                  
+                </p>
+              
+              
+                <div class="post-prevnext">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2021/02/22/Pyramid-space-encoding_new/">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">Pyramid-space-encoding</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2021/02/16/Analysis-video-traffic-with-wireshark_new/">
+                        <span class="hidden-mobile">Analysis-video-traffic-with-wireshark</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+              <!-- Comments -->
+              <article class="comments" id="comments" lazyload>
+                
+                  
+                
+                
+  <div id="valine"></div>
+  <script type="text/javascript">
+    Fluid.utils.loadComments('#valine', function() {
+      Fluid.utils.createScript('https://cdn.jsdelivr.net/npm/valine@1/dist/Valine.min.js', function() {
+        var options = Object.assign(
+          {"appId":"jApqS8Xxcc1eST53AyiAisFx-gzGzoHsz","appKey":"iyngroaUslATD8V4nOgOHowr","path":"window.location.pathname","placeholder":"说点什么呗~","avatar":"retro","meta":["nick","mail","link"],"requiredFields":["mail"],"pageSize":10,"lang":"zh-CN","highlight":false,"recordIP":false,"serverURLs":"","emojiCDN":null,"emojiMaps":null,"enableQQ":true},
+          {
+            el: "#valine",
+            path: window.location.pathname
+          }
+        )
+        new Valine(options);
+        Fluid.utils.waitElementVisible('#valine .vcontent', () => {
+          Fluid.plugins.initFancyBox('#valine .vcontent img:not(.vemoji)');
+        })
+      });
     });
-    if ('nick,mail') { valine.config.requiredFields= 'nick,mail'.split(',') }
-  }
+  </script>
+  <noscript>Please enable JavaScript to view the comments</noscript>
 
-  if (typeof Valine === 'function') initValine() 
-  else $.getScript('https://cdn.jsdelivr.net/npm/valine/dist/Valine.min.js', initValine)
-}
 
-if ('Valine' === 'Valine' || !false) {
-  if (false) loadComment(document.querySelector('#vcomment'),loadValine)
-  else setTimeout(() => loadValine(), 0)
-} else {
-  function loadOtherComment () {
-    loadValine()
-  }
-}</script><script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></div></body></html>
+              </article>
+            
+          </article>
+        </div>
+      </div>
+    </div>
+    
+      <div class="d-none d-lg-block col-lg-2 toc-container" id="toc-ctn">
+        <div id="toc">
+  <p class="toc-header"><i class="iconfont icon-list"></i>&nbsp;目录</p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+      </div>
+    
+  </div>
+</div>
+
+<!-- Custom -->
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v"
+                 for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+
+    
+  </main>
+
+  <footer class="text-center mt-5 py-3">
+  <div class="footer-content">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" integrity="sha512-SfTiTlX6kk+qitfevl/7LibUOeJWlt9rbyDn92a1DqWOw9vWG2MFoays0sgObmWazO5BQPiFucnnEAjpAB+/Sw==" crossorigin="anonymous" referrerpolicy="no-referrer">
+     <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+  </div>
+  
+  <div class="statistics">
+    
+    
+
+    
+      
+        <!-- 不蒜子统计PV -->
+        <span id="busuanzi_container_site_pv" style="display: none">
+            总访问量 
+            <span id="busuanzi_value_site_pv"></span>
+             次
+          </span>
+      
+      
+        <!-- 不蒜子统计UV -->
+        <span id="busuanzi_container_site_uv" style="display: none">
+            总访客数 
+            <span id="busuanzi_value_site_uv"></span>
+             人
+          </span>
+      
+    
+  </div>
+
+
+  
+  <!-- 备案信息 -->
+  <div class="beian">
+    <span>
+      <a href="http://beian.miit.gov.cn/" target="_blank" rel="nofollow noopener">
+        陕ICP备19023179号
+      </a>
+    </span>
+    
+  </div>
+
+
+  <div class="cdn"><a href="https://www.upyun.com/?utm_source=lianmeng&amp;utm_medium=referral" target="_blank"><img width="70px" class="entered loading" src="/img/upyun.png" srcset="/img/loading.gif" lazyload data-ll-status="loading"><span></span></a></div>
+  
+</footer>
+
+
+  <!-- SCRIPTS -->
+  
+  <script  src="https://cdn.jsdelivr.net/npm/nprogress@0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/nprogress@0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://cdn.jsdelivr.net/npm/jquery@3/dist/jquery.min.js" ></script>
+<script  src="https://cdn.jsdelivr.net/npm/bootstrap@4/dist/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+<!-- Plugins -->
+
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+  
+
+
+
+  
+    <script  src="https://cdn.jsdelivr.net/npm/tocbot@4/dist/tocbot.min.js" ></script>
+  
+  
+    <script  src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3/dist/jquery.fancybox.min.js" ></script>
+  
+  
+    <script  src="https://cdn.jsdelivr.net/npm/anchor-js@4/anchor.min.js" ></script>
+  
+  
+    <script defer src="https://cdn.jsdelivr.net/npm/clipboard@2/dist/clipboard.min.js" ></script>
+  
+
+
+
+  <script defer src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" ></script>
+
+
+
+
+  <script  src="https://cdn.jsdelivr.net/npm/typed.js@2/lib/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var title = document.getElementById('subtitle').title;
+      
+      typing(title)
+      
+    })(window, document);
+  </script>
+
+
+
+
+
+  
+
+  
+    <!-- MathJax -->
+    <script>
+      MathJax = {
+        tex: {
+          inlineMath: [['$', '$'], ['\\(', '\\)']]
+        },
+        loader: {
+          load: ['ui/lazy']
+        },
+        options: {
+          renderActions: {
+            findScript: [10, doc => {
+              document.querySelectorAll('script[type^="math/tex"]').forEach(node => {
+                const display = !!node.type.match(/; *mode=display/);
+                const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display);
+                const text = document.createTextNode('');
+                node.parentNode.replaceChild(text, node);
+                math.start = { node: text, delim: '', n: 0 };
+                math.end = { node: text, delim: '', n: 0 };
+                doc.math.push(math);
+              });
+            }, '', false],
+            insertedScript: [200, () => {
+              document.querySelectorAll('mjx-container').forEach(node => {
+                let target = node.parentNode;
+                if (target.nodeName.toLowerCase() === 'li') {
+                  target.parentNode.classList.add('has-jax');
+                }
+              });
+            }, '', false]
+          }
+        }
+      };
+    </script>
+
+    <script async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js" ></script>
+
+  
+
+
+
+
+
+
+
+
+
+
+
+<!-- 主题的启动项 保持在最底部 -->
+<script  src="/js/boot.js" ></script>
+
+
+</body>
+</html>

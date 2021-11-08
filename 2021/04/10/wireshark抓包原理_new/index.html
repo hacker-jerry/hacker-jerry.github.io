@@ -1,175 +1,621 @@
-<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width,initial-scale=1"><title>wireshark抓包原理 | M@tr1xの日常</title><meta name="description" content="这几天学院研究生复试，院长出了这道题，就是问了 wireshark 的抓包原理，由于我并不太清楚，所以特此记录。   Wireshark 网络上传输的数据包通过网卡进入到网络协议分析器系统。即Wireshark 使用的网卡数据复制，只要是经过指定网卡都会被抓取。  每一个协议分析器内部都维护有一个“跟踪缓冲区”内存空间区域。它用于暂存从网络上面复制而来的数据包流。数据包流从“捕获过滤器”流入到协议"><meta name="keywords" content="CTF,白帽子,Pwn,Web"><meta name="author" content="M@tr1x"><meta name="copyright" content="M@tr1x"><meta name="format-detection" content="telephone=no"><link rel="shortcut icon" href="/img/favicon.png"><link rel="canonical" href="https://www.blog.hackerjerry.top/2021/04/10/wireshark%E6%8A%93%E5%8C%85%E5%8E%9F%E7%90%86_new/"><meta http-equiv="Cache-Control" content="no-transform"><meta http-equiv="Cache-Control" content="no-siteapp"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//fonts.googleapis.com" crossorigin="crossorigin"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><meta name="google-site-verification" content="UA-157542666-1"/><meta property="og:type" content="article"><meta property="og:title" content="wireshark抓包原理"><meta property="og:url" content="https://www.blog.hackerjerry.top/2021/04/10/wireshark%E6%8A%93%E5%8C%85%E5%8E%9F%E7%90%86_new/"><meta property="og:site_name" content="M@tr1xの日常"><meta property="og:description" content="这几天学院研究生复试，院长出了这道题，就是问了 wireshark 的抓包原理，由于我并不太清楚，所以特此记录。   Wireshark 网络上传输的数据包通过网卡进入到网络协议分析器系统。即Wireshark 使用的网卡数据复制，只要是经过指定网卡都会被抓取。  每一个协议分析器内部都维护有一个“跟踪缓冲区”内存空间区域。它用于暂存从网络上面复制而来的数据包流。数据包流从“捕获过滤器”流入到协议"><meta property="og:image" content="https://image.hackerjerry.top/2427682894.jpeg"><meta property="article:published_time" content="2021-04-10T02:43:22.000Z"><meta property="article:modified_time" content="2021-10-08T04:06:43.434Z"><meta name="twitter:card" content="summary"><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.css"><link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Titillium+Web&amp;display=swap"><script>var GLOBAL_CONFIG = { 
-  root: '/',
-  hexoversion: '5.1.1',
-  algolia: undefined,
-  localSearch: {"path":"search.xml","languages":{"hits_empty":"找不到您查询的内容：${query}"}},
-  translate: undefined,
-  noticeOutdate: {"limitDay":500,"position":"top","messagePrev":"It has been","messageNext":"days since the last update, the content of the article may be outdated."},
-  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":true},
-  copy: {
-    success: '复制成功',
-    error: '复制错误',
-    noSupport: '浏览器不支持'
-  },
-  bookmark: {
-    message_prev: '按',
-    message_next: '键将本页加入书签'
-  },
-  runtime: '天',
-  last_push_date: {"zeroDay":"今天","suffix":"天前"},
-  copyright: {"limitCount":50,"languages":{"author":"作者: M@tr1x","link":"链接: ","source":"来源: M@tr1xの日常","info":"著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。"}},
-  ClickShowText: undefined,
-  medium_zoom: false,
-  fancybox: true,
-  Snackbar: undefined,
-  justifiedGallery: {
-    js: 'https://cdn.jsdelivr.net/npm/justifiedGallery/dist/js/jquery.justifiedGallery.min.js',
-    css: 'https://cdn.jsdelivr.net/npm/justifiedGallery/dist/css/justifiedGallery.min.css'
-  },
-  baiduPush: false,
-  isPhotoFigcaption: false,
-  islazyload: true,
-  isanchor: false
-};
 
-var saveToLocal = {
-  set: function setWithExpiry(key, value, ttl) {
-      const now = new Date()
-      const expiryDay = ttl * 86400000
-      const item = {
-        value: value,
-        expiry: now.getTime() + expiryDay,
-      }
-      localStorage.setItem(key, JSON.stringify(item))
-    },
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/favicon.png">
+  <link rel="icon" href="/img/favicon.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
   
-  get: function getWithExpiry(key) {
-    const itemStr = localStorage.getItem(key)
+  <meta name="theme-color" content="#2f4154">
+  <meta name="description" content="这几天学院研究生复试，院长出了这道题，就是问了 wireshark 的抓包原理，由于我并不太清楚，所以特此记录。">
+  <meta name="author" content="M@tr1x">
+  <meta name="keywords" content="CTF,白帽子,Pwn,Web">
+  <meta name="description" content="这几天学院研究生复试，院长出了这道题，就是问了 wireshark 的抓包原理，由于我并不太清楚，所以特此记录。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="wireshark抓包原理">
+<meta property="og:url" content="https://www.blog.hackerjerry.top/2021/04/10/wireshark%E6%8A%93%E5%8C%85%E5%8E%9F%E7%90%86_new/index.html">
+<meta property="og:site_name" content="M@tr1xの日常">
+<meta property="og:description" content="这几天学院研究生复试，院长出了这道题，就是问了 wireshark 的抓包原理，由于我并不太清楚，所以特此记录。">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://image.hackerjerry.top/wireshark%E6%8A%93%E5%8C%85%E5%8E%9F%E7%90%86-1.jpeg#align=left&display=inline&height=463&margin=%5Bobject%20Object%5D&originHeight=463&originWidth=1102&size=0&status=done&style=none&width=1102">
+<meta property="og:image" content="https://image.hackerjerry.top/wireshark%E6%8A%93%E5%8C%85%E5%8E%9F%E7%90%86-2.png#align=left&display=inline&height=375&margin=%5Bobject%20Object%5D&name=image.png&originHeight=461&originWidth=814&size=234125&status=done&style=none&width=662">
+<meta property="og:image" content="https://image.hackerjerry.top/wireshark%E6%8A%93%E5%8C%85%E5%8E%9F%E7%90%86-3.png#align=left&display=inline&height=265&margin=%5Bobject%20Object%5D&name=image.png&originHeight=265&originWidth=642&size=114805&status=done&style=none&width=642">
+<meta property="og:image" content="https://image.hackerjerry.top/wireshark%E6%8A%93%E5%8C%85%E5%8E%9F%E7%90%86-4.png#align=left&display=inline&height=429&margin=%5Bobject%20Object%5D&name=image.png&originHeight=523&originWidth=828&size=203088&status=done&style=none&width=679">
+<meta property="og:image" content="https://image.hackerjerry.top/wireshark%E6%8A%93%E5%8C%85%E5%8E%9F%E7%90%86-5.png#align=left&display=inline&height=219&margin=%5Bobject%20Object%5D&name=image.png&originHeight=438&originWidth=1550&size=714203&status=done&style=none&width=775">
+<meta property="og:image" content="https://image.hackerjerry.top/wireshark%E6%8A%93%E5%8C%85%E5%8E%9F%E7%90%86-6.png#align=left&display=inline&height=215&margin=%5Bobject%20Object%5D&name=image.png&originHeight=430&originWidth=1547&size=653510&status=done&style=none&width=773.5">
+<meta property="og:image" content="https://image.hackerjerry.top/wireshark%E6%8A%93%E5%8C%85%E5%8E%9F%E7%90%86-7.png#align=left&display=inline&height=148&margin=%5Bobject%20Object%5D&name=image.png&originHeight=295&originWidth=747&size=233011&status=done&style=none&width=373.5">
+<meta property="og:image" content="https://image.hackerjerry.top/wireshark%E6%8A%93%E5%8C%85%E5%8E%9F%E7%90%86-8.png#align=left&display=inline&height=62&margin=%5Bobject%20Object%5D&name=image.png&originHeight=124&originWidth=1131&size=180774&status=done&style=none&width=565.5">
+<meta property="og:image" content="https://image.hackerjerry.top/wireshark%E6%8A%93%E5%8C%85%E5%8E%9F%E7%90%86-9.png#align=left&display=inline&height=150&margin=%5Bobject%20Object%5D&name=image.png&originHeight=299&originWidth=1066&size=320679&status=done&style=none&width=533">
+<meta property="article:published_time" content="2021-04-10T02:43:22.000Z">
+<meta property="article:modified_time" content="2021-11-08T13:32:29.646Z">
+<meta property="article:author" content="M@tr1x">
+<meta property="article:tag" content="CTF,白帽子,Pwn,Web">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://image.hackerjerry.top/wireshark%E6%8A%93%E5%8C%85%E5%8E%9F%E7%90%86-1.jpeg#align=left&display=inline&height=463&margin=%5Bobject%20Object%5D&originHeight=463&originWidth=1102&size=0&status=done&style=none&width=1102">
+  
+  <title>wireshark抓包原理 - M@tr1xの日常</title>
 
-    if (!itemStr) {
-      return undefined
-    }
-    const item = JSON.parse(itemStr)
-    const now = new Date()
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4/dist/css/bootstrap.min.css" />
 
-    if (now.getTime() > item.expiry) {
-      localStorage.removeItem(key)
-      return undefined
-    }
-    return item.value
-  }
-}</script><script id="config_change">var GLOBAL_CONFIG_SITE = { 
-  isPost: true,
-  isHome: false,
-  isHighlightShrink: false,
-  isSidebar: true,
-  postUpdate: '2021-10-08 12:06:43'
-}</script><noscript><style type="text/css">
-#nav {
-  opacity: 1
-}
-.justified-gallery img {
-  opacity: 1
-}
-</style></noscript><script>var activateDarkMode = function () {
-  document.documentElement.setAttribute('data-theme', 'dark')
-  if (document.querySelector('meta[name="theme-color"]') !== null) {
-    document.querySelector('meta[name="theme-color"]').setAttribute('content', '#000')
-  }
-}
-var activateLightMode = function () {
-  document.documentElement.setAttribute('data-theme', 'light')
-  if (document.querySelector('meta[name="theme-color"]') !== null) {
-    document.querySelector('meta[name="theme-color"]').setAttribute('content', '#fff')
-  }
-}
 
-var autoChangeMode = 'false'
-var t = saveToLocal.get('theme')
-if (autoChangeMode === '1') {
-  var isDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches
-  var isLightMode = window.matchMedia('(prefers-color-scheme: light)').matches
-  var isNotSpecified = window.matchMedia('(prefers-color-scheme: no-preference)').matches
-  var hasNoSupport = !isDarkMode && !isLightMode && !isNotSpecified
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/github-markdown-css@4/github-markdown.min.css" />
+  <link  rel="stylesheet" href="/lib/hint/hint.min.css" />
 
-  if (t === undefined) {
-    if (isLightMode) activateLightMode()
-    else if (isDarkMode) activateDarkMode()
-    else if (isNotSpecified || hasNoSupport) {
-      console.log('You specified no preference for a color scheme or your browser does not support it. I Schedule dark mode during night time.')
-      var now = new Date()
-      var hour = now.getHours()
-      var isNight = hour <= 6 || hour >= 18
-      isNight ? activateDarkMode() : activateLightMode()
-    }
-    window.matchMedia('(prefers-color-scheme: dark)').addListener(function (e) {
-      if (saveToLocal.get('theme') === undefined) {
-        e.matches ? activateDarkMode() : activateLightMode()
-      }
-    })
-  } else if (t === 'light') activateLightMode()
-  else activateDarkMode()
-} else if (autoChangeMode === '2') {
-  now = new Date()
-  hour = now.getHours()
-  isNight = hour <= 6 || hour >= 18
-  if (t === undefined) isNight ? activateDarkMode() : activateLightMode()
-  else if (t === 'light') activateLightMode()
-  else activateDarkMode()
-} else {
-  if (t === 'dark') activateDarkMode()
-  else if (t === 'light') activateLightMode()
-}</script><meta name="generator" content="Hexo 5.1.1"><link rel="alternate" href="/atom.xml" title="M@tr1xの日常" type="application/atom+xml">
-</head><body><div id="mobile-sidebar"><div id="menu_mask"></div><div id="mobile-sidebar-menus"><div class="mobile_author_icon"><img class="avatar-img" data-lazy-src="/img/avatar.png" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="mobile_post_data"><div class="mobile_data_item is-center"><div class="mobile_data_link"><a href="/archives/"><div class="headline">文章</div><div class="length_num">78</div></a></div></div><div class="mobile_data_item is-center">      <div class="mobile_data_link"><a href="/tags/"><div class="headline">标签</div><div class="length_num">45</div></a></div></div><div class="mobile_data_item is-center">     <div class="mobile_data_link"><a href="/categories/"><div class="headline">分类</div><div class="length_num">16</div></a></div></div></div><hr/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fa fa-home"></i><span> Home</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fa fa-tags"></i><span> Tags</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fa fa-folder-open"></i><span> Categories</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fa fa-link"></i><span> Link</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fa fa-heart"></i><span> About</span></a></div><div class="menus_item"><a class="site-page" href="javascript:void(0);"><i class="fa-fw fa fa-list"></i><span> List</span><i class="fas fa-chevron-down expand"></i></a><ul class="menus_item_child"><li><a class="site-page" href="/bangumis/"><i class="fa-fw fa fa-film"></i><span> 追番</span></a></li><li><a class="site-page" href="/artalk/"><i class="fa-fw fa-fw fa fa-comment-alt"></i><span> 说说</span></a></li></ul></div></div></div></div><div id="body-wrap"><div id="sidebar"><i class="fas fa-arrow-right" id="toggle-sidebar"></i><div class="sidebar-toc"><div class="sidebar-toc__title">目录</div><div class="sidebar-toc__progress"><span class="progress-notice">你已经读了</span><span class="progress-num">0</span><span class="progress-percentage">%</span><div class="sidebar-toc__progress-bar">     </div></div><div class="sidebar-toc__content"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Wireshark"><span class="toc-number">1.</span> <span class="toc-text">Wireshark</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%B7%B7%E6%9D%82%E6%A8%A1%E5%BC%8F%E4%B8%8E%E7%9B%91%E8%A7%86%E6%A8%A1%E5%BC%8F%E5%8C%BA%E5%88%AB"><span class="toc-number">1.1.</span> <span class="toc-text">混杂模式与监视模式区别</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#ping-%E6%B5%81%E7%A8%8B"><span class="toc-number"></span> <span class="toc-text">ping 流程</span></a></div></div></div><header class="post-bg" id="page-header" style="background-image: url(https://image.hackerjerry.top/2427682894.jpeg)"><nav id="nav"><span id="blog_name"><a id="site-name" href="/">M@tr1xの日常</a></span><span class="menus"><div id="search_button"><a class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> 搜索</span></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fa fa-home"></i><span> Home</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fa fa-tags"></i><span> Tags</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fa fa-folder-open"></i><span> Categories</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fa fa-link"></i><span> Link</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fa fa-heart"></i><span> About</span></a></div><div class="menus_item"><a class="site-page" href="javascript:void(0);"><i class="fa-fw fa fa-list"></i><span> List</span><i class="fas fa-chevron-down expand"></i></a><ul class="menus_item_child"><li><a class="site-page" href="/bangumis/"><i class="fa-fw fa fa-film"></i><span> 追番</span></a></li><li><a class="site-page" href="/artalk/"><i class="fa-fw fa-fw fa fa-comment-alt"></i><span> 说说</span></a></li></ul></div></div><span class="toggle-menu close"><a class="site-page"><i class="fas fa-bars fa-fw"></i></a></span></span></nav><div id="post-info"><div id="post-title"><div class="posttitle">wireshark抓包原理</div></div><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2021-04-10T02:43:22.000Z" title="发表于 2021-04-10 10:43:22">2021-04-10</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2021-10-08T04:06:43.434Z" title="更新于 2021-10-08 12:06:43">2021-10-08</time></span></div><div class="meta-secondline"> <span class="post-meta-separator">|</span><span class="post-meta-pv-cv"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">阅读量:</span><span id="busuanzi_value_page_pv"></span></span></div></div></div></header><main class="layout_post" id="content-inner"><article id="post"><div class="post-content" id="article-container"><p>这几天学院研究生复试，院长出了这道题，就是问了 wireshark 的抓包原理，由于我并不太清楚，所以特此记录。</p>
+  
+    
+    
+      
+      <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@10/styles/github-gist.min.css" />
+    
+  
+
+  
+    <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3/dist/jquery.fancybox.min.css" />
+  
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_ba1fz6golrf.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_kmeydafke9r.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+<!-- 自定义样式保持在最底部 -->
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    var CONFIG = {"hostname":"www.blog.hackerjerry.top","root":"/","version":"1.8.12","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"right","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"copy_btn":true,"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":1},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname"}},"search_path":"/local-search.xml"};
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+<meta name="generator" content="Hexo 5.1.1"><link rel="alternate" href="/atom.xml" title="M@tr1xの日常" type="application/atom+xml">
+</head>
+
+
+<body>
+  <header style="height: 70vh;">
+    <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>M@tr1xの日常</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                首页
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                归档
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                分类
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                标签
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                关于
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/links/">
+                <i class="iconfont icon-link-fill"></i>
+                友链
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/bangumis/">
+                <i class="fa-fw fa fa-film"></i>
+                追番
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/artalk/">
+                <i class="iconfont icon-comment"></i>
+                说说
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              &nbsp;<i class="iconfont icon-search"></i>&nbsp;
+            </a>
+          </li>
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">&nbsp;<i
+                class="iconfont icon-dark" id="color-toggle-icon"></i>&nbsp;</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+    <div class="banner" id="banner" parallax=true
+         style="background: url('/img/default.png') no-repeat center center;
+           background-size: cover;">
+      <div class="full-bg-img">
+        <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+          <div class="page-header text-center fade-in-up">
+            <span class="h2" id="subtitle" title="wireshark抓包原理">
+              
+            </span>
+
+            
+              <div class="mt-3">
+  
+  
+    <span class="post-meta">
+      <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+      <time datetime="2021-04-10 10:43" pubdate>
+        2021年4月10日 上午
+      </time>
+    </span>
+  
+</div>
+
+<div class="mt-1">
+  
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-chart"></i>
+      1.6k 字
+    </span>
+  
+
+  
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-clock-fill"></i>
+      
+      
+      5 分钟
+    </span>
+  
+
+  
+  
+    
+      <!-- 不蒜子统计文章PV -->
+      <span id="busuanzi_container_page_pv" style="display: none">
+        <i class="iconfont icon-eye" aria-hidden="true"></i>
+        <span id="busuanzi_value_page_pv"></span> 次
+      </span>
+    
+  
+</div>
+
+            
+          </div>
+
+          
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="d-none d-lg-block col-lg-2"></div>
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div class="py-5" id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">wireshark抓包原理</h1>
+            
+              <p class="note note-info">
+                
+                  本文最后更新于：2021年11月8日 晚上
+                
+              </p>
+            
+            <div class="markdown-body">
+              <p>这几天学院研究生复试，院长出了这道题，就是问了 wireshark 的抓包原理，由于我并不太清楚，所以特此记录。</p>
 <a id="more"></a>
 
-<h2 id="Wireshark"><a href="#Wireshark" class="headerlink" title="Wireshark"></a>Wireshark</h2><p><img src= "/img/loading.gif" data-lazy-src="https://image.hackerjerry.top/wireshark%E6%8A%93%E5%8C%85%E5%8E%9F%E7%90%86-1.jpeg#align=left&display=inline&height=463&margin=%5Bobject%20Object%5D&originHeight=463&originWidth=1102&size=0&status=done&style=none&width=1102"></p>
-<p>网络上传输的数据包<strong>通过网卡进入到网络协议分析器系统</strong>。即<strong>Wireshark 使用的网卡数据复制，只要是经过指定网卡都会被抓取</strong>。<br>  每一个协议分析器内部都维护有一个“<strong>跟踪缓冲区</strong>”内存空间区域。它用于<strong>暂存从网络上面复制而来的数据包流</strong>。数据包流从“捕获过滤器”流入到协议分析器的跟踪缓存区中，该缓冲区中的数据包能够在被捕获之后立即查看或是以其他文件格式保持到磁盘上面。比如 Wireshark 协议分析器工具，打开之后，点击[开始捕获]， 然后便可立刻查看捕获到的数据包信息。此时的这些数据包就是放在协议分析器的“跟踪缓冲区”中的。<br>协议分析器所使用的网卡和网卡驱动程序必须能够支持“<strong>混杂模式操作</strong>（Promiscuous Mode Operation）”。因为<strong>只有运行在混杂模式下的网卡才能够捕获到网络中传输到其他设备的“广播数据包、多播数据包、单播数据包以及错误数据包等等”（</strong>支持 VLAN ,单播，多播等），两者一起协同工作。<br><img src= "/img/loading.gif" data-lazy-src="https://image.hackerjerry.top/wireshark%E6%8A%93%E5%8C%85%E5%8E%9F%E7%90%86-2.png#align=left&display=inline&height=375&margin=%5Bobject%20Object%5D&name=image.png&originHeight=461&originWidth=814&size=234125&status=done&style=none&width=662" alt="image.png"></p>
+<h2 id="Wireshark"><a href="#Wireshark" class="headerlink" title="Wireshark"></a>Wireshark</h2><p><img src="https://image.hackerjerry.top/wireshark%E6%8A%93%E5%8C%85%E5%8E%9F%E7%90%86-1.jpeg#align=left&display=inline&height=463&margin=%5Bobject%20Object%5D&originHeight=463&originWidth=1102&size=0&status=done&style=none&width=1102" srcset="/img/loading.gif" lazyload></p>
+<p>网络上传输的数据包<strong>通过网卡进入到网络协议分析器系统</strong>。即<strong>Wireshark 使用的网卡数据复制，只要是经过指定网卡都会被抓取</strong>。<br>  每一个协议分析器内部都维护有一个“<strong>跟踪缓冲区</strong>”内存空间区域。它用于<strong>暂存从网络上面复制而来的数据包流</strong>。数据包流从“捕获过滤器”流入到协议分析器的跟踪缓存区中，该缓冲区中的数据包能够在被捕获之后立即查看或是以其他文件格式保持到磁盘上面。比如 Wireshark 协议分析器工具，打开之后，点击[开始捕获]， 然后便可立刻查看捕获到的数据包信息。此时的这些数据包就是放在协议分析器的“跟踪缓冲区”中的。<br>协议分析器所使用的网卡和网卡驱动程序必须能够支持“<strong>混杂模式操作</strong>（Promiscuous Mode Operation）”。因为<strong>只有运行在混杂模式下的网卡才能够捕获到网络中传输到其他设备的“广播数据包、多播数据包、单播数据包以及错误数据包等等”（</strong>支持 VLAN ,单播，多播等），两者一起协同工作。<br><img src="https://image.hackerjerry.top/wireshark%E6%8A%93%E5%8C%85%E5%8E%9F%E7%90%86-2.png#align=left&display=inline&height=375&margin=%5Bobject%20Object%5D&name=image.png&originHeight=461&originWidth=814&size=234125&status=done&style=none&width=662" srcset="/img/loading.gif" lazyload alt="image.png"></p>
 <h3 id="混杂模式与监视模式区别"><a href="#混杂模式与监视模式区别" class="headerlink" title="混杂模式与监视模式区别"></a>混杂模式与监视模式区别</h3><p>要弄清混杂模式和监视模式之间的区别：<strong>监视模式仅用于无线卡</strong>，<strong>混杂模式用于无线和有线</strong>。 监控模式使卡无需关联接入点即可侦听无线数据包。 混杂模式使卡可以侦听所有数据包，即使不是针对特定的数据包。</p>
 <blockquote>
 <p>作者：圣手书生黎公子<br>链接：<a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/267640786">https://zhuanlan.zhihu.com/p/267640786</a><br>来源：知乎<br>著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。</p>
 </blockquote>
-<h1 id="ping-流程"><a href="#ping-流程" class="headerlink" title="ping 流程"></a>ping 流程</h1><p><img src= "/img/loading.gif" data-lazy-src="https://image.hackerjerry.top/wireshark%E6%8A%93%E5%8C%85%E5%8E%9F%E7%90%86-3.png#align=left&display=inline&height=265&margin=%5Bobject%20Object%5D&name=image.png&originHeight=265&originWidth=642&size=114805&status=done&style=none&width=642" alt="image.png"><br>在这里，我们搭建了一个 PC+交换机+路由器（文中又称网关）的本地网络</p>
-<p>在一开始，所有机器的 arp 表其实都是空的。<br><img src= "/img/loading.gif" data-lazy-src="https://image.hackerjerry.top/wireshark%E6%8A%93%E5%8C%85%E5%8E%9F%E7%90%86-4.png#align=left&display=inline&height=429&margin=%5Bobject%20Object%5D&name=image.png&originHeight=523&originWidth=828&size=203088&status=done&style=none&width=679" alt="image.png"><br>而此时，让 PC 去进行 ping（使用 ICMP 协议）自己的网关 192.168.1.1，是可以通的。<br>为什么呢？<br>我们分析一下流程。</p>
+<h1 id="ping-流程"><a href="#ping-流程" class="headerlink" title="ping 流程"></a>ping 流程</h1><p><img src="https://image.hackerjerry.top/wireshark%E6%8A%93%E5%8C%85%E5%8E%9F%E7%90%86-3.png#align=left&display=inline&height=265&margin=%5Bobject%20Object%5D&name=image.png&originHeight=265&originWidth=642&size=114805&status=done&style=none&width=642" srcset="/img/loading.gif" lazyload alt="image.png"><br>在这里，我们搭建了一个 PC+交换机+路由器（文中又称网关）的本地网络</p>
+<p>在一开始，所有机器的 arp 表其实都是空的。<br><img src="https://image.hackerjerry.top/wireshark%E6%8A%93%E5%8C%85%E5%8E%9F%E7%90%86-4.png#align=left&display=inline&height=429&margin=%5Bobject%20Object%5D&name=image.png&originHeight=523&originWidth=828&size=203088&status=done&style=none&width=679" srcset="/img/loading.gif" lazyload alt="image.png"><br>而此时，让 PC 去进行 ping（使用 ICMP 协议）自己的网关 192.168.1.1，是可以通的。<br>为什么呢？<br>我们分析一下流程。</p>
 <ol>
 <li>PC 首先封装这个 ICMP 数据包，最里面是 ICMP 的数据，数据外面封装 IPV4 包头，IPV4 包头外面是帧头。格式如下：</li>
 </ol>
-<p><img src= "/img/loading.gif" data-lazy-src="https://image.hackerjerry.top/wireshark%E6%8A%93%E5%8C%85%E5%8E%9F%E7%90%86-5.png#align=left&display=inline&height=219&margin=%5Bobject%20Object%5D&name=image.png&originHeight=438&originWidth=1550&size=714203&status=done&style=none&width=775" alt="image.png"></p>
+<p><img src="https://image.hackerjerry.top/wireshark%E6%8A%93%E5%8C%85%E5%8E%9F%E7%90%86-5.png#align=left&display=inline&height=219&margin=%5Bobject%20Object%5D&name=image.png&originHeight=438&originWidth=1550&size=714203&status=done&style=none&width=775" srcset="/img/loading.gif" lazyload alt="image.png"></p>
 <ol start="2">
 <li>有个问题是，刚开始 ping 的时候，PC 的 ARP 表项是不知道目的 IP 所对应的 MAC 是多少，那么他怎么获取的呢。</li>
 </ol>
-<p>仔细看数据抓包，有一对 ARP 包：<br><img src= "/img/loading.gif" data-lazy-src="https://image.hackerjerry.top/wireshark%E6%8A%93%E5%8C%85%E5%8E%9F%E7%90%86-6.png#align=left&display=inline&height=215&margin=%5Bobject%20Object%5D&name=image.png&originHeight=430&originWidth=1547&size=653510&status=done&style=none&width=773.5" alt="image.png"><br>就是在发 ICMP 包之前，系统先发了一个 ARP 包！<br>上面的 ARP 请求包大概意思是：我是 192.168.1.99，我的 MAC 是 aabb.cc00.3000，我想问 192.168.1.1 你的 MAC 是多少，收到请回复收到请回复。<br>在 ARP 请求的过程中，SW 已经学到了 PC 和 R1 的接口 MAC 地址，MAC 地址表项已经形成。<br><img src= "/img/loading.gif" data-lazy-src="https://image.hackerjerry.top/wireshark%E6%8A%93%E5%8C%85%E5%8E%9F%E7%90%86-7.png#align=left&display=inline&height=148&margin=%5Bobject%20Object%5D&name=image.png&originHeight=295&originWidth=747&size=233011&status=done&style=none&width=373.5" alt="image.png"><br>那么，他是怎么形成的呢？<br>第一步：<br>当 SW 通过 e0/0 端口收到 PC 发来的 ARP 广播包，PC 首先查看自己的 MAC 地址表项，看看数据帧的源 MAC 是否存在于我的 MAC 地址表中，如果没有，那么就直接把 ARP 广播包的源 MAC（aabb.cc00.3000）和接收端口 e0/0 对应起来，形成第一个 MAC 地址表的条目。如果有对应的 MAC 地址条目，SW 就看已经存在的条目和当前的收包端口是否一致，如果不一致就更新 MAC 地址表里面的条目，如果一致就直接泛洪转发这个广播数据帧。<br>第二步：SW 通过 e0/1 端口把这个数据帧发给 R1，R1 收到之后，形成 ARP 表项。<br><img src= "/img/loading.gif" data-lazy-src="https://image.hackerjerry.top/wireshark%E6%8A%93%E5%8C%85%E5%8E%9F%E7%90%86-8.png#align=left&display=inline&height=62&margin=%5Bobject%20Object%5D&name=image.png&originHeight=124&originWidth=1131&size=180774&status=done&style=none&width=565.5" alt="image.png"><br>R1 拆开外面帧头看到目的 MAC 是自己（广播包本网段内所有人均可接收），R1 就继续拆包，拆开 ARP 头部，看到请求的 MAC 是自己的 IP 地址对应的 MAC，所以 R1 就响应这个 ARP 得请求包。<br><img src= "/img/loading.gif" data-lazy-src="https://image.hackerjerry.top/wireshark%E6%8A%93%E5%8C%85%E5%8E%9F%E7%90%86-9.png#align=left&display=inline&height=150&margin=%5Bobject%20Object%5D&name=image.png&originHeight=299&originWidth=1066&size=320679&status=done&style=none&width=533" alt="image.png"><br>第三步：响应的 ARP Reply 包发送到 SW 的 e0/1 口，SW1 把单播响应包源 MAC（aabb.cc00.1000）和自己的接收端口 e0/1 口对应起来，形成另外一条 MAC 地址表条目，然后查看到数据帧的目的 MAC 是 aabb.cc00.3000，SW 直接查找自己的 MAC 地址表，发现有对应的条目，直接通过 e0/0 口转发，PC 就收到了响应，获取到了 R1 的 e0/0 接口，也就是 PC 网关的 MAC。</p>
-</div><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">文章作者: </span><span class="post-copyright-info"><a href="mailto:undefined">M@tr1x</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">文章链接: </span><span class="post-copyright-info"><a href="https://www.blog.hackerjerry.top/2021/04/10/wireshark%E6%8A%93%E5%8C%85%E5%8E%9F%E7%90%86_new/">https://www.blog.hackerjerry.top/2021/04/10/wireshark%E6%8A%93%E5%8C%85%E5%8E%9F%E7%90%86_new/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="https://www.blog.hackerjerry.top" target="_blank">M@tr1xの日常</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"></div><div class="post_share"><div class="social-share" data-image="https://image.hackerjerry.top/2427682894.jpeg" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/social-share.js/dist/css/share.min.css"><script src="https://cdn.jsdelivr.net/npm/social-share.js/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><div class="prev-post pull-left"><a href="/2021/04/11/SPECTRE-Coding_new/"><img class="prev-cover" data-lazy-src="https://image.hackerjerry.top/2427682894.jpeg" onerror="onerror=null;src='/img/404.jpg'"><div class="pagination-info"><div class="label">上一篇</div><div class="prev_info">SPECTRE-Coding</div></div></a></div><div class="next-post pull-right"><a href="/2021/04/09/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E4%B9%8B%E9%9A%8F%E6%9C%BA%E6%A3%AE%E6%9E%97_new/"><img class="next-cover" data-lazy-src="https://image.hackerjerry.top/2427682894.jpeg" onerror="onerror=null;src='/img/404.jpg'"><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">机器学习之随机森林</div></div></a></div></nav><hr/><div id="post-comment"><div class="comment-head"><div class="comment-headline"><i class="fas fa-comments fa-fw"></i><span> 评论</span></div></div><div class="comment-wrap"><div><div class="vcomment" id="vcomment"></div></div></div></div></article></main><footer id="footer" data-type="color"><div id="footer-wrap"><div class="copyright">&copy;2019 - 2021 By M@tr1x</div><div class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div><div class="footer_custom_text">冷風熱血，荡涤乾坤</div><div class="icp"><a target="_blank" rel="noopener" href="http://www.beian.miit.gov.cn"><img class="icp-icon" src="/img/icp.png"/><span>陕ICP备19023179号</span></a></div><div class="cdn"><a href="https://www.upyun.com/?utm_source=lianmeng&amp;utm_medium=referral" target="_blank"><img src="/img/upyun.png" width="70px"/><span></span></a></div></div></footer></div><section id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="设置"><i class="fas fa-cog"></i></button><a id="to_comment" href="#post-comment" title="直达评论"><i class="fas fa-comments"></i></a><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="回到顶部"><i class="fas fa-arrow-up"></i></button></div></section><div class="search-dialog" id="local-search"><div class="search-dialog__title" id="local-search-title">本地搜索</div><div id="local-input-panel"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="搜索文章" type="text"/></div></div></div><hr/><div id="local-search-results"><div id="local-hits"></div><div id="local-stats"><div class="local-search-stats__hr" id="hr"><span>由</span> <a target="_blank" rel="noopener" href="https://github.com/wzpan/hexo-generator-search" style="color:#49B1F5;">hexo-generator-search</a>
- <span>提供支持</span></div></div></div><span class="search-close-button"><i class="fas fa-times"></i></span></div><div id="search-mask"></div><div><script src="https://cdn.jsdelivr.net/npm/jquery@latest/dist/jquery.min.js"></script><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.js"></script><script src="https://cdn.jsdelivr.net/npm/instant.page/instantpage.min.js" type="module" defer></script><script src="https://cdn.jsdelivr.net/npm/vanilla-lazyload/dist/lazyload.iife.min.js" async></script><script src="/js/search/local-search.js"></script><div class="js-pjax"><script>function loadValine () {
-  function initValine () {
-    window.valine = new Valine({
-      el: '#vcomment',
-      appId: 'jApqS8Xxcc1eST53AyiAisFx-gzGzoHsz',
-      appKey: 'iyngroaUslATD8V4nOgOHowr',
-      placeholder: '说点什么呗~',
-      avatar: 'monsterid',
-      meta: 'nick,mail,link'.split(','),
-      pageSize: '10',
-      lang: 'zh-CN',
-      recordIP: false,
-      serverURLs: '',
-      emojiCDN: '',
-      emojiMaps: "",
-      enableQQ: true,
-      path: window.location.pathname,
+<p>仔细看数据抓包，有一对 ARP 包：<br><img src="https://image.hackerjerry.top/wireshark%E6%8A%93%E5%8C%85%E5%8E%9F%E7%90%86-6.png#align=left&display=inline&height=215&margin=%5Bobject%20Object%5D&name=image.png&originHeight=430&originWidth=1547&size=653510&status=done&style=none&width=773.5" srcset="/img/loading.gif" lazyload alt="image.png"><br>就是在发 ICMP 包之前，系统先发了一个 ARP 包！<br>上面的 ARP 请求包大概意思是：我是 192.168.1.99，我的 MAC 是 aabb.cc00.3000，我想问 192.168.1.1 你的 MAC 是多少，收到请回复收到请回复。<br>在 ARP 请求的过程中，SW 已经学到了 PC 和 R1 的接口 MAC 地址，MAC 地址表项已经形成。<br><img src="https://image.hackerjerry.top/wireshark%E6%8A%93%E5%8C%85%E5%8E%9F%E7%90%86-7.png#align=left&display=inline&height=148&margin=%5Bobject%20Object%5D&name=image.png&originHeight=295&originWidth=747&size=233011&status=done&style=none&width=373.5" srcset="/img/loading.gif" lazyload alt="image.png"><br>那么，他是怎么形成的呢？<br>第一步：<br>当 SW 通过 e0/0 端口收到 PC 发来的 ARP 广播包，PC 首先查看自己的 MAC 地址表项，看看数据帧的源 MAC 是否存在于我的 MAC 地址表中，如果没有，那么就直接把 ARP 广播包的源 MAC（aabb.cc00.3000）和接收端口 e0/0 对应起来，形成第一个 MAC 地址表的条目。如果有对应的 MAC 地址条目，SW 就看已经存在的条目和当前的收包端口是否一致，如果不一致就更新 MAC 地址表里面的条目，如果一致就直接泛洪转发这个广播数据帧。<br>第二步：SW 通过 e0/1 端口把这个数据帧发给 R1，R1 收到之后，形成 ARP 表项。<br><img src="https://image.hackerjerry.top/wireshark%E6%8A%93%E5%8C%85%E5%8E%9F%E7%90%86-8.png#align=left&display=inline&height=62&margin=%5Bobject%20Object%5D&name=image.png&originHeight=124&originWidth=1131&size=180774&status=done&style=none&width=565.5" srcset="/img/loading.gif" lazyload alt="image.png"><br>R1 拆开外面帧头看到目的 MAC 是自己（广播包本网段内所有人均可接收），R1 就继续拆包，拆开 ARP 头部，看到请求的 MAC 是自己的 IP 地址对应的 MAC，所以 R1 就响应这个 ARP 得请求包。<br><img src="https://image.hackerjerry.top/wireshark%E6%8A%93%E5%8C%85%E5%8E%9F%E7%90%86-9.png#align=left&display=inline&height=150&margin=%5Bobject%20Object%5D&name=image.png&originHeight=299&originWidth=1066&size=320679&status=done&style=none&width=533" srcset="/img/loading.gif" lazyload alt="image.png"><br>第三步：响应的 ARP Reply 包发送到 SW 的 e0/1 口，SW1 把单播响应包源 MAC（aabb.cc00.1000）和自己的接收端口 e0/1 口对应起来，形成另外一条 MAC 地址表条目，然后查看到数据帧的目的 MAC 是 aabb.cc00.3000，SW 直接查找自己的 MAC 地址表，发现有对应的条目，直接通过 e0/0 口转发，PC 就收到了响应，获取到了 R1 的 e0/0 接口，也就是 PC 网关的 MAC。</p>
+
+            </div>
+            <hr>
+            <div>
+              <div class="post-metas mb-3">
+                
+                
+              </div>
+              
+                <p class="note note-warning">
+                  
+                    本博客所有文章除特别声明外，均采用 <a target="_blank" href="https://creativecommons.org/licenses/by-sa/4.0/deed.zh" rel="nofollow noopener noopener">CC BY-SA 4.0 协议</a> ，转载请注明出处！
+                  
+                </p>
+              
+              
+                <div class="post-prevnext">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2021/04/11/SPECTRE-Coding_new/">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">SPECTRE-Coding</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2021/04/09/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E4%B9%8B%E9%9A%8F%E6%9C%BA%E6%A3%AE%E6%9E%97_new/">
+                        <span class="hidden-mobile">机器学习之随机森林</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+              <!-- Comments -->
+              <article class="comments" id="comments" lazyload>
+                
+                  
+                
+                
+  <div id="valine"></div>
+  <script type="text/javascript">
+    Fluid.utils.loadComments('#valine', function() {
+      Fluid.utils.createScript('https://cdn.jsdelivr.net/npm/valine@1/dist/Valine.min.js', function() {
+        var options = Object.assign(
+          {"appId":"jApqS8Xxcc1eST53AyiAisFx-gzGzoHsz","appKey":"iyngroaUslATD8V4nOgOHowr","path":"window.location.pathname","placeholder":"说点什么呗~","avatar":"retro","meta":["nick","mail","link"],"requiredFields":["mail"],"pageSize":10,"lang":"zh-CN","highlight":false,"recordIP":false,"serverURLs":"","emojiCDN":null,"emojiMaps":null,"enableQQ":true},
+          {
+            el: "#valine",
+            path: window.location.pathname
+          }
+        )
+        new Valine(options);
+        Fluid.utils.waitElementVisible('#valine .vcontent', () => {
+          Fluid.plugins.initFancyBox('#valine .vcontent img:not(.vemoji)');
+        })
+      });
     });
-    if ('nick,mail') { valine.config.requiredFields= 'nick,mail'.split(',') }
-  }
+  </script>
+  <noscript>Please enable JavaScript to view the comments</noscript>
 
-  if (typeof Valine === 'function') initValine() 
-  else $.getScript('https://cdn.jsdelivr.net/npm/valine/dist/Valine.min.js', initValine)
-}
 
-if ('Valine' === 'Valine' || !false) {
-  if (false) loadComment(document.querySelector('#vcomment'),loadValine)
-  else setTimeout(() => loadValine(), 0)
-} else {
-  function loadOtherComment () {
-    loadValine()
-  }
-}</script><script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></div></body></html>
+              </article>
+            
+          </article>
+        </div>
+      </div>
+    </div>
+    
+      <div class="d-none d-lg-block col-lg-2 toc-container" id="toc-ctn">
+        <div id="toc">
+  <p class="toc-header"><i class="iconfont icon-list"></i>&nbsp;目录</p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+      </div>
+    
+  </div>
+</div>
+
+<!-- Custom -->
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v"
+                 for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+
+    
+  </main>
+
+  <footer class="text-center mt-5 py-3">
+  <div class="footer-content">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" integrity="sha512-SfTiTlX6kk+qitfevl/7LibUOeJWlt9rbyDn92a1DqWOw9vWG2MFoays0sgObmWazO5BQPiFucnnEAjpAB+/Sw==" crossorigin="anonymous" referrerpolicy="no-referrer">
+     <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+  </div>
+  
+  <div class="statistics">
+    
+    
+
+    
+      
+        <!-- 不蒜子统计PV -->
+        <span id="busuanzi_container_site_pv" style="display: none">
+            总访问量 
+            <span id="busuanzi_value_site_pv"></span>
+             次
+          </span>
+      
+      
+        <!-- 不蒜子统计UV -->
+        <span id="busuanzi_container_site_uv" style="display: none">
+            总访客数 
+            <span id="busuanzi_value_site_uv"></span>
+             人
+          </span>
+      
+    
+  </div>
+
+
+  
+  <!-- 备案信息 -->
+  <div class="beian">
+    <span>
+      <a href="http://beian.miit.gov.cn/" target="_blank" rel="nofollow noopener">
+        陕ICP备19023179号
+      </a>
+    </span>
+    
+  </div>
+
+
+  <div class="cdn"><a href="https://www.upyun.com/?utm_source=lianmeng&amp;utm_medium=referral" target="_blank"><img width="70px" class="entered loading" src="/img/upyun.png" srcset="/img/loading.gif" lazyload data-ll-status="loading"><span></span></a></div>
+  
+</footer>
+
+
+  <!-- SCRIPTS -->
+  
+  <script  src="https://cdn.jsdelivr.net/npm/nprogress@0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/nprogress@0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://cdn.jsdelivr.net/npm/jquery@3/dist/jquery.min.js" ></script>
+<script  src="https://cdn.jsdelivr.net/npm/bootstrap@4/dist/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+<!-- Plugins -->
+
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+  
+
+
+
+  
+    <script  src="https://cdn.jsdelivr.net/npm/tocbot@4/dist/tocbot.min.js" ></script>
+  
+  
+    <script  src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3/dist/jquery.fancybox.min.js" ></script>
+  
+  
+    <script  src="https://cdn.jsdelivr.net/npm/anchor-js@4/anchor.min.js" ></script>
+  
+  
+    <script defer src="https://cdn.jsdelivr.net/npm/clipboard@2/dist/clipboard.min.js" ></script>
+  
+
+
+
+  <script defer src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" ></script>
+
+
+
+
+  <script  src="https://cdn.jsdelivr.net/npm/typed.js@2/lib/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var title = document.getElementById('subtitle').title;
+      
+      typing(title)
+      
+    })(window, document);
+  </script>
+
+
+
+
+
+  
+
+  
+    <!-- MathJax -->
+    <script>
+      MathJax = {
+        tex: {
+          inlineMath: [['$', '$'], ['\\(', '\\)']]
+        },
+        loader: {
+          load: ['ui/lazy']
+        },
+        options: {
+          renderActions: {
+            findScript: [10, doc => {
+              document.querySelectorAll('script[type^="math/tex"]').forEach(node => {
+                const display = !!node.type.match(/; *mode=display/);
+                const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display);
+                const text = document.createTextNode('');
+                node.parentNode.replaceChild(text, node);
+                math.start = { node: text, delim: '', n: 0 };
+                math.end = { node: text, delim: '', n: 0 };
+                doc.math.push(math);
+              });
+            }, '', false],
+            insertedScript: [200, () => {
+              document.querySelectorAll('mjx-container').forEach(node => {
+                let target = node.parentNode;
+                if (target.nodeName.toLowerCase() === 'li') {
+                  target.parentNode.classList.add('has-jax');
+                }
+              });
+            }, '', false]
+          }
+        }
+      };
+    </script>
+
+    <script async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js" ></script>
+
+  
+
+
+
+
+
+
+
+
+
+
+
+<!-- 主题的启动项 保持在最底部 -->
+<script  src="/js/boot.js" ></script>
+
+
+</body>
+</html>

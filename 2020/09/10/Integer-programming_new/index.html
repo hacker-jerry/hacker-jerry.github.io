@@ -1,135 +1,307 @@
-<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Integer-programming | M@tr1xの日常</title><meta name="description" content="整数规划线性规划 LP 问题 各变量可以是小数来逼近最值  model:max 5*x1+8*x2;x1+x2&lt;6;5*x1+9*x2&lt;&#x3D;45;end输出 Objective value:             41.25000 X1        2.250000            0.000000 X2        3.750000            0."><meta name="keywords" content="lingo,整数规划"><meta name="author" content="M@tr1x"><meta name="copyright" content="M@tr1x"><meta name="format-detection" content="telephone=no"><link rel="shortcut icon" href="/img/favicon.png"><link rel="canonical" href="https://www.blog.hackerjerry.top/2020/09/10/Integer-programming_new/"><meta http-equiv="Cache-Control" content="no-transform"><meta http-equiv="Cache-Control" content="no-siteapp"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//fonts.googleapis.com" crossorigin="crossorigin"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><meta name="google-site-verification" content="UA-157542666-1"/><meta property="og:type" content="article"><meta property="og:title" content="Integer-programming"><meta property="og:url" content="https://www.blog.hackerjerry.top/2020/09/10/Integer-programming_new/"><meta property="og:site_name" content="M@tr1xの日常"><meta property="og:description" content="整数规划线性规划 LP 问题 各变量可以是小数来逼近最值  model:max 5*x1+8*x2;x1+x2&lt;6;5*x1+9*x2&lt;&#x3D;45;end输出 Objective value:             41.25000 X1        2.250000            0.000000 X2        3.750000            0."><meta property="og:image" content="https://image.hackerjerry.top/wallpaper-28.jpg"><meta property="article:published_time" content="2020-09-10T08:55:09.000Z"><meta property="article:modified_time" content="2021-10-08T04:05:33.511Z"><meta name="twitter:card" content="summary"><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.css"><link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Titillium+Web&amp;display=swap"><script>var GLOBAL_CONFIG = { 
-  root: '/',
-  hexoversion: '5.1.1',
-  algolia: undefined,
-  localSearch: {"path":"search.xml","languages":{"hits_empty":"找不到您查询的内容：${query}"}},
-  translate: undefined,
-  noticeOutdate: {"limitDay":500,"position":"top","messagePrev":"It has been","messageNext":"days since the last update, the content of the article may be outdated."},
-  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":true},
-  copy: {
-    success: '复制成功',
-    error: '复制错误',
-    noSupport: '浏览器不支持'
-  },
-  bookmark: {
-    message_prev: '按',
-    message_next: '键将本页加入书签'
-  },
-  runtime: '天',
-  last_push_date: {"zeroDay":"今天","suffix":"天前"},
-  copyright: {"limitCount":50,"languages":{"author":"作者: M@tr1x","link":"链接: ","source":"来源: M@tr1xの日常","info":"著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。"}},
-  ClickShowText: undefined,
-  medium_zoom: false,
-  fancybox: true,
-  Snackbar: undefined,
-  justifiedGallery: {
-    js: 'https://cdn.jsdelivr.net/npm/justifiedGallery/dist/js/jquery.justifiedGallery.min.js',
-    css: 'https://cdn.jsdelivr.net/npm/justifiedGallery/dist/css/justifiedGallery.min.css'
-  },
-  baiduPush: false,
-  isPhotoFigcaption: false,
-  islazyload: true,
-  isanchor: false
-};
 
-var saveToLocal = {
-  set: function setWithExpiry(key, value, ttl) {
-      const now = new Date()
-      const expiryDay = ttl * 86400000
-      const item = {
-        value: value,
-        expiry: now.getTime() + expiryDay,
-      }
-      localStorage.setItem(key, JSON.stringify(item))
-    },
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/favicon.png">
+  <link rel="icon" href="/img/favicon.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
   
-  get: function getWithExpiry(key) {
-    const itemStr = localStorage.getItem(key)
+  <meta name="theme-color" content="#2f4154">
+  <meta name="description" content="一个菜鸡白帽子的小站">
+  <meta name="author" content="M@tr1x">
+  <meta name="keywords" content="CTF,白帽子,Pwn,Web">
+  <meta name="description" content="整数规划线性规划 LP 问题 各变量可以是小数来逼近最值  123456789model:max 5*x1+8*x2;x1+x2&lt;6;5*x1+9*x2&lt;&#x3D;45;end输出 Objective value:             41.25000 X1        2.250000            0.000000 X2        3.750000">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Integer-programming">
+<meta property="og:url" content="https://www.blog.hackerjerry.top/2020/09/10/Integer-programming_new/index.html">
+<meta property="og:site_name" content="M@tr1xの日常">
+<meta property="og:description" content="整数规划线性规划 LP 问题 各变量可以是小数来逼近最值  123456789model:max 5*x1+8*x2;x1+x2&lt;6;5*x1+9*x2&lt;&#x3D;45;end输出 Objective value:             41.25000 X1        2.250000            0.000000 X2        3.750000">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2020/png/1629942/1599728163727-676d1a88-4879-4aef-aa34-4c66cf99f470.png#align=left&display=inline&height=523&margin=%5Bobject%20Object%5D&originHeight=523&originWidth=1014&size=0&status=done&style=none&width=1014">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2020/png/1629942/1599728164253-96254c1f-96d1-44bc-a9c1-919c9ef00301.png#align=left&display=inline&height=636&margin=%5Bobject%20Object%5D&originHeight=636&originWidth=795&size=0&status=done&style=none&width=795">
+<meta property="article:published_time" content="2020-09-10T08:55:09.000Z">
+<meta property="article:modified_time" content="2021-11-08T13:43:56.148Z">
+<meta property="article:author" content="M@tr1x">
+<meta property="article:tag" content="lingo">
+<meta property="article:tag" content="整数规划">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://cdn.nlark.com/yuque/0/2020/png/1629942/1599728163727-676d1a88-4879-4aef-aa34-4c66cf99f470.png#align=left&display=inline&height=523&margin=%5Bobject%20Object%5D&originHeight=523&originWidth=1014&size=0&status=done&style=none&width=1014">
+  
+  <title>Integer-programming - M@tr1xの日常</title>
 
-    if (!itemStr) {
-      return undefined
-    }
-    const item = JSON.parse(itemStr)
-    const now = new Date()
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4/dist/css/bootstrap.min.css" />
 
-    if (now.getTime() > item.expiry) {
-      localStorage.removeItem(key)
-      return undefined
-    }
-    return item.value
-  }
-}</script><script id="config_change">var GLOBAL_CONFIG_SITE = { 
-  isPost: true,
-  isHome: false,
-  isHighlightShrink: false,
-  isSidebar: true,
-  postUpdate: '2021-10-08 12:05:33'
-}</script><noscript><style type="text/css">
-#nav {
-  opacity: 1
-}
-.justified-gallery img {
-  opacity: 1
-}
-</style></noscript><script>var activateDarkMode = function () {
-  document.documentElement.setAttribute('data-theme', 'dark')
-  if (document.querySelector('meta[name="theme-color"]') !== null) {
-    document.querySelector('meta[name="theme-color"]').setAttribute('content', '#000')
-  }
-}
-var activateLightMode = function () {
-  document.documentElement.setAttribute('data-theme', 'light')
-  if (document.querySelector('meta[name="theme-color"]') !== null) {
-    document.querySelector('meta[name="theme-color"]').setAttribute('content', '#fff')
-  }
-}
 
-var autoChangeMode = 'false'
-var t = saveToLocal.get('theme')
-if (autoChangeMode === '1') {
-  var isDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches
-  var isLightMode = window.matchMedia('(prefers-color-scheme: light)').matches
-  var isNotSpecified = window.matchMedia('(prefers-color-scheme: no-preference)').matches
-  var hasNoSupport = !isDarkMode && !isLightMode && !isNotSpecified
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/github-markdown-css@4/github-markdown.min.css" />
+  <link  rel="stylesheet" href="/lib/hint/hint.min.css" />
 
-  if (t === undefined) {
-    if (isLightMode) activateLightMode()
-    else if (isDarkMode) activateDarkMode()
-    else if (isNotSpecified || hasNoSupport) {
-      console.log('You specified no preference for a color scheme or your browser does not support it. I Schedule dark mode during night time.')
-      var now = new Date()
-      var hour = now.getHours()
-      var isNight = hour <= 6 || hour >= 18
-      isNight ? activateDarkMode() : activateLightMode()
-    }
-    window.matchMedia('(prefers-color-scheme: dark)').addListener(function (e) {
-      if (saveToLocal.get('theme') === undefined) {
-        e.matches ? activateDarkMode() : activateLightMode()
-      }
-    })
-  } else if (t === 'light') activateLightMode()
-  else activateDarkMode()
-} else if (autoChangeMode === '2') {
-  now = new Date()
-  hour = now.getHours()
-  isNight = hour <= 6 || hour >= 18
-  if (t === undefined) isNight ? activateDarkMode() : activateLightMode()
-  else if (t === 'light') activateLightMode()
-  else activateDarkMode()
-} else {
-  if (t === 'dark') activateDarkMode()
-  else if (t === 'light') activateLightMode()
-}</script><meta name="generator" content="Hexo 5.1.1"><link rel="alternate" href="/atom.xml" title="M@tr1xの日常" type="application/atom+xml">
-</head><body><div id="mobile-sidebar"><div id="menu_mask"></div><div id="mobile-sidebar-menus"><div class="mobile_author_icon"><img class="avatar-img" data-lazy-src="/img/avatar.png" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="mobile_post_data"><div class="mobile_data_item is-center"><div class="mobile_data_link"><a href="/archives/"><div class="headline">文章</div><div class="length_num">78</div></a></div></div><div class="mobile_data_item is-center">      <div class="mobile_data_link"><a href="/tags/"><div class="headline">标签</div><div class="length_num">45</div></a></div></div><div class="mobile_data_item is-center">     <div class="mobile_data_link"><a href="/categories/"><div class="headline">分类</div><div class="length_num">16</div></a></div></div></div><hr/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fa fa-home"></i><span> Home</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fa fa-tags"></i><span> Tags</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fa fa-folder-open"></i><span> Categories</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fa fa-link"></i><span> Link</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fa fa-heart"></i><span> About</span></a></div><div class="menus_item"><a class="site-page" href="javascript:void(0);"><i class="fa-fw fa fa-list"></i><span> List</span><i class="fas fa-chevron-down expand"></i></a><ul class="menus_item_child"><li><a class="site-page" href="/bangumis/"><i class="fa-fw fa fa-film"></i><span> 追番</span></a></li><li><a class="site-page" href="/artalk/"><i class="fa-fw fa-fw fa fa-comment-alt"></i><span> 说说</span></a></li></ul></div></div></div></div><div id="body-wrap"><div id="sidebar"><i class="fas fa-arrow-right" id="toggle-sidebar"></i><div class="sidebar-toc"><div class="sidebar-toc__title">目录</div><div class="sidebar-toc__progress"><span class="progress-notice">你已经读了</span><span class="progress-num">0</span><span class="progress-percentage">%</span><div class="sidebar-toc__progress-bar">     </div></div><div class="sidebar-toc__content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E6%95%B4%E6%95%B0%E8%A7%84%E5%88%92"><span class="toc-number">1.</span> <span class="toc-text">整数规划</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%BA%BF%E6%80%A7%E8%A7%84%E5%88%92-LP-%E9%97%AE%E9%A2%98"><span class="toc-number">1.1.</span> <span class="toc-text">线性规划 LP 问题</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%95%B4%E6%95%B0%E8%A7%84%E5%88%92-IP-%E6%9D%BE%E5%BC%9B%E9%97%AE%E9%A2%98"><span class="toc-number">1.2.</span> <span class="toc-text">整数规划 IP 松弛问题</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92%E2%80%93%E6%9C%80%E7%9F%AD%E8%B7%AF%E5%BE%84"><span class="toc-number">1.3.</span> <span class="toc-text">动态规划–最短路径</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%80%89%E8%AF%BE%E6%A8%A1%E5%9E%8B%E2%80%930-1-%E8%A7%84%E5%88%92"><span class="toc-number">1.4.</span> <span class="toc-text">选课模型–0-1 规划</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%BF%9E%E7%BB%AD%E8%A7%84%E5%88%92-%E2%80%93%E7%9F%B3%E6%B2%B9%E8%B4%AD%E4%B9%B0"><span class="toc-number">1.5.</span> <span class="toc-text">连续规划 –石油购买</span></a></li></ol></li></ol></div></div></div><header class="post-bg" id="page-header" style="background-image: url(https://image.hackerjerry.top/wallpaper-28.jpg)"><nav id="nav"><span id="blog_name"><a id="site-name" href="/">M@tr1xの日常</a></span><span class="menus"><div id="search_button"><a class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> 搜索</span></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fa fa-home"></i><span> Home</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fa fa-tags"></i><span> Tags</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fa fa-folder-open"></i><span> Categories</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fa fa-link"></i><span> Link</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fa fa-heart"></i><span> About</span></a></div><div class="menus_item"><a class="site-page" href="javascript:void(0);"><i class="fa-fw fa fa-list"></i><span> List</span><i class="fas fa-chevron-down expand"></i></a><ul class="menus_item_child"><li><a class="site-page" href="/bangumis/"><i class="fa-fw fa fa-film"></i><span> 追番</span></a></li><li><a class="site-page" href="/artalk/"><i class="fa-fw fa-fw fa fa-comment-alt"></i><span> 说说</span></a></li></ul></div></div><span class="toggle-menu close"><a class="site-page"><i class="fas fa-bars fa-fw"></i></a></span></span></nav><div id="post-info"><div id="post-title"><div class="posttitle">Integer-programming</div></div><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2020-09-10T08:55:09.000Z" title="发表于 2020-09-10 16:55:09">2020-09-10</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2021-10-08T04:05:33.511Z" title="更新于 2021-10-08 12:05:33">2021-10-08</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E6%95%B0%E5%AD%A6%E5%BB%BA%E6%A8%A1/">数学建模</a></span></div><div class="meta-secondline"> <span class="post-meta-separator">|</span><span class="post-meta-pv-cv"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">阅读量:</span><span id="busuanzi_value_page_pv"></span></span></div></div></div></header><main class="layout_post" id="content-inner"><article id="post"><div class="post-content" id="article-container"><a id="more"></a>
+  
+    
+    
+      
+      <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@10/styles/github-gist.min.css" />
+    
+  
+
+  
+    <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3/dist/jquery.fancybox.min.css" />
+  
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_ba1fz6golrf.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_kmeydafke9r.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+<!-- 自定义样式保持在最底部 -->
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    var CONFIG = {"hostname":"www.blog.hackerjerry.top","root":"/","version":"1.8.12","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"right","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"copy_btn":true,"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":1},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname"}},"search_path":"/local-search.xml"};
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+<meta name="generator" content="Hexo 5.1.1"><link rel="alternate" href="/atom.xml" title="M@tr1xの日常" type="application/atom+xml">
+</head>
+
+
+<body>
+  <header style="height: 70vh;">
+    <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>M@tr1xの日常</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                首页
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                归档
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                分类
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                标签
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                关于
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/links/">
+                <i class="iconfont icon-link-fill"></i>
+                友链
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/bangumis/">
+                <i class="fa-fw fa fa-film"></i>
+                追番
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/artalk/">
+                <i class="iconfont icon-comment"></i>
+                说说
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              &nbsp;<i class="iconfont icon-search"></i>&nbsp;
+            </a>
+          </li>
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">&nbsp;<i
+                class="iconfont icon-dark" id="color-toggle-icon"></i>&nbsp;</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+    <div class="banner" id="banner" parallax=true
+         style="background: url('/img/default.png') no-repeat center center;
+           background-size: cover;">
+      <div class="full-bg-img">
+        <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+          <div class="page-header text-center fade-in-up">
+            <span class="h2" id="subtitle" title="Integer-programming">
+              
+            </span>
+
+            
+              <div class="mt-3">
+  
+  
+    <span class="post-meta">
+      <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+      <time datetime="2020-09-10 16:55" pubdate>
+        2020年9月10日 下午
+      </time>
+    </span>
+  
+</div>
+
+<div class="mt-1">
+  
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-chart"></i>
+      3.3k 字
+    </span>
+  
+
+  
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-clock-fill"></i>
+      
+      
+      10 分钟
+    </span>
+  
+
+  
+  
+    
+      <!-- 不蒜子统计文章PV -->
+      <span id="busuanzi_container_page_pv" style="display: none">
+        <i class="iconfont icon-eye" aria-hidden="true"></i>
+        <span id="busuanzi_value_page_pv"></span> 次
+      </span>
+    
+  
+</div>
+
+            
+          </div>
+
+          
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="d-none d-lg-block col-lg-2"></div>
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div class="py-5" id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">Integer-programming</h1>
+            
+              <p class="note note-info">
+                
+                  本文最后更新于：2021年11月8日 晚上
+                
+              </p>
+            
+            <div class="markdown-body">
+              <a id="more"></a>
 
 <h1 id="整数规划"><a href="#整数规划" class="headerlink" title="整数规划"></a>整数规划</h1><h2 id="线性规划-LP-问题"><a href="#线性规划-LP-问题" class="headerlink" title="线性规划 LP 问题"></a>线性规划 LP 问题</h2><blockquote>
 <p>各变量可以是小数来逼近最值</p>
 </blockquote>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">model:</span><br><span class="line">max 5*x1+8*x2;</span><br><span class="line">x1+x2&lt;6;</span><br><span class="line">5*x1+9*x2&lt;&#x3D;45;</span><br><span class="line">end</span><br><span class="line">输出</span><br><span class="line"> Objective value:             41.25000</span><br><span class="line"> X1        2.250000            0.000000</span><br><span class="line"> X2        3.750000            0.000000</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><code class="hljs lingo">model:<br>max 5*x1+8*x2;<br>x1+x2&lt;6;<br>5*x1+9*x2&lt;&#x3D;45;<br>end<br>输出<br> Objective value:             41.25000<br> X1        2.250000            0.000000<br> X2        3.750000            0.000000<br></code></pre></td></tr></table></figure>
 
-<h2 id="整数规划-IP-松弛问题"><a href="#整数规划-IP-松弛问题" class="headerlink" title="整数规划 IP 松弛问题"></a>整数规划 IP 松弛问题</h2><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">model:</span><br><span class="line">sets:</span><br><span class="line">col&#x2F;1,2&#x2F;;</span><br><span class="line">hh(col):x;</span><br><span class="line">endsets</span><br><span class="line">MAX &#x3D; 5*x(1)+8*x(2);</span><br><span class="line">x(1)+x(2)&lt;6;</span><br><span class="line">5*x(1)+9*x(2)&lt;&#x3D;45;</span><br><span class="line">@for(col(j):@gin(x(j)));!这句话是限制变量为整数（gin）;</span><br><span class="line">END</span><br><span class="line">输出</span><br><span class="line">Objective value:                              40.00000</span><br><span class="line">Variable           Value        Reduced Cost</span><br><span class="line">X( 1)        0.000000           -5.000000</span><br><span class="line">X( 2)        5.000000           -8.000000</span><br></pre></td></tr></table></figure>
+<h2 id="整数规划-IP-松弛问题"><a href="#整数规划-IP-松弛问题" class="headerlink" title="整数规划 IP 松弛问题"></a>整数规划 IP 松弛问题</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><code class="hljs lingo">model:<br>sets:<br>col&#x2F;1,2&#x2F;;<br>hh(col):x;<br>endsets<br>MAX &#x3D; 5*x(1)+8*x(2);<br>x(1)+x(2)&lt;6;<br>5*x(1)+9*x(2)&lt;&#x3D;45;<br>@for(col(j):@gin(x(j)));!这句话是限制变量为整数（gin）;<br>END<br>输出<br>Objective value:                              40.00000<br>Variable           Value        Reduced Cost<br>X( 1)        0.000000           -5.000000<br>X( 2)        5.000000           -8.000000<br></code></pre></td></tr></table></figure>
 
-<h2 id="动态规划–最短路径"><a href="#动态规划–最短路径" class="headerlink" title="动态规划–最短路径"></a>动态规划–最短路径</h2><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">model:</span><br><span class="line">sets:</span><br><span class="line">citles&#x2F;1..9&#x2F;:L;</span><br><span class="line">roads(citles,citles)&#x2F;</span><br><span class="line">9,6,9,7,9,8</span><br><span class="line">6,4,6,5,7,4,7,5,8,4,8,5</span><br><span class="line">4,2,4,3,5,2,5,3</span><br><span class="line">2,1,3,1&#x2F;:D;</span><br><span class="line">endsets</span><br><span class="line">data:</span><br><span class="line">D&#x3D;</span><br><span class="line">6 3 3</span><br><span class="line">6 5 8 6 7 4</span><br><span class="line">6 7 8 9</span><br><span class="line">5 6;</span><br><span class="line">enddata</span><br><span class="line">L(1)&#x3D;0;</span><br><span class="line">@for(citles(i)|i#GT#1:</span><br><span class="line">L(i) &#x3D; @min(roads(i,j):D(i,j)+L(j)));</span><br><span class="line">end</span><br><span class="line">输出</span><br><span class="line"> Variable           Value</span><br><span class="line">    L( 1)        0.000000</span><br><span class="line">    L( 2)        5.000000</span><br><span class="line">    L( 3)        6.000000</span><br><span class="line">    L( 4)        11.00000</span><br><span class="line">    L( 5)        13.00000</span><br><span class="line">    L( 6)        17.00000</span><br><span class="line">    L( 7)        19.00000</span><br><span class="line">    L( 8)        17.00000</span><br><span class="line">    L( 9)        20.00000</span><br><span class="line">D( 9, 6)        6.000000</span><br><span class="line">D( 9, 7)        3.000000</span><br><span class="line">D( 9, 8)        3.000000</span><br><span class="line">D( 6, 4)        6.000000</span><br><span class="line">D( 6, 5)        5.000000</span><br><span class="line">D( 7, 4)        8.000000</span><br><span class="line">D( 7, 5)        6.000000</span><br><span class="line">D( 8, 4)        7.000000</span><br><span class="line">D( 8, 5)        4.000000</span><br><span class="line">D( 4, 2)        6.000000</span><br><span class="line">D( 4, 3)        7.000000</span><br><span class="line">D( 5, 2)        8.000000</span><br><span class="line">D( 5, 3)        9.000000</span><br><span class="line">D( 2, 1)        5.000000</span><br><span class="line">D( 3, 1)        6.000000</span><br></pre></td></tr></table></figure>
+<h2 id="动态规划–最短路径"><a href="#动态规划–最短路径" class="headerlink" title="动态规划–最短路径"></a>动态规划–最短路径</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br></pre></td><td class="code"><pre><code class="hljs lingo">model:<br>sets:<br>citles&#x2F;1..9&#x2F;:L;<br>roads(citles,citles)&#x2F;<br>9,6,9,7,9,8<br>6,4,6,5,7,4,7,5,8,4,8,5<br>4,2,4,3,5,2,5,3<br>2,1,3,1&#x2F;:D;<br>endsets<br>data:<br>D&#x3D;<br>6 3 3<br>6 5 8 6 7 4<br>6 7 8 9<br>5 6;<br>enddata<br>L(1)&#x3D;0;<br>@for(citles(i)|i#GT#1:<br>L(i) &#x3D; @min(roads(i,j):D(i,j)+L(j)));<br>end<br>输出<br> Variable           Value<br>    L( 1)        0.000000<br>    L( 2)        5.000000<br>    L( 3)        6.000000<br>    L( 4)        11.00000<br>    L( 5)        13.00000<br>    L( 6)        17.00000<br>    L( 7)        19.00000<br>    L( 8)        17.00000<br>    L( 9)        20.00000<br>D( 9, 6)        6.000000<br>D( 9, 7)        3.000000<br>D( 9, 8)        3.000000<br>D( 6, 4)        6.000000<br>D( 6, 5)        5.000000<br>D( 7, 4)        8.000000<br>D( 7, 5)        6.000000<br>D( 8, 4)        7.000000<br>D( 8, 5)        4.000000<br>D( 4, 2)        6.000000<br>D( 4, 3)        7.000000<br>D( 5, 2)        8.000000<br>D( 5, 3)        9.000000<br>D( 2, 1)        5.000000<br>D( 3, 1)        6.000000<br></code></pre></td></tr></table></figure>
 
 <ol>
 <li>所有函数均以@开头</li>
@@ -137,45 +309,329 @@ if (autoChangeMode === '1') {
 <li>集合循环语句#GT#表示逻辑关系大于</li>
 <li>L(i) = @min(roads(i,j):D(i,j)+L(j)))即为动态规划基本方程</li>
 </ol>
-<h2 id="选课模型–0-1-规划"><a href="#选课模型–0-1-规划" class="headerlink" title="选课模型–0-1 规划"></a>选课模型–0-1 规划</h2><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">model:</span><br><span class="line">sets:</span><br><span class="line">Shuliang&#x2F;1..18&#x2F;:m;</span><br><span class="line">Xuanke(Shuliang):x;</span><br><span class="line">endsets</span><br><span class="line">data:</span><br><span class="line">m &#x3D; 5,5,4,4,3,3,3,2,3,3,3,2,2,2,2,1,1,1;</span><br><span class="line">enddata</span><br><span class="line">min&#x3D;@sum(Xuanke(i):x(i));</span><br><span class="line">@for(Xuanke(k):@bin(x(k)));</span><br><span class="line">@sum(Xuanke(i):m(i)*x(i))&gt;&#x3D;18;</span><br><span class="line">@sum(Xuanke(j)|j#ge#9#and#j#le#18:m(j)*x(j))&lt;&#x3D;@sum(Xuanke(i):m(i)*x(i))&#x2F;3;!j大于9小于18，i的范围为1~18</span><br><span class="line">@sum(Xuanke(j)|j#ge#9#and#j#le#18:m(j)*x(j))&gt;&#x3D;@sum(Xuanke(i):m(i)*x(i))&#x2F;6;</span><br><span class="line">x(1)&gt;&#x3D;x(5);</span><br><span class="line">x(2)&gt;&#x3D;x(7);</span><br><span class="line">x(8)&gt;&#x3D;x(9);</span><br><span class="line">x(6)&gt;&#x3D;x(10);</span><br><span class="line">x(4)&gt;&#x3D;x(11);</span><br><span class="line">x(5)&gt;&#x3D;x(12);</span><br><span class="line">x(7)&gt;&#x3D;x(13);</span><br><span class="line">x(6)&gt;&#x3D;x(14);</span><br><span class="line">end</span><br><span class="line">输出</span><br><span class="line">Objective value:                              5.000000</span><br><span class="line">X( 1)        1.000000            1.000000</span><br><span class="line">X( 2)        1.000000            1.000000</span><br><span class="line">X( 3)        0.000000            1.000000</span><br><span class="line">X( 4)        1.000000            1.000000</span><br><span class="line">X( 5)        0.000000            1.000000</span><br><span class="line">X( 6)        0.000000            1.000000</span><br><span class="line">X( 7)        0.000000            1.000000</span><br><span class="line">X( 8)        0.000000            1.000000</span><br><span class="line">X( 9)        0.000000            1.000000</span><br><span class="line">X( 10)        0.000000            1.000000</span><br><span class="line">X( 11)        1.000000            1.000000</span><br><span class="line">X( 12)        0.000000            1.000000</span><br><span class="line">X( 13)        0.000000            1.000000</span><br><span class="line">X( 14)        0.000000            1.000000</span><br><span class="line">X( 15)        1.000000            1.000000</span><br><span class="line">X( 16)        0.000000            1.000000</span><br><span class="line">X( 17)        0.000000            1.000000</span><br><span class="line">X( 18)        0.000000            1.000000</span><br></pre></td></tr></table></figure>
+<h2 id="选课模型–0-1-规划"><a href="#选课模型–0-1-规划" class="headerlink" title="选课模型–0-1 规划"></a>选课模型–0-1 规划</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br></pre></td><td class="code"><pre><code class="hljs lingo">model:<br>sets:<br>Shuliang&#x2F;1..18&#x2F;:m;<br>Xuanke(Shuliang):x;<br>endsets<br>data:<br>m &#x3D; 5,5,4,4,3,3,3,2,3,3,3,2,2,2,2,1,1,1;<br>enddata<br>min&#x3D;@sum(Xuanke(i):x(i));<br>@for(Xuanke(k):@bin(x(k)));<br>@sum(Xuanke(i):m(i)*x(i))&gt;&#x3D;18;<br>@sum(Xuanke(j)|j#ge#9#and#j#le#18:m(j)*x(j))&lt;&#x3D;@sum(Xuanke(i):m(i)*x(i))&#x2F;3;!j大于9小于18，i的范围为1~18<br>@sum(Xuanke(j)|j#ge#9#and#j#le#18:m(j)*x(j))&gt;&#x3D;@sum(Xuanke(i):m(i)*x(i))&#x2F;6;<br>x(1)&gt;&#x3D;x(5);<br>x(2)&gt;&#x3D;x(7);<br>x(8)&gt;&#x3D;x(9);<br>x(6)&gt;&#x3D;x(10);<br>x(4)&gt;&#x3D;x(11);<br>x(5)&gt;&#x3D;x(12);<br>x(7)&gt;&#x3D;x(13);<br>x(6)&gt;&#x3D;x(14);<br>end<br>输出<br>Objective value:                              5.000000<br>X( 1)        1.000000            1.000000<br>X( 2)        1.000000            1.000000<br>X( 3)        0.000000            1.000000<br>X( 4)        1.000000            1.000000<br>X( 5)        0.000000            1.000000<br>X( 6)        0.000000            1.000000<br>X( 7)        0.000000            1.000000<br>X( 8)        0.000000            1.000000<br>X( 9)        0.000000            1.000000<br>X( 10)        0.000000            1.000000<br>X( 11)        1.000000            1.000000<br>X( 12)        0.000000            1.000000<br>X( 13)        0.000000            1.000000<br>X( 14)        0.000000            1.000000<br>X( 15)        1.000000            1.000000<br>X( 16)        0.000000            1.000000<br>X( 17)        0.000000            1.000000<br>X( 18)        0.000000            1.000000<br></code></pre></td></tr></table></figure>
 
-<p>由此得出选课方案，一共选 5 门，为 x 矩阵中为 1 的变量。<br>这里发现了 Lingo 的一个非常棒的检查代码的功能！<img src= "/img/loading.gif" data-lazy-src="https://cdn.nlark.com/yuque/0/2020/png/1629942/1599728163727-676d1a88-4879-4aef-aa34-4c66cf99f470.png#align=left&display=inline&height=523&margin=%5Bobject%20Object%5D&originHeight=523&originWidth=1014&size=0&status=done&style=none&width=1014">就是模型编译！它可以直接把代码翻译成数学公式，如图<img src= "/img/loading.gif" data-lazy-src="https://cdn.nlark.com/yuque/0/2020/png/1629942/1599728164253-96254c1f-96d1-44bc-a9c1-919c9ef00301.png#align=left&display=inline&height=636&margin=%5Bobject%20Object%5D&originHeight=636&originWidth=795&size=0&status=done&style=none&width=795"> 简直神器！！这样就可以看看翻译成的式子是不是自己想要的从而检查代码哪里写错了！点赞 👍</p>
+<p>由此得出选课方案，一共选 5 门，为 x 矩阵中为 1 的变量。<br>这里发现了 Lingo 的一个非常棒的检查代码的功能！<img src="https://cdn.nlark.com/yuque/0/2020/png/1629942/1599728163727-676d1a88-4879-4aef-aa34-4c66cf99f470.png#align=left&display=inline&height=523&margin=%5Bobject%20Object%5D&originHeight=523&originWidth=1014&size=0&status=done&style=none&width=1014" srcset="/img/loading.gif" lazyload>就是模型编译！它可以直接把代码翻译成数学公式，如图<img src="https://cdn.nlark.com/yuque/0/2020/png/1629942/1599728164253-96254c1f-96d1-44bc-a9c1-919c9ef00301.png#align=left&display=inline&height=636&margin=%5Bobject%20Object%5D&originHeight=636&originWidth=795&size=0&status=done&style=none&width=795" srcset="/img/loading.gif" lazyload> 简直神器！！这样就可以看看翻译成的式子是不是自己想要的从而检查代码哪里写错了！点赞 👍</p>
 <h2 id="连续规划-–石油购买"><a href="#连续规划-–石油购买" class="headerlink" title="连续规划 –石油购买"></a>连续规划 –石油购买</h2><p>这里遇到一种新情况，即分段规划，比如：当购买量不超过 500 吨时，单价 10000 元；当购买量超过 500 吨但不超过 1000 吨，超过的部分 8000 元，当超过 1000 吨但不超过 1500 吨，超过的部分 6000 元。<br>这里有多种方法可以实现。<br><strong>第一种–巧用 if 语句</strong></p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">model:</span><br><span class="line">sets:</span><br><span class="line">buy&#x2F;1,2,3&#x2F;:r;</span><br><span class="line">nums&#x2F;1,2&#x2F;;</span><br><span class="line">goods(nums):x;</span><br><span class="line">endsets</span><br><span class="line">max &#x3D; 4800*x(1)+5600*x(2)-10000*r(1)-8000*r(2)-6000*r(3);</span><br><span class="line">0.5*x(1)+0.6*x(2)&lt;&#x3D;500+r(1)+r(2)+r(3);</span><br><span class="line">0.5*x(1)+0.4*x(2)&lt;&#x3D;1000;</span><br><span class="line">r(1)&lt;&#x3D;500;</span><br><span class="line">r(3)&lt;&#x3D;500;</span><br><span class="line">r(2)&lt;&#x3D;500;</span><br><span class="line">r(2)&#x3D;@if(r(1)#lt#500,0,r(2));!由于@if语句第一个是判断条件，第二个是为真时的值，第三个是为假的值，而这里必须是个数而不能表示成&lt;&#x3D;500，因此让它等于自身;</span><br><span class="line">r(3)&#x3D;@if(r(2)#lt#500,0,r(3));</span><br><span class="line">end</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><code class="hljs lingo">model:<br>sets:<br>buy&#x2F;1,2,3&#x2F;:r;<br>nums&#x2F;1,2&#x2F;;<br>goods(nums):x;<br>endsets<br>max &#x3D; 4800*x(1)+5600*x(2)-10000*r(1)-8000*r(2)-6000*r(3);<br>0.5*x(1)+0.6*x(2)&lt;&#x3D;500+r(1)+r(2)+r(3);<br>0.5*x(1)+0.4*x(2)&lt;&#x3D;1000;<br>r(1)&lt;&#x3D;500;<br>r(3)&lt;&#x3D;500;<br>r(2)&lt;&#x3D;500;<br>r(2)&#x3D;@if(r(1)#lt#500,0,r(2));!由于@if语句第一个是判断条件，第二个是为真时的值，第三个是为假的值，而这里必须是个数而不能表示成&lt;&#x3D;500，因此让它等于自身;<br>r(3)&#x3D;@if(r(2)#lt#500,0,r(3));<br>end<br></code></pre></td></tr></table></figure>
 
 <p><strong>第二种–引入 0-1 变量，转换成线性约束</strong><br>这里约定，为第一阶段购买原油吨，为第二阶段，为第三阶段,表示是否购买.<br>核心代码：</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">x1-500*y1&lt;&#x3D;0;</span><br><span class="line">x2-500*y2&lt;&#x3D;0;</span><br><span class="line">x3-500*y3&lt;&#x3D;0;</span><br><span class="line">x1-500*y2&gt;&#x3D;0;</span><br><span class="line">x2-500*y3&gt;&#x3D;0;</span><br><span class="line">@bin(y1);</span><br><span class="line">@bin(y3);</span><br><span class="line">@bin(y2);</span><br><span class="line">得到方案</span><br><span class="line">Variable           Value        Reduced Cost</span><br><span class="line">R( 1)        500.0000            0.000000</span><br><span class="line">R( 2)        500.0000            0.000000</span><br><span class="line">R( 3)        0.000000            6000.000</span><br><span class="line">X( 1)        0.000000            2200.000</span><br><span class="line">X( 2)        2500.000            0.000000</span><br></pre></td></tr></table></figure>
-</div><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">文章作者: </span><span class="post-copyright-info"><a href="mailto:undefined">M@tr1x</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">文章链接: </span><span class="post-copyright-info"><a href="https://www.blog.hackerjerry.top/2020/09/10/Integer-programming_new/">https://www.blog.hackerjerry.top/2020/09/10/Integer-programming_new/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="https://www.blog.hackerjerry.top" target="_blank">M@tr1xの日常</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/lingo/">lingo</a><a class="post-meta__tags" href="/tags/%E6%95%B4%E6%95%B0%E8%A7%84%E5%88%92/">整数规划</a></div><div class="post_share"><div class="social-share" data-image="https://image.hackerjerry.top/wallpaper-28.jpg" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/social-share.js/dist/css/share.min.css"><script src="https://cdn.jsdelivr.net/npm/social-share.js/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><div class="prev-post pull-left"><a href="/2020/09/10/Solving-Nonlinear-equations-and-equations_new/"><img class="prev-cover" data-lazy-src="https://image.hackerjerry.top/wallpaper-11.jpg" onerror="onerror=null;src='/img/404.jpg'"><div class="pagination-info"><div class="label">上一篇</div><div class="prev_info">Solving-Nonlinear-equations-and-equations</div></div></a></div><div class="next-post pull-right"><a href="/2020/09/10/Constraint-Optimization_new/"><img class="next-cover" data-lazy-src="https://image.hackerjerry.top/wallpaper-2.jpg" onerror="onerror=null;src='/img/404.jpg'"><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">Constraint-Optimization</div></div></a></div></nav><hr/><div id="post-comment"><div class="comment-head"><div class="comment-headline"><i class="fas fa-comments fa-fw"></i><span> 评论</span></div></div><div class="comment-wrap"><div><div class="vcomment" id="vcomment"></div></div></div></div></article></main><footer id="footer" data-type="color"><div id="footer-wrap"><div class="copyright">&copy;2019 - 2021 By M@tr1x</div><div class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div><div class="footer_custom_text">冷風熱血，荡涤乾坤</div><div class="icp"><a target="_blank" rel="noopener" href="http://www.beian.miit.gov.cn"><img class="icp-icon" src="/img/icp.png"/><span>陕ICP备19023179号</span></a></div><div class="cdn"><a href="https://www.upyun.com/?utm_source=lianmeng&amp;utm_medium=referral" target="_blank"><img src="/img/upyun.png" width="70px"/><span></span></a></div></div></footer></div><section id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="设置"><i class="fas fa-cog"></i></button><a id="to_comment" href="#post-comment" title="直达评论"><i class="fas fa-comments"></i></a><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="回到顶部"><i class="fas fa-arrow-up"></i></button></div></section><div class="search-dialog" id="local-search"><div class="search-dialog__title" id="local-search-title">本地搜索</div><div id="local-input-panel"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="搜索文章" type="text"/></div></div></div><hr/><div id="local-search-results"><div id="local-hits"></div><div id="local-stats"><div class="local-search-stats__hr" id="hr"><span>由</span> <a target="_blank" rel="noopener" href="https://github.com/wzpan/hexo-generator-search" style="color:#49B1F5;">hexo-generator-search</a>
- <span>提供支持</span></div></div></div><span class="search-close-button"><i class="fas fa-times"></i></span></div><div id="search-mask"></div><div><script src="https://cdn.jsdelivr.net/npm/jquery@latest/dist/jquery.min.js"></script><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.js"></script><script src="https://cdn.jsdelivr.net/npm/instant.page/instantpage.min.js" type="module" defer></script><script src="https://cdn.jsdelivr.net/npm/vanilla-lazyload/dist/lazyload.iife.min.js" async></script><script src="/js/search/local-search.js"></script><div class="js-pjax"><script>function loadValine () {
-  function initValine () {
-    window.valine = new Valine({
-      el: '#vcomment',
-      appId: 'jApqS8Xxcc1eST53AyiAisFx-gzGzoHsz',
-      appKey: 'iyngroaUslATD8V4nOgOHowr',
-      placeholder: '说点什么呗~',
-      avatar: 'monsterid',
-      meta: 'nick,mail,link'.split(','),
-      pageSize: '10',
-      lang: 'zh-CN',
-      recordIP: false,
-      serverURLs: '',
-      emojiCDN: '',
-      emojiMaps: "",
-      enableQQ: true,
-      path: window.location.pathname,
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><code class="hljs lingo">x1-500*y1&lt;&#x3D;0;<br>x2-500*y2&lt;&#x3D;0;<br>x3-500*y3&lt;&#x3D;0;<br>x1-500*y2&gt;&#x3D;0;<br>x2-500*y3&gt;&#x3D;0;<br>@bin(y1);<br>@bin(y3);<br>@bin(y2);<br>得到方案<br>Variable           Value        Reduced Cost<br>R( 1)        500.0000            0.000000<br>R( 2)        500.0000            0.000000<br>R( 3)        0.000000            6000.000<br>X( 1)        0.000000            2200.000<br>X( 2)        2500.000            0.000000<br></code></pre></td></tr></table></figure>
+
+            </div>
+            <hr>
+            <div>
+              <div class="post-metas mb-3">
+                
+                  <div class="post-meta mr-3">
+                    <i class="iconfont icon-category"></i>
+                    
+                      <a class="hover-with-bg" href="/categories/%E6%95%B0%E5%AD%A6%E5%BB%BA%E6%A8%A1/">数学建模</a>
+                    
+                  </div>
+                
+                
+                  <div class="post-meta">
+                    <i class="iconfont icon-tags"></i>
+                    
+                      <a class="hover-with-bg" href="/tags/lingo/">lingo</a>
+                    
+                      <a class="hover-with-bg" href="/tags/%E6%95%B4%E6%95%B0%E8%A7%84%E5%88%92/">整数规划</a>
+                    
+                  </div>
+                
+              </div>
+              
+                <p class="note note-warning">
+                  
+                    本博客所有文章除特别声明外，均采用 <a target="_blank" href="https://creativecommons.org/licenses/by-sa/4.0/deed.zh" rel="nofollow noopener noopener">CC BY-SA 4.0 协议</a> ，转载请注明出处！
+                  
+                </p>
+              
+              
+                <div class="post-prevnext">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2020/09/10/Solving-Nonlinear-equations-and-equations_new/">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">Solving-Nonlinear-equations-and-equations</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2020/09/10/Constraint-Optimization_new/">
+                        <span class="hidden-mobile">Constraint-Optimization</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+              <!-- Comments -->
+              <article class="comments" id="comments" lazyload>
+                
+                  
+                
+                
+  <div id="valine"></div>
+  <script type="text/javascript">
+    Fluid.utils.loadComments('#valine', function() {
+      Fluid.utils.createScript('https://cdn.jsdelivr.net/npm/valine@1/dist/Valine.min.js', function() {
+        var options = Object.assign(
+          {"appId":"jApqS8Xxcc1eST53AyiAisFx-gzGzoHsz","appKey":"iyngroaUslATD8V4nOgOHowr","path":"window.location.pathname","placeholder":"说点什么呗~","avatar":"retro","meta":["nick","mail","link"],"requiredFields":["mail"],"pageSize":10,"lang":"zh-CN","highlight":false,"recordIP":false,"serverURLs":"","emojiCDN":null,"emojiMaps":null,"enableQQ":true},
+          {
+            el: "#valine",
+            path: window.location.pathname
+          }
+        )
+        new Valine(options);
+        Fluid.utils.waitElementVisible('#valine .vcontent', () => {
+          Fluid.plugins.initFancyBox('#valine .vcontent img:not(.vemoji)');
+        })
+      });
     });
-    if ('nick,mail') { valine.config.requiredFields= 'nick,mail'.split(',') }
-  }
+  </script>
+  <noscript>Please enable JavaScript to view the comments</noscript>
 
-  if (typeof Valine === 'function') initValine() 
-  else $.getScript('https://cdn.jsdelivr.net/npm/valine/dist/Valine.min.js', initValine)
-}
 
-if ('Valine' === 'Valine' || !false) {
-  if (false) loadComment(document.querySelector('#vcomment'),loadValine)
-  else setTimeout(() => loadValine(), 0)
-} else {
-  function loadOtherComment () {
-    loadValine()
-  }
-}</script><script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></div></body></html>
+              </article>
+            
+          </article>
+        </div>
+      </div>
+    </div>
+    
+      <div class="d-none d-lg-block col-lg-2 toc-container" id="toc-ctn">
+        <div id="toc">
+  <p class="toc-header"><i class="iconfont icon-list"></i>&nbsp;目录</p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+      </div>
+    
+  </div>
+</div>
+
+<!-- Custom -->
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v"
+                 for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+
+    
+  </main>
+
+  <footer class="text-center mt-5 py-3">
+  <div class="footer-content">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" integrity="sha512-SfTiTlX6kk+qitfevl/7LibUOeJWlt9rbyDn92a1DqWOw9vWG2MFoays0sgObmWazO5BQPiFucnnEAjpAB+/Sw==" crossorigin="anonymous" referrerpolicy="no-referrer">
+     <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+  </div>
+  
+  <div class="statistics">
+    
+    
+
+    
+      
+        <!-- 不蒜子统计PV -->
+        <span id="busuanzi_container_site_pv" style="display: none">
+            总访问量 
+            <span id="busuanzi_value_site_pv"></span>
+             次
+          </span>
+      
+      
+        <!-- 不蒜子统计UV -->
+        <span id="busuanzi_container_site_uv" style="display: none">
+            总访客数 
+            <span id="busuanzi_value_site_uv"></span>
+             人
+          </span>
+      
+    
+  </div>
+
+
+  
+  <!-- 备案信息 -->
+  <div class="beian">
+    <span>
+      <a href="http://beian.miit.gov.cn/" target="_blank" rel="nofollow noopener">
+        陕ICP备19023179号
+      </a>
+    </span>
+    
+  </div>
+
+
+  <div class="cdn"><a href="https://www.upyun.com/?utm_source=lianmeng&amp;utm_medium=referral" target="_blank"><img width="70px" class="entered loading" src="/img/upyun.png" srcset="/img/loading.gif" lazyload data-ll-status="loading"><span></span></a></div>
+  
+</footer>
+
+
+  <!-- SCRIPTS -->
+  
+  <script  src="https://cdn.jsdelivr.net/npm/nprogress@0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/nprogress@0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://cdn.jsdelivr.net/npm/jquery@3/dist/jquery.min.js" ></script>
+<script  src="https://cdn.jsdelivr.net/npm/bootstrap@4/dist/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+<!-- Plugins -->
+
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+  
+
+
+
+  
+    <script  src="https://cdn.jsdelivr.net/npm/tocbot@4/dist/tocbot.min.js" ></script>
+  
+  
+    <script  src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3/dist/jquery.fancybox.min.js" ></script>
+  
+  
+    <script  src="https://cdn.jsdelivr.net/npm/anchor-js@4/anchor.min.js" ></script>
+  
+  
+    <script defer src="https://cdn.jsdelivr.net/npm/clipboard@2/dist/clipboard.min.js" ></script>
+  
+
+
+
+  <script defer src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" ></script>
+
+
+
+
+  <script  src="https://cdn.jsdelivr.net/npm/typed.js@2/lib/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var title = document.getElementById('subtitle').title;
+      
+      typing(title)
+      
+    })(window, document);
+  </script>
+
+
+
+
+
+  
+
+  
+    <!-- MathJax -->
+    <script>
+      MathJax = {
+        tex: {
+          inlineMath: [['$', '$'], ['\\(', '\\)']]
+        },
+        loader: {
+          load: ['ui/lazy']
+        },
+        options: {
+          renderActions: {
+            findScript: [10, doc => {
+              document.querySelectorAll('script[type^="math/tex"]').forEach(node => {
+                const display = !!node.type.match(/; *mode=display/);
+                const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display);
+                const text = document.createTextNode('');
+                node.parentNode.replaceChild(text, node);
+                math.start = { node: text, delim: '', n: 0 };
+                math.end = { node: text, delim: '', n: 0 };
+                doc.math.push(math);
+              });
+            }, '', false],
+            insertedScript: [200, () => {
+              document.querySelectorAll('mjx-container').forEach(node => {
+                let target = node.parentNode;
+                if (target.nodeName.toLowerCase() === 'li') {
+                  target.parentNode.classList.add('has-jax');
+                }
+              });
+            }, '', false]
+          }
+        }
+      };
+    </script>
+
+    <script async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js" ></script>
+
+  
+
+
+
+
+
+
+
+
+
+
+
+<!-- 主题的启动项 保持在最底部 -->
+<script  src="/js/boot.js" ></script>
+
+
+</body>
+</html>

@@ -1,131 +1,324 @@
-<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width,initial-scale=1"><title>机器学习之随机森林 | M@tr1xの日常</title><meta name="description" content="tags: []categories: []cover: “”​  这里记录一下 AI 作品赛里接触到的随机森林算法。   决策树随机森林由许多决策树（decision tree）组成，我们可以将决策树视为一系列关于数据的是&#x2F;否问题，从而最终得出一个预测类别（或回归情况下的连续值）。 这是一个可解释的模型，因为它非常像我们人类进行分类的过程：在我们做出决定之前（在理想世界中），我们会对可用数据进行"><meta name="keywords" content="CTF,白帽子,Pwn,Web"><meta name="author" content="M@tr1x"><meta name="copyright" content="M@tr1x"><meta name="format-detection" content="telephone=no"><link rel="shortcut icon" href="/img/favicon.png"><link rel="canonical" href="https://www.blog.hackerjerry.top/2021/04/09/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E4%B9%8B%E9%9A%8F%E6%9C%BA%E6%A3%AE%E6%9E%97_new/"><meta http-equiv="Cache-Control" content="no-transform"><meta http-equiv="Cache-Control" content="no-siteapp"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//fonts.googleapis.com" crossorigin="crossorigin"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><meta name="google-site-verification" content="UA-157542666-1"/><meta property="og:type" content="article"><meta property="og:title" content="机器学习之随机森林"><meta property="og:url" content="https://www.blog.hackerjerry.top/2021/04/09/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E4%B9%8B%E9%9A%8F%E6%9C%BA%E6%A3%AE%E6%9E%97_new/"><meta property="og:site_name" content="M@tr1xの日常"><meta property="og:description" content="tags: []categories: []cover: “”​  这里记录一下 AI 作品赛里接触到的随机森林算法。   决策树随机森林由许多决策树（decision tree）组成，我们可以将决策树视为一系列关于数据的是&#x2F;否问题，从而最终得出一个预测类别（或回归情况下的连续值）。 这是一个可解释的模型，因为它非常像我们人类进行分类的过程：在我们做出决定之前（在理想世界中），我们会对可用数据进行"><meta property="og:image" content="https://image.hackerjerry.top/2427682894.jpeg"><meta property="article:published_time" content="2021-04-09T12:33:30.000Z"><meta property="article:modified_time" content="2021-10-08T04:07:30.068Z"><meta name="twitter:card" content="summary"><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.css"><link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Titillium+Web&amp;display=swap"><script>var GLOBAL_CONFIG = { 
-  root: '/',
-  hexoversion: '5.1.1',
-  algolia: undefined,
-  localSearch: {"path":"search.xml","languages":{"hits_empty":"找不到您查询的内容：${query}"}},
-  translate: undefined,
-  noticeOutdate: {"limitDay":500,"position":"top","messagePrev":"It has been","messageNext":"days since the last update, the content of the article may be outdated."},
-  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":true},
-  copy: {
-    success: '复制成功',
-    error: '复制错误',
-    noSupport: '浏览器不支持'
-  },
-  bookmark: {
-    message_prev: '按',
-    message_next: '键将本页加入书签'
-  },
-  runtime: '天',
-  last_push_date: {"zeroDay":"今天","suffix":"天前"},
-  copyright: {"limitCount":50,"languages":{"author":"作者: M@tr1x","link":"链接: ","source":"来源: M@tr1xの日常","info":"著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。"}},
-  ClickShowText: undefined,
-  medium_zoom: false,
-  fancybox: true,
-  Snackbar: undefined,
-  justifiedGallery: {
-    js: 'https://cdn.jsdelivr.net/npm/justifiedGallery/dist/js/jquery.justifiedGallery.min.js',
-    css: 'https://cdn.jsdelivr.net/npm/justifiedGallery/dist/css/justifiedGallery.min.css'
-  },
-  baiduPush: false,
-  isPhotoFigcaption: false,
-  islazyload: true,
-  isanchor: false
-};
 
-var saveToLocal = {
-  set: function setWithExpiry(key, value, ttl) {
-      const now = new Date()
-      const expiryDay = ttl * 86400000
-      const item = {
-        value: value,
-        expiry: now.getTime() + expiryDay,
-      }
-      localStorage.setItem(key, JSON.stringify(item))
-    },
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/favicon.png">
+  <link rel="icon" href="/img/favicon.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
   
-  get: function getWithExpiry(key) {
-    const itemStr = localStorage.getItem(key)
+  <meta name="theme-color" content="#2f4154">
+  <meta name="description" content="tags: []categories: []cover: “”​
 
-    if (!itemStr) {
-      return undefined
-    }
-    const item = JSON.parse(itemStr)
-    const now = new Date()
+这里记录一下 AI 作品赛里接触到的随机森林算法。">
+  <meta name="author" content="M@tr1x">
+  <meta name="keywords" content="CTF,白帽子,Pwn,Web">
+  <meta name="description" content="tags: []categories: []cover: “”​  这里记录一下 AI 作品赛里接触到的随机森林算法。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="机器学习之随机森林">
+<meta property="og:url" content="https://www.blog.hackerjerry.top/2021/04/09/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E4%B9%8B%E9%9A%8F%E6%9C%BA%E6%A3%AE%E6%9E%97_new/index.html">
+<meta property="og:site_name" content="M@tr1xの日常">
+<meta property="og:description" content="tags: []categories: []cover: “”​  这里记录一下 AI 作品赛里接触到的随机森林算法。">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://image.hackerjerry.top/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E4%B9%8B%E9%9A%8F%E6%9C%BA%E6%A3%AE%E6%9E%97-1.png#height=588&id=XYnoX&name=image.png&originHeight=732&originWidth=837&originalType=binary%E2%88%B6=1&size=369303&status=done&style=none&width=672">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2021/svg/1629942/1618020812451-b0b3a075-5dcb-42d8-bf97-78aa34e4b86e.svg#height=18&id=jf86o&originHeight=18&originWidth=19&originalType=binary%E2%88%B6=1&size=0&status=done&style=none&width=19">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2021/svg/1629942/1618020812589-b6f620aa-d6a0-4990-8de0-93dcf01f721e.svg#height=18&id=fdcbK&originHeight=18&originWidth=19&originalType=binary%E2%88%B6=1&size=0&status=done&style=none&width=19">
+<meta property="og:image" content="https://image.hackerjerry.top/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E4%B9%8B%E9%9A%8F%E6%9C%BA%E6%A3%AE%E6%9E%97-2.svg#height=62&id=X43jp&originHeight=62&originWidth=196&originalType=binary%E2%88%B6=1&size=0&status=done&style=none&width=196">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2021/svg/1629942/1618020812831-53a78260-e1f7-4fe9-bd8b-1b6cbdd6d85d.svg#height=26&id=PpyfP&originHeight=26&originWidth=74&originalType=binary%E2%88%B6=1&size=0&status=done&style=none&width=74">
+<meta property="og:image" content="https://image.hackerjerry.top/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E4%B9%8B%E9%9A%8F%E6%9C%BA%E6%A3%AE%E6%9E%97-3.svg#height=26&id=EE8pQ&originHeight=26&originWidth=248&originalType=binary%E2%88%B6=1&size=0&status=done&style=none&width=248">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2021/svg/1629942/1618020812738-fffb9065-834c-444d-9a51-8881c89e799f.svg#height=26&id=tYvso&originHeight=26&originWidth=74&originalType=binary%E2%88%B6=1&size=0&status=done&style=none&width=74">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2021/svg/1629942/1618020812748-d95f3fa5-1a2f-4372-ad0b-78d11ef80423.svg#height=18&id=QMRXL&originHeight=18&originWidth=23&originalType=binary%E2%88%B6=1&size=0&status=done&style=none&width=23">
+<meta property="og:image" content="https://image.hackerjerry.top/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E4%B9%8B%E9%9A%8F%E6%9C%BA%E6%A3%AE%E6%9E%97-4.svg#height=59&id=lstWO&originHeight=59&originWidth=186&originalType=binary%E2%88%B6=1&size=0&status=done&style=none&width=186">
+<meta property="og:image" content="https://image.hackerjerry.top/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E4%B9%8B%E9%9A%8F%E6%9C%BA%E6%A3%AE%E6%9E%97-5.png#height=56&id=dVbT7&originHeight=242&originWidth=757&originalType=binary%E2%88%B6=1&size=0&status=done&style=none&width=176">
+<meta property="og:image" content="https://image.hackerjerry.top/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E4%B9%8B%E9%9A%8F%E6%9C%BA%E6%A3%AE%E6%9E%97-6.png#height=73&id=NEETK&originHeight=73&originWidth=1080&originalType=binary%E2%88%B6=1&size=0&status=done&style=none&width=1080">
+<meta property="og:image" content="https://image.hackerjerry.top/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E4%B9%8B%E9%9A%8F%E6%9C%BA%E6%A3%AE%E6%9E%97-7.png#height=58&id=idTVC&margin=%5Bobject%20Object%5D&name=image.png&originHeight=77&originWidth=845&originalType=binary%E2%88%B6=1&size=17368&status=done&style=none&width=641">
+<meta property="og:image" content="https://image.hackerjerry.top/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E4%B9%8B%E9%9A%8F%E6%9C%BA%E6%A3%AE%E6%9E%97-8.png#height=281&id=iUL7X&margin=%5Bobject%20Object%5D&name=image.png&originHeight=561&originWidth=731&originalType=binary%E2%88%B6=1&size=122786&status=done&style=none&width=365.5">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2021/svg/1629942/1618021002264-6488bff2-9519-4ecc-bbdd-6f2f86c34189.svg#height=23&id=p7K03&originHeight=23&originWidth=24&originalType=binary%E2%88%B6=1&size=0&status=done&style=none&width=24">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2021/svg/1629942/1618021002341-9e586245-0eb4-43f1-ab4b-e9d2f1514bd9.svg#height=23&id=Jvs0Y&originHeight=23&originWidth=32&originalType=binary%E2%88%B6=1&size=0&status=done&style=none&width=32">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2021/svg/1629942/1618021002330-b42005d2-d60f-4e39-927c-852a31a4810e.svg#height=26&id=W8yRc&originHeight=26&originWidth=56&originalType=binary%E2%88%B6=1&size=0&status=done&style=none&width=56">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2021/svg/1629942/1618021002461-670ab097-97d8-4674-b83a-a27eed267988.svg#height=21&id=Ihqmy&originHeight=21&originWidth=52&originalType=binary%E2%88%B6=1&size=0&status=done&style=none&width=52">
+<meta property="og:image" content="https://image.hackerjerry.top/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E4%B9%8B%E9%9A%8F%E6%9C%BA%E6%A3%AE%E6%9E%97-9.svg#height=69&id=GEe9U&originHeight=69&originWidth=264&originalType=binary%E2%88%B6=1&size=0&status=done&style=none&width=264">
+<meta property="og:image" content="https://image.hackerjerry.top/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E4%B9%8B%E9%9A%8F%E6%9C%BA%E6%A3%AE%E6%9E%97-10.svg#height=57&id=M7VkN&originHeight=57&originWidth=246&originalType=binary%E2%88%B6=1&size=0&status=done&style=none&width=246">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2021/svg/1629942/1618021002545-b6955ef3-85ad-4594-9a5e-f5a27be46475.svg#height=15&id=JPvdT&originHeight=15&originWidth=13&originalType=binary%E2%88%B6=1&size=0&status=done&style=none&width=13">
+<meta property="og:image" content="https://image.hackerjerry.top/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E4%B9%8B%E9%9A%8F%E6%9C%BA%E6%A3%AE%E6%9E%97-11.png#height=162&id=iOtB0&margin=%5Bobject%20Object%5D&name=image.png&originHeight=323&originWidth=799&originalType=binary%E2%88%B6=1&size=117004&status=done&style=none&width=399.5">
+<meta property="og:image" content="https://image.hackerjerry.top/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E4%B9%8B%E9%9A%8F%E6%9C%BA%E6%A3%AE%E6%9E%97-12.png#height=271&id=ImDoE&margin=%5Bobject%20Object%5D&name=image.png&originHeight=542&originWidth=777&originalType=binary%E2%88%B6=1&size=81703&status=done&style=none&width=388.5">
+<meta property="article:published_time" content="2021-04-09T12:33:30.000Z">
+<meta property="article:modified_time" content="2021-11-08T13:45:50.302Z">
+<meta property="article:author" content="M@tr1x">
+<meta property="article:tag" content="CTF,白帽子,Pwn,Web">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://image.hackerjerry.top/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E4%B9%8B%E9%9A%8F%E6%9C%BA%E6%A3%AE%E6%9E%97-1.png#height=588&id=XYnoX&name=image.png&originHeight=732&originWidth=837&originalType=binary%E2%88%B6=1&size=369303&status=done&style=none&width=672">
+  
+  <title>机器学习之随机森林 - M@tr1xの日常</title>
 
-    if (now.getTime() > item.expiry) {
-      localStorage.removeItem(key)
-      return undefined
-    }
-    return item.value
-  }
-}</script><script id="config_change">var GLOBAL_CONFIG_SITE = { 
-  isPost: true,
-  isHome: false,
-  isHighlightShrink: false,
-  isSidebar: true,
-  postUpdate: '2021-10-08 12:07:30'
-}</script><noscript><style type="text/css">
-#nav {
-  opacity: 1
-}
-.justified-gallery img {
-  opacity: 1
-}
-</style></noscript><script>var activateDarkMode = function () {
-  document.documentElement.setAttribute('data-theme', 'dark')
-  if (document.querySelector('meta[name="theme-color"]') !== null) {
-    document.querySelector('meta[name="theme-color"]').setAttribute('content', '#000')
-  }
-}
-var activateLightMode = function () {
-  document.documentElement.setAttribute('data-theme', 'light')
-  if (document.querySelector('meta[name="theme-color"]') !== null) {
-    document.querySelector('meta[name="theme-color"]').setAttribute('content', '#fff')
-  }
-}
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4/dist/css/bootstrap.min.css" />
 
-var autoChangeMode = 'false'
-var t = saveToLocal.get('theme')
-if (autoChangeMode === '1') {
-  var isDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches
-  var isLightMode = window.matchMedia('(prefers-color-scheme: light)').matches
-  var isNotSpecified = window.matchMedia('(prefers-color-scheme: no-preference)').matches
-  var hasNoSupport = !isDarkMode && !isLightMode && !isNotSpecified
 
-  if (t === undefined) {
-    if (isLightMode) activateLightMode()
-    else if (isDarkMode) activateDarkMode()
-    else if (isNotSpecified || hasNoSupport) {
-      console.log('You specified no preference for a color scheme or your browser does not support it. I Schedule dark mode during night time.')
-      var now = new Date()
-      var hour = now.getHours()
-      var isNight = hour <= 6 || hour >= 18
-      isNight ? activateDarkMode() : activateLightMode()
-    }
-    window.matchMedia('(prefers-color-scheme: dark)').addListener(function (e) {
-      if (saveToLocal.get('theme') === undefined) {
-        e.matches ? activateDarkMode() : activateLightMode()
-      }
-    })
-  } else if (t === 'light') activateLightMode()
-  else activateDarkMode()
-} else if (autoChangeMode === '2') {
-  now = new Date()
-  hour = now.getHours()
-  isNight = hour <= 6 || hour >= 18
-  if (t === undefined) isNight ? activateDarkMode() : activateLightMode()
-  else if (t === 'light') activateLightMode()
-  else activateDarkMode()
-} else {
-  if (t === 'dark') activateDarkMode()
-  else if (t === 'light') activateLightMode()
-}</script><meta name="generator" content="Hexo 5.1.1"><link rel="alternate" href="/atom.xml" title="M@tr1xの日常" type="application/atom+xml">
-</head><body><div id="mobile-sidebar"><div id="menu_mask"></div><div id="mobile-sidebar-menus"><div class="mobile_author_icon"><img class="avatar-img" data-lazy-src="/img/avatar.png" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="mobile_post_data"><div class="mobile_data_item is-center"><div class="mobile_data_link"><a href="/archives/"><div class="headline">文章</div><div class="length_num">78</div></a></div></div><div class="mobile_data_item is-center">      <div class="mobile_data_link"><a href="/tags/"><div class="headline">标签</div><div class="length_num">45</div></a></div></div><div class="mobile_data_item is-center">     <div class="mobile_data_link"><a href="/categories/"><div class="headline">分类</div><div class="length_num">16</div></a></div></div></div><hr/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fa fa-home"></i><span> Home</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fa fa-tags"></i><span> Tags</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fa fa-folder-open"></i><span> Categories</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fa fa-link"></i><span> Link</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fa fa-heart"></i><span> About</span></a></div><div class="menus_item"><a class="site-page" href="javascript:void(0);"><i class="fa-fw fa fa-list"></i><span> List</span><i class="fas fa-chevron-down expand"></i></a><ul class="menus_item_child"><li><a class="site-page" href="/bangumis/"><i class="fa-fw fa fa-film"></i><span> 追番</span></a></li><li><a class="site-page" href="/artalk/"><i class="fa-fw fa-fw fa fa-comment-alt"></i><span> 说说</span></a></li></ul></div></div></div></div><div id="body-wrap"><div id="sidebar"><i class="fas fa-arrow-right" id="toggle-sidebar"></i><div class="sidebar-toc"><div class="sidebar-toc__title">目录</div><div class="sidebar-toc__progress"><span class="progress-notice">你已经读了</span><span class="progress-num">0</span><span class="progress-percentage">%</span><div class="sidebar-toc__progress-bar">     </div></div><div class="sidebar-toc__content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%86%B3%E7%AD%96%E6%A0%91"><span class="toc-number">1.</span> <span class="toc-text">决策树</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BF%A1%E6%81%AF%E5%A2%9E%E7%9B%8A"><span class="toc-number">1.1.</span> <span class="toc-text">信息增益</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BF%A1%E6%81%AF%E5%A2%9E%E7%9B%8A%E7%8E%87"><span class="toc-number">1.2.</span> <span class="toc-text">信息增益率</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%9F%BA%E5%B0%BC%E4%B8%8D%E7%BA%AF%E5%BA%A6%EF%BC%88Gini-Impurity%EF%BC%89"><span class="toc-number">1.3.</span> <span class="toc-text">基尼不纯度（Gini Impurity）</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%86%B3%E7%AD%96%E6%A0%91%E5%89%AA%E6%9E%9D"><span class="toc-number">1.4.</span> <span class="toc-text">决策树剪枝</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#CART-%E7%AE%97%E6%B3%95"><span class="toc-number">1.5.</span> <span class="toc-text">CART 算法</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%BF%87%E6%8B%9F%E5%90%88%E2%80%93%E4%B8%BA%E4%BB%80%E4%B9%88%E6%A3%AE%E6%9E%97%E6%AF%94%E4%B8%80%E6%A3%B5%E6%A0%91%E6%9B%B4%E5%A5%BD"><span class="toc-number">1.6.</span> <span class="toc-text">过拟合–为什么森林比一棵树更好</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E9%9A%8F%E6%9C%BA%E6%A3%AE%E6%9E%97"><span class="toc-number">2.</span> <span class="toc-text">随机森林</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%9A%8F%E6%9C%BA%E6%8A%BD%E6%A0%B7%E8%AE%AD%E7%BB%83%E8%A7%82%E6%B5%8B%E6%95%B0%E6%8D%AE"><span class="toc-number">2.1.</span> <span class="toc-text">随机抽样训练观测数据</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%94%A8%E4%BA%8E%E6%8B%86%E5%88%86%E8%8A%82%E7%82%B9%E7%9A%84%E9%9A%8F%E6%9C%BA%E7%89%B9%E5%BE%81%E5%AD%90%E9%9B%86"><span class="toc-number">2.2.</span> <span class="toc-text">用于拆分节点的随机特征子集</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%AE%97%E6%B3%95%E7%89%B9%E7%82%B9"><span class="toc-number">2.3.</span> <span class="toc-text">算法特点</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E6%A8%A1%E5%9E%8B%E8%AF%84%E4%BB%B7"><span class="toc-number">3.</span> <span class="toc-text">模型评价</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E9%97%AE%E7%AD%94"><span class="toc-number">4.</span> <span class="toc-text">问答</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%BA%E4%BB%80%E4%B9%88%E8%A6%81%E9%9A%8F%E6%9C%BA%E6%8A%BD%E6%A0%B7%E8%AE%AD%E7%BB%83%E9%9B%86%EF%BC%9F"><span class="toc-number">4.1.</span> <span class="toc-text">为什么要随机抽样训练集？</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%BA%E4%BB%80%E4%B9%88%E8%A6%81%E6%9C%89%E6%94%BE%E5%9B%9E%E5%9C%B0%E6%8A%BD%E6%A0%B7%EF%BC%9F"><span class="toc-number">4.2.</span> <span class="toc-text">为什么要有放回地抽样？</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%9A%8F%E6%9C%BA%E6%A3%AE%E6%9E%97%E7%9A%84%E9%9A%8F%E6%9C%BA%E4%BD%93%E7%8E%B0%E5%9C%A8%E5%93%AA%E9%87%8C%EF%BC%9F"><span class="toc-number">4.3.</span> <span class="toc-text">随机森林的随机体现在哪里？</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%BF%99%E4%B8%A4%E7%A7%8D%E9%9A%8F%E6%9C%BA%E6%9C%89%E4%BB%80%E4%B9%88%E5%A5%BD%E5%A4%84%EF%BC%9F"><span class="toc-number">4.4.</span> <span class="toc-text">这两种随机有什么好处？</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%9A%8F%E6%9C%BA%E6%A3%AE%E6%9E%97%E5%88%86%E7%B1%BB%E7%9A%84%E9%94%99%E8%AF%AF%E7%8E%87%E5%92%8C%E4%BB%80%E4%B9%88%E6%9C%89%E5%85%B3%EF%BC%9F"><span class="toc-number">4.5.</span> <span class="toc-text">随机森林分类的错误率和什么有关？</span></a></li></ol></li></ol></div></div></div><header class="post-bg" id="page-header" style="background-image: url(https://image.hackerjerry.top/2427682894.jpeg)"><nav id="nav"><span id="blog_name"><a id="site-name" href="/">M@tr1xの日常</a></span><span class="menus"><div id="search_button"><a class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> 搜索</span></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fa fa-home"></i><span> Home</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fa fa-tags"></i><span> Tags</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fa fa-folder-open"></i><span> Categories</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fa fa-link"></i><span> Link</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fa fa-heart"></i><span> About</span></a></div><div class="menus_item"><a class="site-page" href="javascript:void(0);"><i class="fa-fw fa fa-list"></i><span> List</span><i class="fas fa-chevron-down expand"></i></a><ul class="menus_item_child"><li><a class="site-page" href="/bangumis/"><i class="fa-fw fa fa-film"></i><span> 追番</span></a></li><li><a class="site-page" href="/artalk/"><i class="fa-fw fa-fw fa fa-comment-alt"></i><span> 说说</span></a></li></ul></div></div><span class="toggle-menu close"><a class="site-page"><i class="fas fa-bars fa-fw"></i></a></span></span></nav><div id="post-info"><div id="post-title"><div class="posttitle">机器学习之随机森林</div></div><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2021-04-09T12:33:30.000Z" title="发表于 2021-04-09 20:33:30">2021-04-09</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2021-10-08T04:07:30.068Z" title="更新于 2021-10-08 12:07:30">2021-10-08</time></span></div><div class="meta-secondline"> <span class="post-meta-separator">|</span><span class="post-meta-pv-cv"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">阅读量:</span><span id="busuanzi_value_page_pv"></span></span></div></div></div></header><main class="layout_post" id="content-inner"><article id="post"><div class="post-content" id="article-container"><p>tags: []<br>categories: []<br>cover: “”<br>​</p>
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/github-markdown-css@4/github-markdown.min.css" />
+  <link  rel="stylesheet" href="/lib/hint/hint.min.css" />
+
+  
+    
+    
+      
+      <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@10/styles/github-gist.min.css" />
+    
+  
+
+  
+    <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3/dist/jquery.fancybox.min.css" />
+  
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_ba1fz6golrf.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_kmeydafke9r.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+<!-- 自定义样式保持在最底部 -->
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    var CONFIG = {"hostname":"www.blog.hackerjerry.top","root":"/","version":"1.8.12","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"right","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"copy_btn":true,"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":1},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname"}},"search_path":"/local-search.xml"};
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+<meta name="generator" content="Hexo 5.1.1"><link rel="alternate" href="/atom.xml" title="M@tr1xの日常" type="application/atom+xml">
+</head>
+
+
+<body>
+  <header style="height: 70vh;">
+    <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>M@tr1xの日常</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                首页
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                归档
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                分类
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                标签
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                关于
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/links/">
+                <i class="iconfont icon-link-fill"></i>
+                友链
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/bangumis/">
+                <i class="fa-fw fa fa-film"></i>
+                追番
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/artalk/">
+                <i class="iconfont icon-comment"></i>
+                说说
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              &nbsp;<i class="iconfont icon-search"></i>&nbsp;
+            </a>
+          </li>
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">&nbsp;<i
+                class="iconfont icon-dark" id="color-toggle-icon"></i>&nbsp;</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+    <div class="banner" id="banner" parallax=true
+         style="background: url('/img/default.png') no-repeat center center;
+           background-size: cover;">
+      <div class="full-bg-img">
+        <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+          <div class="page-header text-center fade-in-up">
+            <span class="h2" id="subtitle" title="机器学习之随机森林">
+              
+            </span>
+
+            
+              <div class="mt-3">
+  
+  
+    <span class="post-meta">
+      <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+      <time datetime="2021-04-09 20:33" pubdate>
+        2021年4月9日 晚上
+      </time>
+    </span>
+  
+</div>
+
+<div class="mt-1">
+  
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-chart"></i>
+      4.8k 字
+    </span>
+  
+
+  
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-clock-fill"></i>
+      
+      
+      15 分钟
+    </span>
+  
+
+  
+  
+    
+      <!-- 不蒜子统计文章PV -->
+      <span id="busuanzi_container_page_pv" style="display: none">
+        <i class="iconfont icon-eye" aria-hidden="true"></i>
+        <span id="busuanzi_value_page_pv"></span> 次
+      </span>
+    
+  
+</div>
+
+            
+          </div>
+
+          
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="d-none d-lg-block col-lg-2"></div>
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div class="py-5" id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">机器学习之随机森林</h1>
+            
+              <p class="note note-info">
+                
+                  本文最后更新于：2021年11月8日 晚上
+                
+              </p>
+            
+            <div class="markdown-body">
+              <p>tags: []<br>categories: []<br>cover: “”<br>​</p>
 <hr>
 <p>这里记录一下 AI 作品赛里接触到的随机森林算法。</p>
 <a id="more"></a>
 
-<h1 id="决策树"><a href="#决策树" class="headerlink" title="决策树"></a>决策树</h1><p>随机森林由许多决策树（decision tree）组成，我们可以将决策树视为一系列关于数据的是/否问题，从而最终得出一个预测类别（或回归情况下的连续值）。 这是一个可解释的模型，因为它非常像我们人类进行分类的过程：在我们做出决定之前（在理想世界中），我们会对可用数据进行一系列的询问。<br>当我们训练决策树时到底发生了什么？可视化可以帮助我们更好地理解决策树，这可以通过 Scikit-Learn 的一个功能来实现（详细信息，请查看 notebook 或这篇文章）。<br><img src= "/img/loading.gif" data-lazy-src="https://image.hackerjerry.top/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E4%B9%8B%E9%9A%8F%E6%9C%BA%E6%A3%AE%E6%9E%97-1.png#height=588&id=XYnoX&name=image.png&originHeight=732&originWidth=837&originalType=binary%E2%88%B6=1&size=369303&status=done&style=none&width=672" alt="image.png"><br>除叶子节点（彩色终端节点）外，所有节点都有 5 个部分：</p>
+<h1 id="决策树"><a href="#决策树" class="headerlink" title="决策树"></a>决策树</h1><p>随机森林由许多决策树（decision tree）组成，我们可以将决策树视为一系列关于数据的是/否问题，从而最终得出一个预测类别（或回归情况下的连续值）。 这是一个可解释的模型，因为它非常像我们人类进行分类的过程：在我们做出决定之前（在理想世界中），我们会对可用数据进行一系列的询问。<br>当我们训练决策树时到底发生了什么？可视化可以帮助我们更好地理解决策树，这可以通过 Scikit-Learn 的一个功能来实现（详细信息，请查看 notebook 或这篇文章）。<br><img src="https://image.hackerjerry.top/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E4%B9%8B%E9%9A%8F%E6%9C%BA%E6%A3%AE%E6%9E%97-1.png#height=588&id=XYnoX&name=image.png&originHeight=732&originWidth=837&originalType=binary%E2%88%B6=1&size=369303&status=done&style=none&width=672" srcset="/img/loading.gif" lazyload alt="image.png"><br>除叶子节点（彩色终端节点）外，所有节点都有 5 个部分：</p>
 <ul>
 <li>基于某个特征的一个值对数据进行的提问，每个提问都有一个真或假的答案可以分裂节点。根据答案，数据点相应地向下移动。</li>
 <li><strong>gini：</strong>节点的 Gini 不纯度。当我们沿着树向下移动时，平均加权基尼不纯度会减少。</li>
@@ -134,12 +327,12 @@ if (autoChangeMode === '1') {
 <li><strong>class：</strong>该节点中大多数点的分类。在叶节点中，即是对节点中所有样本的预测。</li>
 </ul>
 <p><strong>决策树的特征选择</strong>一般有 3 种量化方法：<strong>信息增益、信息增益率、基尼指数</strong>。</p>
-<h2 id="信息增益"><a href="#信息增益" class="headerlink" title="信息增益"></a>信息增益</h2><p>在信息论中，<strong>熵</strong>表示随机变量不确定性的度量。假设随机变量 X 有有限个取值，取值 <img src= "/img/loading.gif" data-lazy-src="https://cdn.nlark.com/yuque/0/2021/svg/1629942/1618020812451-b0b3a075-5dcb-42d8-bf97-78aa34e4b86e.svg#height=18&id=jf86o&originHeight=18&originWidth=19&originalType=binary%E2%88%B6=1&size=0&status=done&style=none&width=19"> 对应的概率为 <img src= "/img/loading.gif" data-lazy-src="https://cdn.nlark.com/yuque/0/2021/svg/1629942/1618020812589-b6f620aa-d6a0-4990-8de0-93dcf01f721e.svg#height=18&id=fdcbK&originHeight=18&originWidth=19&originalType=binary%E2%88%B6=1&size=0&status=done&style=none&width=19"> ，则 X 的熵定义为：<br><img src= "/img/loading.gif" data-lazy-src="https://image.hackerjerry.top/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E4%B9%8B%E9%9A%8F%E6%9C%BA%E6%A3%AE%E6%9E%97-2.svg#height=62&id=X43jp&originHeight=62&originWidth=196&originalType=binary%E2%88%B6=1&size=0&status=done&style=none&width=196"><br>如果某件事<strong>一定发生</strong>（太阳东升西落）或<strong>一定不发生</strong>（钓鱼岛是日本的），则概率为 1 或 0，对应的<strong>熵均为 0</strong>。<br>如果某件事可能发生可能不发生（天要下雨，娘要嫁人），概率介于 0 到 1 之间，熵大于 0。<br>由此可见，<strong>熵越大，随机性越大，结果越不确定</strong>。<br>我们再来看一看<strong>条件熵</strong> <img src= "/img/loading.gif" data-lazy-src="https://cdn.nlark.com/yuque/0/2021/svg/1629942/1618020812831-53a78260-e1f7-4fe9-bd8b-1b6cbdd6d85d.svg#height=26&id=PpyfP&originHeight=26&originWidth=74&originalType=binary%E2%88%B6=1&size=0&status=done&style=none&width=74"> ，<strong>表示引入随机变量 Y 对于消除 X 不确定性的程度</strong>。假如 X、Y 相互独立，则 X 的条件熵和熵有相同的值；否则条件熵一定小于熵。<br>明确了这两个概念，理解信息增益就比较方便了。现在我们有一份数据集 D（例如贷款信息登记表）和特征 A（例如年龄），则<strong>A 的信息增益就是 D 本身的熵与特征 A 给定条件下 D 的条件熵之差</strong>，即：<br><img src= "/img/loading.gif" data-lazy-src="https://image.hackerjerry.top/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E4%B9%8B%E9%9A%8F%E6%9C%BA%E6%A3%AE%E6%9E%97-3.svg#height=26&id=EE8pQ&originHeight=26&originWidth=248&originalType=binary%E2%88%B6=1&size=0&status=done&style=none&width=248"><br>数据集 D 的熵是一个常量。信息增益越大，表示条件熵 <img src= "/img/loading.gif" data-lazy-src="https://cdn.nlark.com/yuque/0/2021/svg/1629942/1618020812738-fffb9065-834c-444d-9a51-8881c89e799f.svg#height=26&id=tYvso&originHeight=26&originWidth=74&originalType=binary%E2%88%B6=1&size=0&status=done&style=none&width=74"> 越小，A 消除 D 的不确定性的功劳越大。<br>所以要<strong>优先选择信息增益大的特征，它们具有更强的分类能力。</strong>由此生成决策树，称为<strong>ID3 算法</strong>。</p>
-<h2 id="信息增益率"><a href="#信息增益率" class="headerlink" title="信息增益率"></a><strong>信息增益率</strong></h2><p>当某个特征具有多种候选值时，信息增益容易偏大，造成误差。引入信息增益率可以校正这一问题。<br>信息增益率 <img src= "/img/loading.gif" data-lazy-src="https://cdn.nlark.com/yuque/0/2021/svg/1629942/1618020812748-d95f3fa5-1a2f-4372-ad0b-78d11ef80423.svg#height=18&id=QMRXL&originHeight=18&originWidth=23&originalType=binary%E2%88%B6=1&size=0&status=done&style=none&width=23"> 为信息增益与数据集 D 的熵之比：<br><img src= "/img/loading.gif" data-lazy-src="https://image.hackerjerry.top/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E4%B9%8B%E9%9A%8F%E6%9C%BA%E6%A3%AE%E6%9E%97-4.svg#height=59&id=lstWO&originHeight=59&originWidth=186&originalType=binary%E2%88%B6=1&size=0&status=done&style=none&width=186"><br>同样，我们<strong>优先选择信息增益率最大的特征，</strong>由此生成决策树，称为<strong>C4.5 算法。</strong><br><strong>​</strong></p>
+<h2 id="信息增益"><a href="#信息增益" class="headerlink" title="信息增益"></a>信息增益</h2><p>在信息论中，<strong>熵</strong>表示随机变量不确定性的度量。假设随机变量 X 有有限个取值，取值 <img src="https://cdn.nlark.com/yuque/0/2021/svg/1629942/1618020812451-b0b3a075-5dcb-42d8-bf97-78aa34e4b86e.svg#height=18&id=jf86o&originHeight=18&originWidth=19&originalType=binary%E2%88%B6=1&size=0&status=done&style=none&width=19" srcset="/img/loading.gif" lazyload> 对应的概率为 <img src="https://cdn.nlark.com/yuque/0/2021/svg/1629942/1618020812589-b6f620aa-d6a0-4990-8de0-93dcf01f721e.svg#height=18&id=fdcbK&originHeight=18&originWidth=19&originalType=binary%E2%88%B6=1&size=0&status=done&style=none&width=19" srcset="/img/loading.gif" lazyload> ，则 X 的熵定义为：<br><img src="https://image.hackerjerry.top/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E4%B9%8B%E9%9A%8F%E6%9C%BA%E6%A3%AE%E6%9E%97-2.svg#height=62&id=X43jp&originHeight=62&originWidth=196&originalType=binary%E2%88%B6=1&size=0&status=done&style=none&width=196" srcset="/img/loading.gif" lazyload><br>如果某件事<strong>一定发生</strong>（太阳东升西落）或<strong>一定不发生</strong>（钓鱼岛是日本的），则概率为 1 或 0，对应的<strong>熵均为 0</strong>。<br>如果某件事可能发生可能不发生（天要下雨，娘要嫁人），概率介于 0 到 1 之间，熵大于 0。<br>由此可见，<strong>熵越大，随机性越大，结果越不确定</strong>。<br>我们再来看一看<strong>条件熵</strong> <img src="https://cdn.nlark.com/yuque/0/2021/svg/1629942/1618020812831-53a78260-e1f7-4fe9-bd8b-1b6cbdd6d85d.svg#height=26&id=PpyfP&originHeight=26&originWidth=74&originalType=binary%E2%88%B6=1&size=0&status=done&style=none&width=74" srcset="/img/loading.gif" lazyload> ，<strong>表示引入随机变量 Y 对于消除 X 不确定性的程度</strong>。假如 X、Y 相互独立，则 X 的条件熵和熵有相同的值；否则条件熵一定小于熵。<br>明确了这两个概念，理解信息增益就比较方便了。现在我们有一份数据集 D（例如贷款信息登记表）和特征 A（例如年龄），则<strong>A 的信息增益就是 D 本身的熵与特征 A 给定条件下 D 的条件熵之差</strong>，即：<br><img src="https://image.hackerjerry.top/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E4%B9%8B%E9%9A%8F%E6%9C%BA%E6%A3%AE%E6%9E%97-3.svg#height=26&id=EE8pQ&originHeight=26&originWidth=248&originalType=binary%E2%88%B6=1&size=0&status=done&style=none&width=248" srcset="/img/loading.gif" lazyload><br>数据集 D 的熵是一个常量。信息增益越大，表示条件熵 <img src="https://cdn.nlark.com/yuque/0/2021/svg/1629942/1618020812738-fffb9065-834c-444d-9a51-8881c89e799f.svg#height=26&id=tYvso&originHeight=26&originWidth=74&originalType=binary%E2%88%B6=1&size=0&status=done&style=none&width=74" srcset="/img/loading.gif" lazyload> 越小，A 消除 D 的不确定性的功劳越大。<br>所以要<strong>优先选择信息增益大的特征，它们具有更强的分类能力。</strong>由此生成决策树，称为<strong>ID3 算法</strong>。</p>
+<h2 id="信息增益率"><a href="#信息增益率" class="headerlink" title="信息增益率"></a><strong>信息增益率</strong></h2><p>当某个特征具有多种候选值时，信息增益容易偏大，造成误差。引入信息增益率可以校正这一问题。<br>信息增益率 <img src="https://cdn.nlark.com/yuque/0/2021/svg/1629942/1618020812748-d95f3fa5-1a2f-4372-ad0b-78d11ef80423.svg#height=18&id=QMRXL&originHeight=18&originWidth=23&originalType=binary%E2%88%B6=1&size=0&status=done&style=none&width=23" srcset="/img/loading.gif" lazyload> 为信息增益与数据集 D 的熵之比：<br><img src="https://image.hackerjerry.top/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E4%B9%8B%E9%9A%8F%E6%9C%BA%E6%A3%AE%E6%9E%97-4.svg#height=59&id=lstWO&originHeight=59&originWidth=186&originalType=binary%E2%88%B6=1&size=0&status=done&style=none&width=186" srcset="/img/loading.gif" lazyload><br>同样，我们<strong>优先选择信息增益率最大的特征，</strong>由此生成决策树，称为<strong>C4.5 算法。</strong><br><strong>​</strong></p>
 <h2 id="基尼不纯度（Gini-Impurity）"><a href="#基尼不纯度（Gini-Impurity）" class="headerlink" title="基尼不纯度（Gini Impurity）"></a><strong>基尼不纯度（Gini Impurity）</strong></h2><p>节点的基尼不纯度是指，根据节点中样本的分布对样本分类时，从节点中随机选择的样本被分错的概率。<br>如，在根节点中，根据节点中的样本标签有 44.4％的可能性错误地对某个随机选择的数据点进行分类。可以      使用以下等式得出这个值：</p>
-<p><img src= "/img/loading.gif" data-lazy-src="https://image.hackerjerry.top/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E4%B9%8B%E9%9A%8F%E6%9C%BA%E6%A3%AE%E6%9E%97-5.png#height=56&id=dVbT7&originHeight=242&originWidth=757&originalType=binary%E2%88%B6=1&size=0&status=done&style=none&width=176"><br>节点 n 的基尼不纯度是<strong>1 减去每个类（二元分类任务中是 2）的样本比例的平方和</strong>。</p>
-<p>例如根节点的基尼不纯度：<br><img src= "/img/loading.gif" data-lazy-src="https://image.hackerjerry.top/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E4%B9%8B%E9%9A%8F%E6%9C%BA%E6%A3%AE%E6%9E%97-6.png#height=73&id=NEETK&originHeight=73&originWidth=1080&originalType=binary%E2%88%B6=1&size=0&status=done&style=none&width=1080"></p>
-<p>在每个节点，决策树要在所有特征中搜索用于拆分的值，从而可以<strong>最大限度地减少基尼不纯度</strong>。（拆分节点的另一个<strong>替代方法</strong>是使用<strong>信息增益</strong>）。<br>然后，它以贪婪递归的过程重复这种拆分，直到达到最大深度，或者每个节点仅包含同类的样本。<br>树每层的加权总基尼不纯度（每个节点的基尼不纯度按照该节点中来自父节点的点的比例进行加权）一定是减少的。在树的第二层，总加权基尼不纯度值为 0.333：<br><img src= "/img/loading.gif" data-lazy-src="https://image.hackerjerry.top/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E4%B9%8B%E9%9A%8F%E6%9C%BA%E6%A3%AE%E6%9E%97-7.png#height=58&id=idTVC&margin=%5Bobject%20Object%5D&name=image.png&originHeight=77&originWidth=845&originalType=binary%E2%88%B6=1&size=17368&status=done&style=none&width=641" alt="image.png"><br>最终，最后一层的加权总基尼不纯度变为 0，也意味着每个节点都是完全纯粹的，从节点中随机选择的点不会被错误分类。虽然这一切看起来挺好的，但这意味着模型可能过拟合，因为所有节点都是仅仅使用训练数据构建的。</p>
+<p><img src="https://image.hackerjerry.top/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E4%B9%8B%E9%9A%8F%E6%9C%BA%E6%A3%AE%E6%9E%97-5.png#height=56&id=dVbT7&originHeight=242&originWidth=757&originalType=binary%E2%88%B6=1&size=0&status=done&style=none&width=176" srcset="/img/loading.gif" lazyload><br>节点 n 的基尼不纯度是<strong>1 减去每个类（二元分类任务中是 2）的样本比例的平方和</strong>。</p>
+<p>例如根节点的基尼不纯度：<br><img src="https://image.hackerjerry.top/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E4%B9%8B%E9%9A%8F%E6%9C%BA%E6%A3%AE%E6%9E%97-6.png#height=73&id=NEETK&originHeight=73&originWidth=1080&originalType=binary%E2%88%B6=1&size=0&status=done&style=none&width=1080" srcset="/img/loading.gif" lazyload></p>
+<p>在每个节点，决策树要在所有特征中搜索用于拆分的值，从而可以<strong>最大限度地减少基尼不纯度</strong>。（拆分节点的另一个<strong>替代方法</strong>是使用<strong>信息增益</strong>）。<br>然后，它以贪婪递归的过程重复这种拆分，直到达到最大深度，或者每个节点仅包含同类的样本。<br>树每层的加权总基尼不纯度（每个节点的基尼不纯度按照该节点中来自父节点的点的比例进行加权）一定是减少的。在树的第二层，总加权基尼不纯度值为 0.333：<br><img src="https://image.hackerjerry.top/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E4%B9%8B%E9%9A%8F%E6%9C%BA%E6%A3%AE%E6%9E%97-7.png#height=58&id=idTVC&margin=%5Bobject%20Object%5D&name=image.png&originHeight=77&originWidth=845&originalType=binary%E2%88%B6=1&size=17368&status=done&style=none&width=641" srcset="/img/loading.gif" lazyload alt="image.png"><br>最终，最后一层的加权总基尼不纯度变为 0，也意味着每个节点都是完全纯粹的，从节点中随机选择的点不会被错误分类。虽然这一切看起来挺好的，但这意味着模型可能过拟合，因为所有节点都是仅仅使用训练数据构建的。</p>
 <h2 id="决策树剪枝"><a href="#决策树剪枝" class="headerlink" title="决策树剪枝"></a>决策树剪枝</h2><p>决策树生成算法递归产生一棵决策树，直到结束划分。什么时候结束呢？</p>
 <ul>
 <li>样本属于同一种类型</li>
@@ -151,11 +344,11 @@ if (autoChangeMode === '1') {
 <li><strong>后剪枝</strong>：等树全部生成后剪枝。<strong>运算量较大，但是比较精准</strong></li>
 </ul>
 <p>决策树剪枝往往通过<strong>极小化决策树整体的损失函数实现</strong>。</p>
-<p><img src= "/img/loading.gif" data-lazy-src="https://image.hackerjerry.top/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E4%B9%8B%E9%9A%8F%E6%9C%BA%E6%A3%AE%E6%9E%97-8.png#height=281&id=iUL7X&margin=%5Bobject%20Object%5D&name=image.png&originHeight=561&originWidth=731&originalType=binary%E2%88%B6=1&size=122786&status=done&style=none&width=365.5" alt="image.png"><br>假设树 T 有|T|个叶子节点，某一个叶子节点 t 上有 <img src= "/img/loading.gif" data-lazy-src="https://cdn.nlark.com/yuque/0/2021/svg/1629942/1618021002264-6488bff2-9519-4ecc-bbdd-6f2f86c34189.svg#height=23&id=p7K03&originHeight=23&originWidth=24&originalType=binary%E2%88%B6=1&size=0&status=done&style=none&width=24"> 个样本，其中 k 类的样本有 <img src= "/img/loading.gif" data-lazy-src="https://cdn.nlark.com/yuque/0/2021/svg/1629942/1618021002341-9e586245-0eb4-43f1-ab4b-e9d2f1514bd9.svg#height=23&id=Jvs0Y&originHeight=23&originWidth=32&originalType=binary%E2%88%B6=1&size=0&status=done&style=none&width=32"> 个，<img src= "/img/loading.gif" data-lazy-src="https://cdn.nlark.com/yuque/0/2021/svg/1629942/1618021002330-b42005d2-d60f-4e39-927c-852a31a4810e.svg#height=26&id=W8yRc&originHeight=26&originWidth=56&originalType=binary%E2%88%B6=1&size=0&status=done&style=none&width=56"> 为叶子节点 t 的熵， <img src= "/img/loading.gif" data-lazy-src="https://cdn.nlark.com/yuque/0/2021/svg/1629942/1618021002461-670ab097-97d8-4674-b83a-a27eed267988.svg#height=21&id=Ihqmy&originHeight=21&originWidth=52&originalType=binary%E2%88%B6=1&size=0&status=done&style=none&width=52"> 是参数，则决策树的<strong>损失函数</strong>定义为：<br><img src= "/img/loading.gif" data-lazy-src="https://image.hackerjerry.top/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E4%B9%8B%E9%9A%8F%E6%9C%BA%E6%A3%AE%E6%9E%97-9.svg#height=69&id=GEe9U&originHeight=69&originWidth=264&originalType=binary%E2%88%B6=1&size=0&status=done&style=none&width=264"><br>其中熵为：<br><img src= "/img/loading.gif" data-lazy-src="https://image.hackerjerry.top/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E4%B9%8B%E9%9A%8F%E6%9C%BA%E6%A3%AE%E6%9E%97-10.svg#height=57&id=M7VkN&originHeight=57&originWidth=246&originalType=binary%E2%88%B6=1&size=0&status=done&style=none&width=246"><br><strong>损失函数第一项为训练误差，第二项为模型复杂度，</strong>用参数 <img src= "/img/loading.gif" data-lazy-src="https://cdn.nlark.com/yuque/0/2021/svg/1629942/1618021002545-b6955ef3-85ad-4594-9a5e-f5a27be46475.svg#height=15&id=JPvdT&originHeight=15&originWidth=13&originalType=binary%E2%88%B6=1&size=0&status=done&style=none&width=13"> 来衡量二者的比重。</p>
+<p><img src="https://image.hackerjerry.top/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E4%B9%8B%E9%9A%8F%E6%9C%BA%E6%A3%AE%E6%9E%97-8.png#height=281&id=iUL7X&margin=%5Bobject%20Object%5D&name=image.png&originHeight=561&originWidth=731&originalType=binary%E2%88%B6=1&size=122786&status=done&style=none&width=365.5" srcset="/img/loading.gif" lazyload alt="image.png"><br>假设树 T 有|T|个叶子节点，某一个叶子节点 t 上有 <img src="https://cdn.nlark.com/yuque/0/2021/svg/1629942/1618021002264-6488bff2-9519-4ecc-bbdd-6f2f86c34189.svg#height=23&id=p7K03&originHeight=23&originWidth=24&originalType=binary%E2%88%B6=1&size=0&status=done&style=none&width=24" srcset="/img/loading.gif" lazyload> 个样本，其中 k 类的样本有 <img src="https://cdn.nlark.com/yuque/0/2021/svg/1629942/1618021002341-9e586245-0eb4-43f1-ab4b-e9d2f1514bd9.svg#height=23&id=Jvs0Y&originHeight=23&originWidth=32&originalType=binary%E2%88%B6=1&size=0&status=done&style=none&width=32" srcset="/img/loading.gif" lazyload> 个，<img src="https://cdn.nlark.com/yuque/0/2021/svg/1629942/1618021002330-b42005d2-d60f-4e39-927c-852a31a4810e.svg#height=26&id=W8yRc&originHeight=26&originWidth=56&originalType=binary%E2%88%B6=1&size=0&status=done&style=none&width=56" srcset="/img/loading.gif" lazyload> 为叶子节点 t 的熵， <img src="https://cdn.nlark.com/yuque/0/2021/svg/1629942/1618021002461-670ab097-97d8-4674-b83a-a27eed267988.svg#height=21&id=Ihqmy&originHeight=21&originWidth=52&originalType=binary%E2%88%B6=1&size=0&status=done&style=none&width=52" srcset="/img/loading.gif" lazyload> 是参数，则决策树的<strong>损失函数</strong>定义为：<br><img src="https://image.hackerjerry.top/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E4%B9%8B%E9%9A%8F%E6%9C%BA%E6%A3%AE%E6%9E%97-9.svg#height=69&id=GEe9U&originHeight=69&originWidth=264&originalType=binary%E2%88%B6=1&size=0&status=done&style=none&width=264" srcset="/img/loading.gif" lazyload><br>其中熵为：<br><img src="https://image.hackerjerry.top/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E4%B9%8B%E9%9A%8F%E6%9C%BA%E6%A3%AE%E6%9E%97-10.svg#height=57&id=M7VkN&originHeight=57&originWidth=246&originalType=binary%E2%88%B6=1&size=0&status=done&style=none&width=246" srcset="/img/loading.gif" lazyload><br><strong>损失函数第一项为训练误差，第二项为模型复杂度，</strong>用参数 <img src="https://cdn.nlark.com/yuque/0/2021/svg/1629942/1618021002545-b6955ef3-85ad-4594-9a5e-f5a27be46475.svg#height=15&id=JPvdT&originHeight=15&originWidth=13&originalType=binary%E2%88%B6=1&size=0&status=done&style=none&width=13" srcset="/img/loading.gif" lazyload> 来衡量二者的比重。</p>
 <h2 id="CART-算法"><a href="#CART-算法" class="headerlink" title="CART 算法"></a>CART 算法</h2><p>CART 表示分类回归决策树，同样由特征选择、树的生成及剪枝组成，可以处理分类和回归任务。<br>相比之下，<strong>ID3 和 C4.5 算法只能处理分类任务</strong>。<br>CART 假设决策树是二叉树，内部结点特征的取值为“是”和“否”，依次递归地二分每个特征。<br>CART 对<strong>回归树</strong>采用<strong>平方误差</strong>最小化准则<strong>，</strong>对<strong>分类树</strong>用<strong>基尼指数</strong>最小化准则。</p>
 <h2 id="过拟合–为什么森林比一棵树更好"><a href="#过拟合–为什么森林比一棵树更好" class="headerlink" title="过拟合–为什么森林比一棵树更好"></a>过拟合–为什么森林比一棵树更好</h2><p><strong>因为这棵树是在训练数据上没有犯错，我们没有限制最大深度（树的层数），因此泛化能力差。</strong><br>过拟合发生在当我们有一个非常灵活的模型（模型具有高能力）时，其本质上是通过紧密拟合来记住训练数据。这样的问题是模型不仅学到了训练数据中的实际关系，还学习了存在的噪声。灵活的模型具有高方差<strong>（variance）</strong>，因为学到的参数（例如决策树的结构）将随着训练数据的不同而变化很大。</p>
 <p>当我们<strong>不限制最大深度时决策树容易过拟合的原因</strong>是它<strong>具有无限的灵活性</strong>，这意味着它可以持续生长，直到它为每个单独的观察点都生成一个叶节点，<strong>达到完美地分类</strong>。<br>如果返回到之前决策树的图像并将最大深度限制为 2（仅进行一次拆分），则分类不再 100％正确。我们减少了决策树的方差，但代价是增加了偏差。<br><strong>限制树的深度</strong>可以<strong>减少方差（好）</strong>并且<strong>增加偏差（坏）</strong>，一种替代方案是，我们可以将许多决策树组合成一个称为随机森林的集成模型（ensemble model）。<br>​</p>
-<h1 id="随机森林"><a href="#随机森林" class="headerlink" title="随机森林"></a>随机森林</h1><p>我们将使用<strong>CART 决策树</strong>作为<strong>弱学习器的 bagging 方法</strong>称为<strong>随机森林</strong>。<br>bagging 是一种在原始数据集上，通过<strong>有放回抽样</strong>分别选出 k 个新数据集，来训练分类器的集成算法。分类器之间没有依赖关系。<br><img src= "/img/loading.gif" data-lazy-src="https://image.hackerjerry.top/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E4%B9%8B%E9%9A%8F%E6%9C%BA%E6%A3%AE%E6%9E%97-11.png#height=162&id=iOtB0&margin=%5Bobject%20Object%5D&name=image.png&originHeight=323&originWidth=799&originalType=binary%E2%88%B6=1&size=117004&status=done&style=none&width=399.5" alt="image.png"><br>随机森林是由许多决策树组成的模型。这个模型不是简单地平均所有树（我们可以称之为“森林”）的预测，而是使用了两个关键概念，名字中的随机二字也是由此而来：</p>
+<h1 id="随机森林"><a href="#随机森林" class="headerlink" title="随机森林"></a>随机森林</h1><p>我们将使用<strong>CART 决策树</strong>作为<strong>弱学习器的 bagging 方法</strong>称为<strong>随机森林</strong>。<br>bagging 是一种在原始数据集上，通过<strong>有放回抽样</strong>分别选出 k 个新数据集，来训练分类器的集成算法。分类器之间没有依赖关系。<br><img src="https://image.hackerjerry.top/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E4%B9%8B%E9%9A%8F%E6%9C%BA%E6%A3%AE%E6%9E%97-11.png#height=162&id=iOtB0&margin=%5Bobject%20Object%5D&name=image.png&originHeight=323&originWidth=799&originalType=binary%E2%88%B6=1&size=117004&status=done&style=none&width=399.5" srcset="/img/loading.gif" lazyload alt="image.png"><br>随机森林是由许多决策树组成的模型。这个模型不是简单地平均所有树（我们可以称之为“森林”）的预测，而是使用了两个关键概念，名字中的随机二字也是由此而来：</p>
 <ul>
 <li>在构建树时对训练数据点进行随机抽样</li>
 <li>分割节点时考虑特征的随机子集</li>
@@ -182,7 +375,7 @@ if (autoChangeMode === '1') {
 <blockquote>
 <p>AUC 是一个从 0（最差）到 1（最佳）的度量值，</p>
 </blockquote>
-<p>我们还可以绘制单个决策树（顶部）和随机森林（底部）的 ROC 曲线。<strong>靠近左上角的曲线代表着更好的模型：</strong><br><img src= "/img/loading.gif" data-lazy-src="https://image.hackerjerry.top/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E4%B9%8B%E9%9A%8F%E6%9C%BA%E6%A3%AE%E6%9E%97-12.png#height=271&id=ImDoE&margin=%5Bobject%20Object%5D&name=image.png&originHeight=542&originWidth=777&originalType=binary%E2%88%B6=1&size=81703&status=done&style=none&width=388.5" alt="image.png"></p>
+<p>我们还可以绘制单个决策树（顶部）和随机森林（底部）的 ROC 曲线。<strong>靠近左上角的曲线代表着更好的模型：</strong><br><img src="https://image.hackerjerry.top/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E4%B9%8B%E9%9A%8F%E6%9C%BA%E6%A3%AE%E6%9E%97-12.png#height=271&id=ImDoE&margin=%5Bobject%20Object%5D&name=image.png&originHeight=542&originWidth=777&originalType=binary%E2%88%B6=1&size=81703&status=done&style=none&width=388.5" srcset="/img/loading.gif" lazyload alt="image.png"></p>
 <h1 id="问答"><a href="#问答" class="headerlink" title="问答"></a>问答</h1><h2 id="为什么要随机抽样训练集？"><a href="#为什么要随机抽样训练集？" class="headerlink" title="为什么要随机抽样训练集？"></a><strong>为什么要随机抽样训练集？</strong></h2><p>如果不进行随机抽样，每棵树的训练集都一样，那么最终训练出的树分类结果也是完全一样的，这样的话完全没有 bagging 的必要；</p>
 <h2 id="为什么要有放回地抽样？"><a href="#为什么要有放回地抽样？" class="headerlink" title="为什么要有放回地抽样？"></a><strong>为什么要有放回地抽样？</strong></h2><p>如果不是有放回的抽样，那么每棵树的训练样本都是不同的，都是没有交集的，这样每棵树都是”有偏的”，都是绝对”片面的”（当然这样说可能不对），也就是说每棵树训练出来都是有很大的差异的；而随机森林最后分类取决于多棵树（弱分类器）的投票表决，这种表决应该是”求同”，因此使用完全不同的训练集来训练每棵树这样对最终分类结果是没有帮助的，这样无异于是”盲人摸象”。</p>
 <h2 id="随机森林的随机体现在哪里？"><a href="#随机森林的随机体现在哪里？" class="headerlink" title="随机森林的随机体现在哪里？"></a><strong>随机森林的随机体现在哪里？</strong></h2><p>1）如果训练集大小为 N，对于每棵树而言，随机且有放回地从训练集中的抽取 N 个训练样本（这种采样方式称为 bootstrap sample 方法），作为该树的训练集；</p>
@@ -197,37 +390,305 @@ if (autoChangeMode === '1') {
 </ul>
 <p>​</p>
 <p>减小特征选择个数 m，树的相关性和分类能力也会相应的降低；增大 m，两者也会随之增大。所以关键问题是如何选择最优的 m（或者是范围），这也是随机森林唯一的一个参数。<br>​</p>
-</div><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">文章作者: </span><span class="post-copyright-info"><a href="mailto:undefined">M@tr1x</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">文章链接: </span><span class="post-copyright-info"><a href="https://www.blog.hackerjerry.top/2021/04/09/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E4%B9%8B%E9%9A%8F%E6%9C%BA%E6%A3%AE%E6%9E%97_new/">https://www.blog.hackerjerry.top/2021/04/09/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E4%B9%8B%E9%9A%8F%E6%9C%BA%E6%A3%AE%E6%9E%97_new/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="https://www.blog.hackerjerry.top" target="_blank">M@tr1xの日常</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"></div><div class="post_share"><div class="social-share" data-image="https://image.hackerjerry.top/2427682894.jpeg" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/social-share.js/dist/css/share.min.css"><script src="https://cdn.jsdelivr.net/npm/social-share.js/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><div class="prev-post pull-left"><a href="/2021/04/10/wireshark%E6%8A%93%E5%8C%85%E5%8E%9F%E7%90%86_new/"><img class="prev-cover" data-lazy-src="https://image.hackerjerry.top/2427682894.jpeg" onerror="onerror=null;src='/img/404.jpg'"><div class="pagination-info"><div class="label">上一篇</div><div class="prev_info">wireshark抓包原理</div></div></a></div><div class="next-post pull-right"><a href="/2021/04/02/BlockDAG%E4%BB%8E%E9%9B%B6%E5%88%B0%E4%B8%80_new/"><img class="next-cover" data-lazy-src="https://image.hackerjerry.top/2427682894.jpeg" onerror="onerror=null;src='/img/404.jpg'"><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">BlockDAG从零到一</div></div></a></div></nav><hr/><div id="post-comment"><div class="comment-head"><div class="comment-headline"><i class="fas fa-comments fa-fw"></i><span> 评论</span></div></div><div class="comment-wrap"><div><div class="vcomment" id="vcomment"></div></div></div></div></article></main><footer id="footer" data-type="color"><div id="footer-wrap"><div class="copyright">&copy;2019 - 2021 By M@tr1x</div><div class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div><div class="footer_custom_text">冷風熱血，荡涤乾坤</div><div class="icp"><a target="_blank" rel="noopener" href="http://www.beian.miit.gov.cn"><img class="icp-icon" src="/img/icp.png"/><span>陕ICP备19023179号</span></a></div><div class="cdn"><a href="https://www.upyun.com/?utm_source=lianmeng&amp;utm_medium=referral" target="_blank"><img src="/img/upyun.png" width="70px"/><span></span></a></div></div></footer></div><section id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="设置"><i class="fas fa-cog"></i></button><a id="to_comment" href="#post-comment" title="直达评论"><i class="fas fa-comments"></i></a><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="回到顶部"><i class="fas fa-arrow-up"></i></button></div></section><div class="search-dialog" id="local-search"><div class="search-dialog__title" id="local-search-title">本地搜索</div><div id="local-input-panel"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="搜索文章" type="text"/></div></div></div><hr/><div id="local-search-results"><div id="local-hits"></div><div id="local-stats"><div class="local-search-stats__hr" id="hr"><span>由</span> <a target="_blank" rel="noopener" href="https://github.com/wzpan/hexo-generator-search" style="color:#49B1F5;">hexo-generator-search</a>
- <span>提供支持</span></div></div></div><span class="search-close-button"><i class="fas fa-times"></i></span></div><div id="search-mask"></div><div><script src="https://cdn.jsdelivr.net/npm/jquery@latest/dist/jquery.min.js"></script><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.js"></script><script src="https://cdn.jsdelivr.net/npm/instant.page/instantpage.min.js" type="module" defer></script><script src="https://cdn.jsdelivr.net/npm/vanilla-lazyload/dist/lazyload.iife.min.js" async></script><script src="/js/search/local-search.js"></script><div class="js-pjax"><script>function loadValine () {
-  function initValine () {
-    window.valine = new Valine({
-      el: '#vcomment',
-      appId: 'jApqS8Xxcc1eST53AyiAisFx-gzGzoHsz',
-      appKey: 'iyngroaUslATD8V4nOgOHowr',
-      placeholder: '说点什么呗~',
-      avatar: 'monsterid',
-      meta: 'nick,mail,link'.split(','),
-      pageSize: '10',
-      lang: 'zh-CN',
-      recordIP: false,
-      serverURLs: '',
-      emojiCDN: '',
-      emojiMaps: "",
-      enableQQ: true,
-      path: window.location.pathname,
+
+            </div>
+            <hr>
+            <div>
+              <div class="post-metas mb-3">
+                
+                
+              </div>
+              
+                <p class="note note-warning">
+                  
+                    本博客所有文章除特别声明外，均采用 <a target="_blank" href="https://creativecommons.org/licenses/by-sa/4.0/deed.zh" rel="nofollow noopener noopener">CC BY-SA 4.0 协议</a> ，转载请注明出处！
+                  
+                </p>
+              
+              
+                <div class="post-prevnext">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2021/04/10/wireshark%E6%8A%93%E5%8C%85%E5%8E%9F%E7%90%86_new/">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">wireshark抓包原理</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2021/04/02/BlockDAG%E4%BB%8E%E9%9B%B6%E5%88%B0%E4%B8%80_new/">
+                        <span class="hidden-mobile">BlockDAG从零到一</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+              <!-- Comments -->
+              <article class="comments" id="comments" lazyload>
+                
+                  
+                
+                
+  <div id="valine"></div>
+  <script type="text/javascript">
+    Fluid.utils.loadComments('#valine', function() {
+      Fluid.utils.createScript('https://cdn.jsdelivr.net/npm/valine@1/dist/Valine.min.js', function() {
+        var options = Object.assign(
+          {"appId":"jApqS8Xxcc1eST53AyiAisFx-gzGzoHsz","appKey":"iyngroaUslATD8V4nOgOHowr","path":"window.location.pathname","placeholder":"说点什么呗~","avatar":"retro","meta":["nick","mail","link"],"requiredFields":["mail"],"pageSize":10,"lang":"zh-CN","highlight":false,"recordIP":false,"serverURLs":"","emojiCDN":null,"emojiMaps":null,"enableQQ":true},
+          {
+            el: "#valine",
+            path: window.location.pathname
+          }
+        )
+        new Valine(options);
+        Fluid.utils.waitElementVisible('#valine .vcontent', () => {
+          Fluid.plugins.initFancyBox('#valine .vcontent img:not(.vemoji)');
+        })
+      });
     });
-    if ('nick,mail') { valine.config.requiredFields= 'nick,mail'.split(',') }
-  }
+  </script>
+  <noscript>Please enable JavaScript to view the comments</noscript>
 
-  if (typeof Valine === 'function') initValine() 
-  else $.getScript('https://cdn.jsdelivr.net/npm/valine/dist/Valine.min.js', initValine)
-}
 
-if ('Valine' === 'Valine' || !false) {
-  if (false) loadComment(document.querySelector('#vcomment'),loadValine)
-  else setTimeout(() => loadValine(), 0)
-} else {
-  function loadOtherComment () {
-    loadValine()
-  }
-}</script><script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></div></body></html>
+              </article>
+            
+          </article>
+        </div>
+      </div>
+    </div>
+    
+      <div class="d-none d-lg-block col-lg-2 toc-container" id="toc-ctn">
+        <div id="toc">
+  <p class="toc-header"><i class="iconfont icon-list"></i>&nbsp;目录</p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+      </div>
+    
+  </div>
+</div>
+
+<!-- Custom -->
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v"
+                 for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+
+    
+  </main>
+
+  <footer class="text-center mt-5 py-3">
+  <div class="footer-content">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" integrity="sha512-SfTiTlX6kk+qitfevl/7LibUOeJWlt9rbyDn92a1DqWOw9vWG2MFoays0sgObmWazO5BQPiFucnnEAjpAB+/Sw==" crossorigin="anonymous" referrerpolicy="no-referrer">
+     <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+  </div>
+  
+  <div class="statistics">
+    
+    
+
+    
+      
+        <!-- 不蒜子统计PV -->
+        <span id="busuanzi_container_site_pv" style="display: none">
+            总访问量 
+            <span id="busuanzi_value_site_pv"></span>
+             次
+          </span>
+      
+      
+        <!-- 不蒜子统计UV -->
+        <span id="busuanzi_container_site_uv" style="display: none">
+            总访客数 
+            <span id="busuanzi_value_site_uv"></span>
+             人
+          </span>
+      
+    
+  </div>
+
+
+  
+  <!-- 备案信息 -->
+  <div class="beian">
+    <span>
+      <a href="http://beian.miit.gov.cn/" target="_blank" rel="nofollow noopener">
+        陕ICP备19023179号
+      </a>
+    </span>
+    
+  </div>
+
+
+  <div class="cdn"><a href="https://www.upyun.com/?utm_source=lianmeng&amp;utm_medium=referral" target="_blank"><img width="70px" class="entered loading" src="/img/upyun.png" srcset="/img/loading.gif" lazyload data-ll-status="loading"><span></span></a></div>
+  
+</footer>
+
+
+  <!-- SCRIPTS -->
+  
+  <script  src="https://cdn.jsdelivr.net/npm/nprogress@0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/nprogress@0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://cdn.jsdelivr.net/npm/jquery@3/dist/jquery.min.js" ></script>
+<script  src="https://cdn.jsdelivr.net/npm/bootstrap@4/dist/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+<!-- Plugins -->
+
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+  
+
+
+
+  
+    <script  src="https://cdn.jsdelivr.net/npm/tocbot@4/dist/tocbot.min.js" ></script>
+  
+  
+    <script  src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3/dist/jquery.fancybox.min.js" ></script>
+  
+  
+    <script  src="https://cdn.jsdelivr.net/npm/anchor-js@4/anchor.min.js" ></script>
+  
+  
+    <script defer src="https://cdn.jsdelivr.net/npm/clipboard@2/dist/clipboard.min.js" ></script>
+  
+
+
+
+  <script defer src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" ></script>
+
+
+
+
+  <script  src="https://cdn.jsdelivr.net/npm/typed.js@2/lib/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var title = document.getElementById('subtitle').title;
+      
+      typing(title)
+      
+    })(window, document);
+  </script>
+
+
+
+
+
+  
+
+  
+    <!-- MathJax -->
+    <script>
+      MathJax = {
+        tex: {
+          inlineMath: [['$', '$'], ['\\(', '\\)']]
+        },
+        loader: {
+          load: ['ui/lazy']
+        },
+        options: {
+          renderActions: {
+            findScript: [10, doc => {
+              document.querySelectorAll('script[type^="math/tex"]').forEach(node => {
+                const display = !!node.type.match(/; *mode=display/);
+                const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display);
+                const text = document.createTextNode('');
+                node.parentNode.replaceChild(text, node);
+                math.start = { node: text, delim: '', n: 0 };
+                math.end = { node: text, delim: '', n: 0 };
+                doc.math.push(math);
+              });
+            }, '', false],
+            insertedScript: [200, () => {
+              document.querySelectorAll('mjx-container').forEach(node => {
+                let target = node.parentNode;
+                if (target.nodeName.toLowerCase() === 'li') {
+                  target.parentNode.classList.add('has-jax');
+                }
+              });
+            }, '', false]
+          }
+        }
+      };
+    </script>
+
+    <script async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js" ></script>
+
+  
+
+
+
+
+
+
+
+
+
+
+
+<!-- 主题的启动项 保持在最底部 -->
+<script  src="/js/boot.js" ></script>
+
+
+</body>
+</html>
