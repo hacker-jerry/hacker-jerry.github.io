@@ -1574,6 +1574,9 @@ post-custom {
   padding: 0.45rem;
   float: right;
 }
+.markdown-body p {
+  margin-bottom: 1px;
+}
 @-moz-keyframes post-prev-anim {
   0% {
     -webkit-transform: translateX(0);
