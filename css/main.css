@@ -1836,6 +1836,34 @@ note-default {
 .about-icons > a > i {
   font-size: 1.5rem;
 }
+.about-content .markdown-body {
+  margin: 3rem auto;
+  max-width: 600px;
+}
+.about-content p {
+  margin-bottom: 1rem;
+  font-family: Menlo, Monaco, Consolas, "Courier New", sans-serif;
+}
+.about-content a {
+  color: inherit;
+  position: relative;
+  text-decoration: none !important;
+  white-space: nowrap;
+}
+.about-content a::before {
+  content: "";
+  position: absolute;
+  height: 10px;
+  bottom: 2px;
+  left: -2px;
+  width: 105%;
+  z-index: -1;
+  background-color: #42b983;
+  opacity: 0.3;
+  transform: skew(-35deg);
+  border-radius: 3px 8px 10px 6px;
+  transition: 0.1s ease background-color;
+}
 .category:not(:last-child) {
   margin-bottom: 1rem;
 }
