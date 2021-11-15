@@ -1,0 +1,690 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/favicon.png">
+  <link rel="icon" href="/img/favicon.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="description" content="加油！">
+  <meta name="author" content="M@tr1x">
+  <meta name="keywords" content="CTF,白帽子,Pwn,Web">
+  <meta name="description" content="加油！">
+<meta property="og:type" content="article">
+<meta property="og:title" content="BlockDAG从零到一">
+<meta property="og:url" content="https://www.blog.hackerjerry.top/2021/04/02/BlockDAG%E4%BB%8E%E9%9B%B6%E5%88%B0%E4%B8%80/index.html">
+<meta property="og:site_name" content="M@tr1xの日常">
+<meta property="og:description" content="加油！">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2021/png/1629942/1617441419925-9f079572-c711-428a-a94f-1a2a6ac6ce98.png#align=left&display=inline&height=299&margin=%5Bobject%20Object%5D&name=image.png&originHeight=598&originWidth=1303&size=258120&status=done&style=none&width=651.5">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2021/png/1629942/1617436033703-2f89b5e6-c23a-45a8-b127-8df8ebd6353d.png#align=left&display=inline&height=343&margin=%5Bobject%20Object%5D&name=image.png&originHeight=686&originWidth=776&size=143104&status=done&style=none&width=388">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2021/png/1629942/1617436089888-84b4f08d-272d-48df-a29b-1fdfd5c0d110.png#align=left&display=inline&height=288&margin=%5Bobject%20Object%5D&name=image.png&originHeight=576&originWidth=626&size=139030&status=done&style=none&width=313">
+<meta property="article:published_time" content="2021-04-02T12:04:25.000Z">
+<meta property="article:modified_time" content="2021-11-15T16:22:16.434Z">
+<meta property="article:author" content="M@tr1x">
+<meta property="article:tag" content="CTF,白帽子,Pwn,Web">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://cdn.nlark.com/yuque/0/2021/png/1629942/1617441419925-9f079572-c711-428a-a94f-1a2a6ac6ce98.png#align=left&display=inline&height=299&margin=%5Bobject%20Object%5D&name=image.png&originHeight=598&originWidth=1303&size=258120&status=done&style=none&width=651.5">
+  
+  <title>BlockDAG从零到一 - M@tr1xの日常</title>
+
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4/dist/css/bootstrap.min.css" />
+
+
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/github-markdown-css@4/github-markdown.min.css" />
+  <link  rel="stylesheet" href="/lib/hint/hint.min.css" />
+
+  
+    
+    
+      
+      <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@10/styles/github-gist.min.css" />
+    
+  
+
+  
+    <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3/dist/jquery.fancybox.min.css" />
+  
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_ba1fz6golrf.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_kmeydafke9r.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+<!-- 自定义样式保持在最底部 -->
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    var CONFIG = {"hostname":"www.blog.hackerjerry.top","root":"/","version":"1.8.12","typing":{"enable":true,"typeSpeed":70,"cursorChar":"|","loop":false},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"right","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"copy_btn":true,"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":1},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname"}},"search_path":"/local-search.xml"};
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+<meta name="generator" content="Hexo 5.1.1"><link rel="alternate" href="/atom.xml" title="M@tr1xの日常" type="application/atom+xml">
+</head>
+
+
+<body>
+  <header style="height: 70vh;">
+    <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>M@tr1xの日常</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                首页
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                归档
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                分类
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                标签
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/links/">
+                <i class="iconfont icon-link-fill"></i>
+                友链
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/bangumis/">
+                <i class="fa-fw fa fa-film"></i>
+                追番
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/artalk/">
+                <i class="iconfont icon-comment"></i>
+                说说
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                关于
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              &nbsp;<i class="iconfont icon-search"></i>&nbsp;
+            </a>
+          </li>
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">&nbsp;<i
+                class="iconfont icon-dark" id="color-toggle-icon"></i>&nbsp;</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+    <div class="banner" id="banner" parallax=true
+         style="background: url('/img/default.png') no-repeat center center;
+           background-size: cover;">
+      <div class="full-bg-img">
+        <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+          <div class="page-header text-center fade-in-up">
+            <span class="h2" id="subtitle" title="BlockDAG从零到一">
+              
+            </span>
+
+            
+              <div class="mt-3">
+  
+  
+    <span class="post-meta">
+      <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+      <time datetime="2021-04-02 20:04" pubdate>
+        2021年4月2日 晚上
+      </time>
+    </span>
+  
+</div>
+
+<div class="mt-1">
+  
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-chart"></i>
+      1.2k 字
+    </span>
+  
+
+  
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-clock-fill"></i>
+      
+      
+      4 分钟
+    </span>
+  
+
+  
+  
+    
+      <!-- 不蒜子统计文章PV -->
+      <span id="busuanzi_container_page_pv" style="display: none">
+        <i class="iconfont icon-eye" aria-hidden="true"></i>
+        <span id="busuanzi_value_page_pv"></span> 次
+      </span>
+    
+  
+</div>
+
+            
+          </div>
+
+          
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    
+      
+<meta name="referrer" content="no-referrer" />
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="d-none d-lg-block col-lg-2"></div>
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div class="py-5" id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">BlockDAG从零到一</h1>
+            
+              <p class="note note-info">
+                
+                  本文最后更新于：2021年11月16日 凌晨
+                
+              </p>
+            
+            <div class="markdown-body">
+              <p>加油！</p>
+<a id="more"></a>
+
+<h1 id="项目结构"><a href="#项目结构" class="headerlink" title="项目结构"></a>项目结构</h1><ul>
+<li><p>DAG</p>
+<ul>
+<li>SPECTRE<ul>
+<li>snapshot.go–生成快照</li>
+<li>vote.go–投票</li>
+<li>log.go–记录日志</li>
+</ul>
+</li>
+<li>accepttxs.go–维持可信交易集</li>
+<li>blockdag.go–主程序</li>
+<li>difficulty.go–动态调整 pow 困难度</li>
+<li>error.go–错误信息</li>
+<li>log.go–日志信息</li>
+<li>process.go–将区块加入链？或者称检查块的合法性</li>
+</ul>
+</li>
+<li><p>minner</p>
+<ul>
+<li>pow.go–工作量证明</li>
+<li>worker.go</li>
+</ul>
+</li>
+<li><p>account</p>
+<ul>
+<li>user.go–用户相关，身份认定，发送交易</li>
+</ul>
+</li>
+<li><p>bloom</p>
+<ul>
+<li>timebloom.go–时间布隆过滤器</li>
+<li>rangebloom.go–范围布隆过滤器</li>
+</ul>
+</li>
+<li><p>p2pnet</p>
+<ul>
+<li>libp2p–p2p 网络对等节点发现</li>
+</ul>
+</li>
+<li><p>mempool–内存池</p>
+</li>
+<li><p>crypto–密码学模块</p>
+<ul>
+<li>pkcs12–引用 gmsm <a target="_blank" rel="noopener" href="https://github.com/tjfoc/gmsm">https://github.com/tjfoc/gmsm</a> 好像性能有点问题？ 这里有另外一个<a target="_blank" rel="noopener" href="https://github.com/rongzer/gm">https://github.com/rongzer/gm</a> 看情况吧</li>
+<li>sm2<ul>
+<li>p256.go</li>
+<li>sm2.go</li>
+<li>utils.go</li>
+</ul>
+</li>
+<li>sm3<ul>
+<li>sm3.go</li>
+<li>ifile</li>
+</ul>
+</li>
+<li>sm4<ul>
+<li>sm4.go</li>
+<li>sm4_gcm.go</li>
+<li>utils.go</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>database-存储 <a target="_blank" rel="noopener" href="https://github.com/vldmkr/merkle-patricia-trie">https://github.com/vldmkr/merkle-patricia-trie</a></p>
+<ul>
+<li><p>mpt</p>
+<ul>
+<li>node.go</li>
+<li>tire.go</li>
+<li>type.go</li>
+</ul>
+</li>
+<li><p>storage</p>
+<ul>
+<li>adapter.go</li>
+<li>leveldb.go</li>
+<li>memory.go</li>
+</ul>
+</li>
+<li><p>database.go–利用 leveldb 存储交易（MPT），在区块中只存储根节点 hsha。</p>
+</li>
+<li><p>merkletire.go–MPT 树存储</p>
+</li>
+<li><p>可以先尝试安装<a target="_blank" rel="noopener" href="https://github.com/soteria-dag/soterd/tree/master/database">https://github.com/soteria-dag/soterd/tree/master/database</a>，看看能不能保存交易</p>
+</li>
+</ul>
+</li>
+</ul>
+<h1 id="p2pnet"><a href="#p2pnet" class="headerlink" title="p2pnet"></a>p2pnet</h1><p><a target="_blank" rel="noopener" href="https://segmentfault.com/a/1190000018590682">区块链中的 P2P</a><br><a target="_blank" rel="noopener" href="https://www.shangmayuan.com/a/61258d114131449994f5278e.html">使用 Go 语言编写区块链 P2P 网络</a>–项目：<a target="_blank" rel="noopener" href="https://github.com/nosequeldeebee/blockchain-tutorial/blob/master/p2p/main.go">https://github.com/nosequeldeebee/blockchain-tutorial/blob/master/p2p/main.go</a><br><a target="_blank" rel="noopener" href="https://github.com/Blockchain-CN/blockchain">https://github.com/Blockchain-CN/blockchain</a> –实现了对等协议的<br><a target="_blank" rel="noopener" href="https://bbbob.win/b6edc29f/">利用 go-libp2p 实现在区块链上的 p2p</a>–里面目录分的挺清楚的</p>
+<h1 id="mempool"><a href="#mempool" class="headerlink" title="mempool"></a>mempool</h1><p><a target="_blank" rel="noopener" href="https://learnblockchain.cn/books/geth/part2/txpool/txpool.html">以太坊交易池架构设计</a>–这一系列很全<br><a target="_blank" rel="noopener" href="https://blog.csdn.net/loy_184548/article/details/86178255">【区块链】比特币学习 - 4 - 交易池</a><br><a target="_blank" rel="noopener" href="https://segmentfault.com/a/1190000017333194">以太坊源码分析：交易缓冲池 txpool</a><br><a target="_blank" rel="noopener" href="https://github.com/lianxiangcloud/linkchain/tree/release/v0.1.3/mempool">https://github.com/lianxiangcloud/linkchain/tree/release/v0.1.3/mempool</a><br><a target="_blank" rel="noopener" href="https://www.jianshu.com/p/521a0926303a">btcd 源码分析系列：6 - mempool</a><br><a target="_blank" rel="noopener" href="https://github.com/wupeaking/tendermint_code_analysis/blob/master/Mempool%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90.md">Mempool 源码分析</a><br><a target="_blank" rel="noopener" href="https://github.com/letsfire/factory">https://github.com/letsfire/factory</a> –单纯的内存池，而非交易池<br><img src="https://cdn.nlark.com/yuque/0/2021/png/1629942/1617441419925-9f079572-c711-428a-a94f-1a2a6ac6ce98.png#align=left&display=inline&height=299&margin=%5Bobject%20Object%5D&name=image.png&originHeight=598&originWidth=1303&size=258120&status=done&style=none&width=651.5" srcset="/img/loading.gif" lazyload alt="image.png"><br>说实话，这个有点难，可能暂时不考虑实现了。</p>
+<h1 id="account"><a href="#account" class="headerlink" title="account"></a>account</h1><p><img src="https://cdn.nlark.com/yuque/0/2021/png/1629942/1617436033703-2f89b5e6-c23a-45a8-b127-8df8ebd6353d.png#align=left&display=inline&height=343&margin=%5Bobject%20Object%5D&name=image.png&originHeight=686&originWidth=776&size=143104&status=done&style=none&width=388" srcset="/img/loading.gif" lazyload alt="image.png"><img src="https://cdn.nlark.com/yuque/0/2021/png/1629942/1617436089888-84b4f08d-272d-48df-a29b-1fdfd5c0d110.png#align=left&display=inline&height=288&margin=%5Bobject%20Object%5D&name=image.png&originHeight=576&originWidth=626&size=139030&status=done&style=none&width=313" srcset="/img/loading.gif" lazyload alt="image.png"><br>来自白皮书：<a target="_blank" rel="noopener" href="https://www.lianxiangcloud.com/static/download/%E4%BA%AB%E4%BA%91%E9%93%BE%E7%99%BD%E7%9A%AE%E4%B9%A61.0.pdf">享云链白皮书 1.0</a><br><a target="_blank" rel="noopener" href="https://learnblockchain.cn/books/geth/part3/sign-and-valid.html">签名与校验</a></p>
+
+            </div>
+            <hr>
+            <div>
+              <div class="post-metas mb-3">
+                
+                
+              </div>
+              
+                <p class="note note-warning">
+                  
+                    本博客所有文章除特别声明外，均采用 <a target="_blank" href="https://creativecommons.org/licenses/by-sa/4.0/deed.zh" rel="nofollow noopener noopener">CC BY-SA 4.0 协议</a> ，转载请注明出处！
+                  
+                </p>
+              
+              
+                <div class="post-prevnext">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2021/04/09/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E4%B9%8B%E9%9A%8F%E6%9C%BA%E6%A3%AE%E6%9E%97/">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">机器学习之随机森林</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2021/04/02/GO%E5%BC%80%E5%8F%91%E6%8C%87%E5%8D%97/">
+                        <span class="hidden-mobile">GO开发指南</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+              <!-- Comments -->
+              <article class="comments" id="comments" lazyload>
+                
+                  
+                
+                
+  <div id="valine"></div>
+  <script type="text/javascript">
+    Fluid.utils.loadComments('#valine', function() {
+      Fluid.utils.createScript('https://cdn.jsdelivr.net/npm/valine@1/dist/Valine.min.js', function() {
+        var options = Object.assign(
+          {"appId":"jApqS8Xxcc1eST53AyiAisFx-gzGzoHsz","appKey":"iyngroaUslATD8V4nOgOHowr","path":"window.location.pathname","placeholder":"说点什么呗~","avatar":"retro","meta":["nick","mail","link"],"requiredFields":["mail"],"pageSize":10,"lang":"zh-CN","highlight":false,"recordIP":false,"serverURLs":"","emojiCDN":null,"emojiMaps":null,"enableQQ":true},
+          {
+            el: "#valine",
+            path: window.location.pathname
+          }
+        )
+        new Valine(options);
+        Fluid.utils.waitElementVisible('#valine .vcontent', () => {
+          Fluid.plugins.initFancyBox('#valine .vcontent img:not(.vemoji)');
+        })
+      });
+    });
+  </script>
+  <noscript>Please enable JavaScript to view the comments</noscript>
+
+
+              </article>
+            
+          </article>
+        </div>
+      </div>
+    </div>
+    
+      <div class="d-none d-lg-block col-lg-2 toc-container" id="toc-ctn">
+        <div id="toc">
+  <p class="toc-header"><i class="iconfont icon-list"></i>&nbsp;目录</p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+      </div>
+    
+  </div>
+</div>
+
+<!-- Custom -->
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v"
+                 for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+
+    
+  </main>
+
+  <footer class="text-center mt-5 py-3">
+  <div class="footer-content">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" integrity="sha512-SfTiTlX6kk+qitfevl/7LibUOeJWlt9rbyDn92a1DqWOw9vWG2MFoays0sgObmWazO5BQPiFucnnEAjpAB+/Sw==" crossorigin="anonymous" referrerpolicy="no-referrer">
+     <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+  </div>
+  
+  <div class="statistics">
+    
+    
+
+    
+      
+        <!-- 不蒜子统计PV -->
+        <span id="busuanzi_container_site_pv" style="display: none">
+            总访问量 
+            <span id="busuanzi_value_site_pv"></span>
+             次
+          </span>
+      
+      
+        <!-- 不蒜子统计UV -->
+        <span id="busuanzi_container_site_uv" style="display: none">
+            总访客数 
+            <span id="busuanzi_value_site_uv"></span>
+             人
+          </span>
+      
+    
+  </div>
+
+
+  
+  <!-- 备案信息 -->
+  <div class="beian">
+    <span>
+      <a href="http://beian.miit.gov.cn/" target="_blank" rel="nofollow noopener">
+        陕ICP备19023179号
+      </a>
+    </span>
+    
+  </div>
+
+
+  <div class="cdn"><a href="https://www.upyun.com/?utm_source=lianmeng&amp;utm_medium=referral" target="_blank"><img width="70px" class="entered loading" src="/img/upyun.png" srcset="/img/loading.gif" lazyload data-ll-status="loading"><span></span></a></div>
+  
+</footer>
+
+
+  <!-- SCRIPTS -->
+  
+  <script  src="https://cdn.jsdelivr.net/npm/nprogress@0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/nprogress@0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://cdn.jsdelivr.net/npm/jquery@3/dist/jquery.min.js" ></script>
+<script  src="https://cdn.jsdelivr.net/npm/bootstrap@4/dist/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+<!-- Plugins -->
+
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+  
+
+
+
+  
+    <script  src="https://cdn.jsdelivr.net/npm/tocbot@4/dist/tocbot.min.js" ></script>
+  
+  
+    <script  src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3/dist/jquery.fancybox.min.js" ></script>
+  
+  
+    <script  src="https://cdn.jsdelivr.net/npm/anchor-js@4/anchor.min.js" ></script>
+  
+  
+    <script defer src="https://cdn.jsdelivr.net/npm/clipboard@2/dist/clipboard.min.js" ></script>
+  
+
+
+
+  <script defer src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" ></script>
+
+
+
+
+  <script  src="https://cdn.jsdelivr.net/npm/typed.js@2/lib/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var title = document.getElementById('subtitle').title;
+      
+      typing(title)
+      
+    })(window, document);
+  </script>
+
+
+
+
+
+  
+
+  
+    <!-- MathJax -->
+    <script>
+      MathJax = {
+        tex: {
+          inlineMath: [['$', '$'], ['\\(', '\\)']]
+        },
+        loader: {
+          load: ['ui/lazy']
+        },
+        options: {
+          renderActions: {
+            findScript: [10, doc => {
+              document.querySelectorAll('script[type^="math/tex"]').forEach(node => {
+                const display = !!node.type.match(/; *mode=display/);
+                const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display);
+                const text = document.createTextNode('');
+                node.parentNode.replaceChild(text, node);
+                math.start = { node: text, delim: '', n: 0 };
+                math.end = { node: text, delim: '', n: 0 };
+                doc.math.push(math);
+              });
+            }, '', false],
+            insertedScript: [200, () => {
+              document.querySelectorAll('mjx-container').forEach(node => {
+                let target = node.parentNode;
+                if (target.nodeName.toLowerCase() === 'li') {
+                  target.parentNode.classList.add('has-jax');
+                }
+              });
+            }, '', false]
+          }
+        }
+      };
+    </script>
+
+    <script async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js" ></script>
+
+  
+
+
+
+
+
+
+
+
+
+
+
+<!-- 主题的启动项 保持在最底部 -->
+<script  src="/js/boot.js" ></script>
+
+
+</body>
+</html>

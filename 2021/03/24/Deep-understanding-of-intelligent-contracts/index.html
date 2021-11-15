@@ -1,0 +1,625 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/favicon.png">
+  <link rel="icon" href="/img/favicon.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="description" content="参考官方文档进行进一步了解。">
+  <meta name="author" content="M@tr1x">
+  <meta name="keywords" content="CTF,白帽子,Pwn,Web">
+  <meta name="description" content="参考官方文档进行进一步了解。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Deep-understanding-of-intelligent-contracts">
+<meta property="og:url" content="https://www.blog.hackerjerry.top/2021/03/24/Deep-understanding-of-intelligent-contracts/index.html">
+<meta property="og:site_name" content="M@tr1xの日常">
+<meta property="og:description" content="参考官方文档进行进一步了解。">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2021/png/1629942/1616635791074-7552337f-87dc-42bf-b6ff-cd27525e2407.png#align=left&display=inline&height=273&margin=%5Bobject%20Object%5D&name=image.png&originHeight=354&originWidth=865&size=56096&status=done&style=none&width=668">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2021/png/1629942/1616636007625-e3a83bad-d74f-4813-99b3-e3d8cf70307f.png#align=left&display=inline&height=256&margin=%5Bobject%20Object%5D&name=image.png&originHeight=280&originWidth=739&size=28395&status=done&style=none&width=675">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2021/png/1629942/1616636373508-48190954-9980-41cb-a288-236801e4a19f.png#align=left&display=inline&height=292&margin=%5Bobject%20Object%5D&name=image.png&originHeight=345&originWidth=804&size=50947&status=done&style=none&width=680">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2021/png/1629942/1616637519498-0e9fd021-a687-4bb8-a324-ac7cecda250f.png#align=left&display=inline&height=266&margin=%5Bobject%20Object%5D&name=image.png&originHeight=339&originWidth=863&size=90524&status=done&style=none&width=677">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2021/png/1629942/1616660756279-b4421d16-f36d-426a-a14b-01f82d5cdfeb.png#align=left&display=inline&height=362&margin=%5Bobject%20Object%5D&name=image.png&originHeight=724&originWidth=1419&size=128783&status=done&style=none&width=709.5">
+<meta property="article:published_time" content="2021-03-24T10:56:29.000Z">
+<meta property="article:modified_time" content="2021-11-15T16:22:16.750Z">
+<meta property="article:author" content="M@tr1x">
+<meta property="article:tag" content="CTF,白帽子,Pwn,Web">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://cdn.nlark.com/yuque/0/2021/png/1629942/1616635791074-7552337f-87dc-42bf-b6ff-cd27525e2407.png#align=left&display=inline&height=273&margin=%5Bobject%20Object%5D&name=image.png&originHeight=354&originWidth=865&size=56096&status=done&style=none&width=668">
+  
+  <title>Deep-understanding-of-intelligent-contracts - M@tr1xの日常</title>
+
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4/dist/css/bootstrap.min.css" />
+
+
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/github-markdown-css@4/github-markdown.min.css" />
+  <link  rel="stylesheet" href="/lib/hint/hint.min.css" />
+
+  
+    
+    
+      
+      <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@10/styles/github-gist.min.css" />
+    
+  
+
+  
+    <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3/dist/jquery.fancybox.min.css" />
+  
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_ba1fz6golrf.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_kmeydafke9r.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+<!-- 自定义样式保持在最底部 -->
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    var CONFIG = {"hostname":"www.blog.hackerjerry.top","root":"/","version":"1.8.12","typing":{"enable":true,"typeSpeed":70,"cursorChar":"|","loop":false},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"right","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"copy_btn":true,"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":1},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname"}},"search_path":"/local-search.xml"};
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+<meta name="generator" content="Hexo 5.1.1"><link rel="alternate" href="/atom.xml" title="M@tr1xの日常" type="application/atom+xml">
+</head>
+
+
+<body>
+  <header style="height: 70vh;">
+    <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>M@tr1xの日常</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                首页
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                归档
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                分类
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                标签
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/links/">
+                <i class="iconfont icon-link-fill"></i>
+                友链
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/bangumis/">
+                <i class="fa-fw fa fa-film"></i>
+                追番
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/artalk/">
+                <i class="iconfont icon-comment"></i>
+                说说
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                关于
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              &nbsp;<i class="iconfont icon-search"></i>&nbsp;
+            </a>
+          </li>
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">&nbsp;<i
+                class="iconfont icon-dark" id="color-toggle-icon"></i>&nbsp;</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+    <div class="banner" id="banner" parallax=true
+         style="background: url('/img/default.png') no-repeat center center;
+           background-size: cover;">
+      <div class="full-bg-img">
+        <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+          <div class="page-header text-center fade-in-up">
+            <span class="h2" id="subtitle" title="Deep-understanding-of-intelligent-contracts">
+              
+            </span>
+
+            
+              <div class="mt-3">
+  
+  
+    <span class="post-meta">
+      <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+      <time datetime="2021-03-24 18:56" pubdate>
+        2021年3月24日 晚上
+      </time>
+    </span>
+  
+</div>
+
+<div class="mt-1">
+  
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-chart"></i>
+      3.7k 字
+    </span>
+  
+
+  
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-clock-fill"></i>
+      
+      
+      12 分钟
+    </span>
+  
+
+  
+  
+    
+      <!-- 不蒜子统计文章PV -->
+      <span id="busuanzi_container_page_pv" style="display: none">
+        <i class="iconfont icon-eye" aria-hidden="true"></i>
+        <span id="busuanzi_value_page_pv"></span> 次
+      </span>
+    
+  
+</div>
+
+            
+          </div>
+
+          
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    
+      
+<meta name="referrer" content="no-referrer" />
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="d-none d-lg-block col-lg-2"></div>
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div class="py-5" id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">Deep-understanding-of-intelligent-contracts</h1>
+            
+              <p class="note note-info">
+                
+                  本文最后更新于：2021年11月16日 凌晨
+                
+              </p>
+            
+            <div class="markdown-body">
+              <p>参考官方文档进行进一步了解。</p>
+<a id="more"></a>
+
+<h1 id="智能合约能干什么"><a href="#智能合约能干什么" class="headerlink" title="智能合约能干什么"></a>智能合约能干什么</h1><p>在各业务彼此进行交互之前，必须先定义一套通用的合约，其中包括通用术语、数据、规则、概念定义和流程。将这些合约放在一起，就构成了管理交易各方之间所有交互的<strong>业务模型</strong>。<br><img src="https://cdn.nlark.com/yuque/0/2021/png/1629942/1616635791074-7552337f-87dc-42bf-b6ff-cd27525e2407.png#align=left&display=inline&height=273&margin=%5Bobject%20Object%5D&name=image.png&originHeight=354&originWidth=865&size=56096&status=done&style=none&width=668" srcset="/img/loading.gif" lazyload alt="image.png"><br>_智能合约用可执行的代码定义了不同组织之间的规则。_<strong><em>应用程序调用智能合约来生成被记录到账本上的交易。</em></strong><br>在<a target="_blank" rel="noopener" href="https://hyperledger-fabric.readthedocs.io/zh_CN/latest/smartcontract/smartcontract.html#%E6%99%BA%E8%83%BD%E5%90%88%E7%BA%A6">上图</a>中，我们可以看到组织  <code>ORG1</code>  和  <code>ORG2</code>  是如何通过定义一个  <code>car</code>  智能合约来实现  <code>查询</code>、<code>转移</code>  和  <code>更新</code>  汽车的。来自这些组织的应用程序调用此智能合约执行业务流程中已商定的步骤，例如将特定汽车的所有权从  <code>ORG1</code>  转移到  <code>ORG2</code>。</p>
+<h1 id="智能合约-amp-链码"><a href="#智能合约-amp-链码" class="headerlink" title="智能合约&amp;链码"></a>智能合约&amp;链码</h1><p>通常，智能合约定义的是控制世界状态中业务对象生命周期的<strong>交易逻辑</strong>，随后该交易逻辑被打包进链码，紧接着链码会被部署到区块链网络中。可以将智能合约看成交易的管理者，而链码则管理着如何将智能合约打包以便用于部署。<br><img src="https://cdn.nlark.com/yuque/0/2021/png/1629942/1616636007625-e3a83bad-d74f-4813-99b3-e3d8cf70307f.png#align=left&display=inline&height=256&margin=%5Bobject%20Object%5D&name=image.png&originHeight=280&originWidth=739&size=28395&status=done&style=none&width=675" srcset="/img/loading.gif" lazyload alt="image.png"><br><em>一个智能合约定义在一个链码中。而多个智能合约也可以定义在同一个链码中。当一个链码部署完毕，该链码中的所有智能合约都可供应用程序使用。</em><br>从上图中我们可以看到，<code>vehicle</code> 链码包含了以下三个智能合约：<code>cars</code>、<code>boats</code> 和 <code>trucks</code>；而 <code>insurance</code> 链码包含了以下四个智能合约：<code>policy</code>、<code>liability</code>、<code>syndication</code> 和 <code>securitization</code>。以上每种智能合约都涵盖了与车辆和保险有关的业务流程的一些关键点。在本主题中，我们将以 <code>car</code> 智能合约为例。我们可以看到，智能合约是一个特定领域的程序，它与特定的业务流程相关，而链码则是一组相关智能合约安装和实例化的技术容器。</p>
+<h1 id="账本"><a href="#账本" class="headerlink" title="账本"></a>账本</h1><p>以最简单的方式来说，区块链记录着更新账本状态的交易，且记录不可篡改。智能合约以编程方式访问账本两个不同的部分：一个是<strong>区块链</strong>（记录所有交易的历史，且记录不可篡改），另一个是<strong>世界状态</strong>（保存这些状态当前值的缓存，是经常需要用到的对象的当前值）。<br>首先，<strong>世界状态</strong>是一个数据库，它存储了一组账本状态的<strong>当前值</strong>。通过世界状态，程序可以直接访问一个账本状态的当前值，不需要遍历整个交易日志来计算当前值。默认情况下，账本状态是以<strong>键值</strong>对的方式来表示的。因为我们可以创建、更新和删除状态，所以世界状态能够频繁更改。<br>其次，<strong>区块链</strong>是交易日志，它记录了促成当前世界状态的所有改变。交易被收集在附加到区块链的区块中，能帮助我们理解所有促成当前世界状态的改变的历史。区块链数据结构与世界状态相差甚远，因为一旦把数据写入区块链，就无法修改，它是<strong>不可篡改的</strong>。<br><img src="https://cdn.nlark.com/yuque/0/2021/png/1629942/1616636373508-48190954-9980-41cb-a288-236801e4a19f.png#align=left&display=inline&height=292&margin=%5Bobject%20Object%5D&name=image.png&originHeight=345&originWidth=804&size=50947&status=done&style=none&width=680" srcset="/img/loading.gif" lazyload alt="image.png"><br><em>账本 L 由区块链 B 和世界状态 W 组成，其中世界状态 W 由区块链 B 决定。我们也可以说世界状态 W 是源自区块链 B。</em><br>智能合约主要在世界状态中将状态<strong>写入</strong>（put）、<strong>读取</strong>（get）和<strong>删除</strong>（delete），还可以查询不可篡改的区块链交易记录。</p>
+<ul>
+<li><strong>读取（get）</strong> 操作一般代表的是查询，目的是获取关于交易对象当前状态的信息。</li>
+<li><strong>写入（put）</strong> 操作通常生成一个新的业务对象或者对账本世界状态中现有的业务对象进行修改。</li>
+<li><strong>删除（delete）</strong> 操作代表的是将一个业务对象从账本的当前状态中移除，但不从账本的历史中移除。</li>
+</ul>
+<p>智能合约有许多可用的 <a target="_blank" rel="noopener" href="https://hyperledger-fabric.readthedocs.io/zh_CN/latest/developapps/transactioncontext.html#structure">API</a>。但重要的是，在任意情况下，无论交易创建、读取、更新还是删除世界状态中的业务对象，区块链都包含了这些操作的记录，且<a target="_blank" rel="noopener" href="https://hyperledger-fabric.readthedocs.io/zh_CN/latest/ledger/ledger.html">记录不可更改</a> 。</p>
+<h2 id="世界状态"><a href="#世界状态" class="headerlink" title="世界状态"></a>世界状态</h2><p>世界状态将业务对象属性的当前值保存为唯一的账本状态。这很有用，因为程序通常需要对象的当前值，如果遍历整个区块链来计算对象的当前值会很麻烦——从世界状态中可以直接获取当前值。<br><img src="https://cdn.nlark.com/yuque/0/2021/png/1629942/1616637519498-0e9fd021-a687-4bb8-a324-ac7cecda250f.png#align=left&display=inline&height=266&margin=%5Bobject%20Object%5D&name=image.png&originHeight=339&originWidth=863&size=90524&status=done&style=none&width=677" srcset="/img/loading.gif" lazyload alt="image.png"><br><em>一个账本世界状态包含两个状态。第一个状态是： key=CAR1 和 value=Audi。第二个状态中有一个更复杂的值：key=CAR2 和 value={model:BMW, color=red, owner=Jane} 。两个状态的版本都是 0。</em><br>账本状态记录了一组与特定业务对象有关的事实。我们的示例展示的是 CAR1 和 CAR2 这两辆车的账本状态，二者都各有一个值和一个键。应用程序可以调用智能合约，该合约使用简单的账本 API 来<strong>获取</strong>、<strong>写入</strong>和<strong>删除</strong>状态。注意状态值可以是简单值（Audi…），也可以是复合值（type:BMW…）。经常会通过查询世界状态来检索具有某些特定属性的对象，例如查找所有红色宝马汽车。<br>应用程序提交那些会更改世界状态的交易，这些交易最终被提交到账本区块链上。应用程序无法看到 Hyperledger Fabric SDK（软件开发工具包）设定的<a target="_blank" rel="noopener" href="https://hyperledger-fabric.readthedocs.io/zh_CN/latest/txflow.html">共识机制</a>的细节内容，它们能做的只是调用智能合约以及在交易被收进区块链时收到通知（<strong>所有被提交的交易，无论有效与否，都会被收进区块链</strong>）。Hyperledger Fabric 的关键设计在于，只有那些受到相关<strong>背书组织签名</strong>的交易才会更新世界状态。<br>您还会注意到，每个状态都有一个版本号，在上面的图表中，状态 CAR1 和 CAR2 都处于它们的初始版本 0。版本号是供 Hyperledger Fabric 内部使用的，并且每次状态更改时版本号会发生递增。每当更新状态时，都会检查该状态的版本，以确保当前状态与背书时的版本相匹配。这就确保了世界状态是按照预期进行更新的，没有发生并发更新。<br>最后，首次创建账本时，世界状态是空的。<strong>因为区块链上记录了所有代表有效世界状态更新的交易，所以任何时候都可以从区块链中重新生成世界状态。</strong>这样一来就变得非常方便，例如，<strong>创建节点时会自动生成世界状态</strong>。此外，如果某个节点发生异常，<strong>重启该节点时能够在接受交易之前重新生成世界状态</strong>。</p>
+<h2 id="区块链"><a href="#区块链" class="headerlink" title="区块链"></a>区块链</h2><p>世界状态存储了与业务对象当前状态相关的事实信息，而区块链是一种历史记录，它记录了这些业务对象是如何到达各自当前状态的相关事实。<strong>区块链记录了每个账本状态之前的所有版本以及状态是如何被更改的。</strong><br><strong>区块链的结构是一群相互链接的区块的序列化日志，其中每个区块都包含一系列交易，各项交易代表了一个对世界状态进行的查询或更新操作。</strong></p>
+<blockquote>
+<p>在这里，官方提到了一个排序服务。<br>其中重要的是<strong>区块排序以及区块内的交易排序</strong>，这一机制是在 Hyperledger Fabric 的<strong>排序服务</strong>组件首次创建区块时被建立起来的。</p>
+</blockquote>
+<p>每个区块的头部都包含区块交易的一个哈希，以及前一个区块头的哈希。这样一来，账本上的所有交易都被按序排列，并以密码方式连接在一起。这种哈希和链接使账本数据变得非常安全。即使某个保存账本的节点被篡改了，该节点也无法让其他节点相信自己拥有“正确的”区块链，这是因为账本被分布在一个由独立节点组成的网络中。<br><strong>区块链总是以文件实现</strong>，而与之相反的是<strong>，世界状态以数据库实现</strong>。这是一个明智的设计，因为区块链数据结构高度偏向于非常小的一组简单操作。第一项操作被放在区块链的末尾，就目前来说，查询操纵相对少见。</p>
+<p>当<strong>应用程序需要访问账本和链码的时候</strong>，他们总是需要连接到 Peer 节点。Hyperledger Fabric SDK 将这个操作变得非常简单，它的 API 使应用程序能够连接到 Peer 节点，<strong>调用链码生成交易，提交交易到网络，在网络中交易会被排序并且提交到分布式账本中</strong>，并且在这个流程结束的时候接收到事件。<br><strong>！不过，我们注意到 xuperchain 在文档中提到了使用 JDK 通过</strong><a target="_blank" rel="noopener" href="https://xuper.baidu.com/n/xuperdoc/development_manuals/XuperRPC.html#id1"><strong>rpc 接口</strong></a><strong>构造交易发布！</strong><br><strong>目前需要知道：</strong></p>
+<ul>
+<li>智能合约发布的交易，发布方地址是什么，接收方地址是什么，他们在链上存储的和普通交易是否有区别？</li>
+<li>在搞清问题 1 之后，是否有可能构造交易，把添加自定义字段，然后使用 rpc 接口发布？</li>
+<li>因为区块链链式结构只需要将上一个区块的 hsah 包含在本区块头中，而 DAG 则将多个（至少两个块作为前置块，那么它们是如何连接的）</li>
+</ul>
+<hr>
+<p>补充一个：<br>【1】快照链<a target="_blank" rel="noopener" href="https://github.com/vitelabs/go-vite/blob/master/ledger/chain/block/snapshot_block.go">https://github.com/vitelabs/go-vite/blob/master/ledger/chain/block/snapshot_block.go</a><br>【2】真正的 DAG？<a target="_blank" rel="noopener" href="https://github.com/vitelabs/go-vite/blob/master/ledger/chain/chain.go">https://github.com/vitelabs/go-vite/blob/master/ledger/chain/chain.go</a><br>【3】靠谱一点的白皮书<a target="_blank" rel="noopener" href="https://www.yuque.com/attachments/yuque/0/2021/pdf/1629942/1616644033176-46652e0d-d91b-41c0-823a-ee503f7d8264.pdf?_lake_card=%7B%22uid%22:%221616644031374-0%22,%22src%22:%22https://www.yuque.com/attachments/yuque/0/2021/pdf/1629942/1616644033176-46652e0d-d91b-41c0-823a-ee503f7d8264.pdf%22,%22name%22:%22vite_cn.pdf%22,%22size%22:1164591,%22type%22:%22application/pdf%22,%22ext%22:%22pdf%22,%22progress%22:%7B%22percent%22:99%7D,%22status%22:%22done%22,%22percent%22:0,%22id%22:%22N6Qwn%22,%22card%22:%22file%22%7D">vite_cn.pdf</a><br>【4】xuper 里的交易定义<a target="_blank" rel="noopener" href="https://github.com/xuperchain/xuperchain/blob/7de83707283ba872129d66aa5e4435d04ed67bee/core/cmd/cli/types.go">https://github.com/xuperchain/xuperchain/blob/7de83707283ba872129d66aa5e4435d04ed67bee/core/cmd/cli/types.go</a><br>【5】xuper 的快照链<a target="_blank" rel="noopener" href="https://github.com/xuperchain/xuperchain/blob/9d9e60a3bcd87bafafdac51784b504a310ead3d7/core/xmodel/xmodel.go#L51">https://github.com/xuperchain/xuperchain/blob/9d9e60a3bcd87bafafdac51784b504a310ead3d7/core/xmodel/xmodel.go#L51</a><br>【6】<a target="_blank" rel="noopener" href="https://www.jianshu.com/p/8734e06d558f">GHOST，DAG，SPECTRE，PHANTOM 和 CONFLUX 技术原理</a>–挺全的<br>【7】<a target="_blank" rel="noopener" href="https://confluxnetwork.org/zh/developers/assets">https://confluxnetwork.org/zh/developers/assets</a>–conflux 区块链，清华自研，树形结构，网站挺好的，白皮书也行</p>
+<p><img src="https://cdn.nlark.com/yuque/0/2021/png/1629942/1616660756279-b4421d16-f36d-426a-a14b-01f82d5cdfeb.png#align=left&display=inline&height=362&margin=%5Bobject%20Object%5D&name=image.png&originHeight=724&originWidth=1419&size=128783&status=done&style=none&width=709.5" srcset="/img/loading.gif" lazyload alt="image.png"><br>【8】conflux 的白皮书<a target="_blank" rel="noopener" href="https://www.yuque.com/attachments/yuque/0/2021/pdf/1629942/1616675325254-7b3d2143-8a29-4ae3-979b-0da2ca0b759e.pdf?_lake_card=%7B%22uid%22:%221616675322385-0%22,%22src%22:%22https://www.yuque.com/attachments/yuque/0/2021/pdf/1629942/1616675325254-7b3d2143-8a29-4ae3-979b-0da2ca0b759e.pdf%22,%22name%22:%22Conflux_Technical_Presentation_whitepaper.pdf%22,%22size%22:1899775,%22type%22:%22application/pdf%22,%22ext%22:%22pdf%22,%22progress%22:%7B%22percent%22:99%7D,%22status%22:%22done%22,%22percent%22:0,%22id%22:%22DpkoK%22,%22card%22:%22file%22%7D">Conflux_Technical_Presentation_whitepaper.pdf</a></p>
+
+            </div>
+            <hr>
+            <div>
+              <div class="post-metas mb-3">
+                
+                
+              </div>
+              
+                <p class="note note-warning">
+                  
+                    本博客所有文章除特别声明外，均采用 <a target="_blank" href="https://creativecommons.org/licenses/by-sa/4.0/deed.zh" rel="nofollow noopener noopener">CC BY-SA 4.0 协议</a> ，转载请注明出处！
+                  
+                </p>
+              
+              
+                <div class="post-prevnext">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2021/03/26/Spatio-temporal-blockchain/">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">Spatio-temporal-blockchain</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2021/03/20/Project-Implementation/">
+                        <span class="hidden-mobile">Project-Implementation</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+              <!-- Comments -->
+              <article class="comments" id="comments" lazyload>
+                
+                  
+                
+                
+  <div id="valine"></div>
+  <script type="text/javascript">
+    Fluid.utils.loadComments('#valine', function() {
+      Fluid.utils.createScript('https://cdn.jsdelivr.net/npm/valine@1/dist/Valine.min.js', function() {
+        var options = Object.assign(
+          {"appId":"jApqS8Xxcc1eST53AyiAisFx-gzGzoHsz","appKey":"iyngroaUslATD8V4nOgOHowr","path":"window.location.pathname","placeholder":"说点什么呗~","avatar":"retro","meta":["nick","mail","link"],"requiredFields":["mail"],"pageSize":10,"lang":"zh-CN","highlight":false,"recordIP":false,"serverURLs":"","emojiCDN":null,"emojiMaps":null,"enableQQ":true},
+          {
+            el: "#valine",
+            path: window.location.pathname
+          }
+        )
+        new Valine(options);
+        Fluid.utils.waitElementVisible('#valine .vcontent', () => {
+          Fluid.plugins.initFancyBox('#valine .vcontent img:not(.vemoji)');
+        })
+      });
+    });
+  </script>
+  <noscript>Please enable JavaScript to view the comments</noscript>
+
+
+              </article>
+            
+          </article>
+        </div>
+      </div>
+    </div>
+    
+      <div class="d-none d-lg-block col-lg-2 toc-container" id="toc-ctn">
+        <div id="toc">
+  <p class="toc-header"><i class="iconfont icon-list"></i>&nbsp;目录</p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+      </div>
+    
+  </div>
+</div>
+
+<!-- Custom -->
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v"
+                 for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+
+    
+  </main>
+
+  <footer class="text-center mt-5 py-3">
+  <div class="footer-content">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" integrity="sha512-SfTiTlX6kk+qitfevl/7LibUOeJWlt9rbyDn92a1DqWOw9vWG2MFoays0sgObmWazO5BQPiFucnnEAjpAB+/Sw==" crossorigin="anonymous" referrerpolicy="no-referrer">
+     <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+  </div>
+  
+  <div class="statistics">
+    
+    
+
+    
+      
+        <!-- 不蒜子统计PV -->
+        <span id="busuanzi_container_site_pv" style="display: none">
+            总访问量 
+            <span id="busuanzi_value_site_pv"></span>
+             次
+          </span>
+      
+      
+        <!-- 不蒜子统计UV -->
+        <span id="busuanzi_container_site_uv" style="display: none">
+            总访客数 
+            <span id="busuanzi_value_site_uv"></span>
+             人
+          </span>
+      
+    
+  </div>
+
+
+  
+  <!-- 备案信息 -->
+  <div class="beian">
+    <span>
+      <a href="http://beian.miit.gov.cn/" target="_blank" rel="nofollow noopener">
+        陕ICP备19023179号
+      </a>
+    </span>
+    
+  </div>
+
+
+  <div class="cdn"><a href="https://www.upyun.com/?utm_source=lianmeng&amp;utm_medium=referral" target="_blank"><img width="70px" class="entered loading" src="/img/upyun.png" srcset="/img/loading.gif" lazyload data-ll-status="loading"><span></span></a></div>
+  
+</footer>
+
+
+  <!-- SCRIPTS -->
+  
+  <script  src="https://cdn.jsdelivr.net/npm/nprogress@0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/nprogress@0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://cdn.jsdelivr.net/npm/jquery@3/dist/jquery.min.js" ></script>
+<script  src="https://cdn.jsdelivr.net/npm/bootstrap@4/dist/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+<!-- Plugins -->
+
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+  
+
+
+
+  
+    <script  src="https://cdn.jsdelivr.net/npm/tocbot@4/dist/tocbot.min.js" ></script>
+  
+  
+    <script  src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3/dist/jquery.fancybox.min.js" ></script>
+  
+  
+    <script  src="https://cdn.jsdelivr.net/npm/anchor-js@4/anchor.min.js" ></script>
+  
+  
+    <script defer src="https://cdn.jsdelivr.net/npm/clipboard@2/dist/clipboard.min.js" ></script>
+  
+
+
+
+  <script defer src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" ></script>
+
+
+
+
+  <script  src="https://cdn.jsdelivr.net/npm/typed.js@2/lib/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var title = document.getElementById('subtitle').title;
+      
+      typing(title)
+      
+    })(window, document);
+  </script>
+
+
+
+
+
+  
+
+  
+    <!-- MathJax -->
+    <script>
+      MathJax = {
+        tex: {
+          inlineMath: [['$', '$'], ['\\(', '\\)']]
+        },
+        loader: {
+          load: ['ui/lazy']
+        },
+        options: {
+          renderActions: {
+            findScript: [10, doc => {
+              document.querySelectorAll('script[type^="math/tex"]').forEach(node => {
+                const display = !!node.type.match(/; *mode=display/);
+                const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display);
+                const text = document.createTextNode('');
+                node.parentNode.replaceChild(text, node);
+                math.start = { node: text, delim: '', n: 0 };
+                math.end = { node: text, delim: '', n: 0 };
+                doc.math.push(math);
+              });
+            }, '', false],
+            insertedScript: [200, () => {
+              document.querySelectorAll('mjx-container').forEach(node => {
+                let target = node.parentNode;
+                if (target.nodeName.toLowerCase() === 'li') {
+                  target.parentNode.classList.add('has-jax');
+                }
+              });
+            }, '', false]
+          }
+        }
+      };
+    </script>
+
+    <script async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js" ></script>
+
+  
+
+
+
+
+
+
+
+
+
+
+
+<!-- 主题的启动项 保持在最底部 -->
+<script  src="/js/boot.js" ></script>
+
+
+</body>
+</html>
