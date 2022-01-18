@@ -1,0 +1,638 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/favicon.png">
+  <link rel="icon" href="/img/favicon.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="description" content="一个菜鸡白帽子的小站">
+  <meta name="author" content="M@tr1x">
+  <meta name="keywords" content="CTF,白帽子,Pwn,Web">
+  <meta name="description" content="时讯 2022 国考过审 200 万人，实际参考人数 140 万，计划录取 3 万。 吉野家被曝食品质量问题 日本封国，因担心 O 病毒进入 世界首个活体机器人生娃 美国纽约开设自助毒品注射场所 外媒称找到马航 MH370 的具体位置，位于 4300 米左右的海底 阿里股价持续走低，蒸发了一个茅台的市值 华南理工偷姐事件  小事生活的点滴记录  最近西安的天气很好 考完了国考，感觉很难，行测 比我">
+<meta property="og:type" content="article">
+<meta property="og:title" content="生活周报-Nov-29-to-Dec-5">
+<meta property="og:url" content="https://www.blog.hackerjerry.top/%E7%94%9F%E6%B4%BB%E5%91%A8%E6%8A%A5-Nov-29-to-Dec-5/index.html">
+<meta property="og:site_name" content="M@tr1xの日常">
+<meta property="og:description" content="时讯 2022 国考过审 200 万人，实际参考人数 140 万，计划录取 3 万。 吉野家被曝食品质量问题 日本封国，因担心 O 病毒进入 世界首个活体机器人生娃 美国纽约开设自助毒品注射场所 外媒称找到马航 MH370 的具体位置，位于 4300 米左右的海底 阿里股价持续走低，蒸发了一个茅台的市值 华南理工偷姐事件  小事生活的点滴记录  最近西安的天气很好 考完了国考，感觉很难，行测 比我">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2021/jpeg/1629942/1638624149670-be918faa-dd12-4743-943c-8140bf8e3cde.jpeg#clientId=u412fb68c-ed46-4&crop=0&crop=0&crop=1&crop=1&from=drop&id=u8dfb97fd&margin=%5Bobject%20Object%5D&name=1638624127903.jpg.jpg&originHeight=994&originWidth=1000&originalType=binary%E2%88%B6=1&rotation=0&showTitle=false&size=183688&status=done&style=none&taskId=u2a58af41-2237-41c0-9899-e95f8d19f9f&title=">
+<meta property="article:published_time" content="2021-12-04T07:10:44.000Z">
+<meta property="article:modified_time" content="2022-01-18T08:24:17.992Z">
+<meta property="article:author" content="M@tr1x">
+<meta property="article:tag" content="CTF,白帽子,Pwn,Web">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://cdn.nlark.com/yuque/0/2021/jpeg/1629942/1638624149670-be918faa-dd12-4743-943c-8140bf8e3cde.jpeg#clientId=u412fb68c-ed46-4&crop=0&crop=0&crop=1&crop=1&from=drop&id=u8dfb97fd&margin=%5Bobject%20Object%5D&name=1638624127903.jpg.jpg&originHeight=994&originWidth=1000&originalType=binary%E2%88%B6=1&rotation=0&showTitle=false&size=183688&status=done&style=none&taskId=u2a58af41-2237-41c0-9899-e95f8d19f9f&title=">
+  
+  <title>生活周报-Nov-29-to-Dec-5 - M@tr1xの日常</title>
+
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4/dist/css/bootstrap.min.css" />
+
+
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/github-markdown-css@4/github-markdown.min.css" />
+  <link  rel="stylesheet" href="/lib/hint/hint.min.css" />
+
+  
+    
+    
+      
+      <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@10/styles/github-gist.min.css" />
+    
+  
+
+  
+    <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3/dist/jquery.fancybox.min.css" />
+  
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_ba1fz6golrf.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_kmeydafke9r.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+<!-- 自定义样式保持在最底部 -->
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    var CONFIG = {"hostname":"www.blog.hackerjerry.top","root":"/","version":"1.8.12","typing":{"enable":true,"typeSpeed":70,"cursorChar":"|","loop":false},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"right","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"copy_btn":true,"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":1},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname"}},"search_path":"/local-search.xml"};
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+<meta name="generator" content="Hexo 5.1.1"><link rel="alternate" href="/atom.xml" title="M@tr1xの日常" type="application/atom+xml">
+</head>
+
+
+<body>
+  <header style="height: 70vh;">
+    <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>M@tr1xの日常</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                首页
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                归档
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                分类
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                标签
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/links/">
+                <i class="iconfont icon-link-fill"></i>
+                友链
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/bangumis/">
+                <i class="fa-fw fa fa-film"></i>
+                追番
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/artalk/">
+                <i class="iconfont icon-comment"></i>
+                说说
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                关于
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              &nbsp;<i class="iconfont icon-search"></i>&nbsp;
+            </a>
+          </li>
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">&nbsp;<i
+                class="iconfont icon-dark" id="color-toggle-icon"></i>&nbsp;</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+    <div class="banner" id="banner" parallax=true
+         style="background: url('/img/default.png') no-repeat center center;
+           background-size: cover;">
+      <div class="full-bg-img">
+        <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+          <div class="page-header text-center fade-in-up">
+            <span class="h2" id="subtitle" title="生活周报-Nov-29-to-Dec-5">
+              
+            </span>
+
+            
+              <div class="mt-3">
+  
+  
+    <span class="post-meta">
+      <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+      <time datetime="2021-12-04 15:10" pubdate>
+        2021年12月4日 下午
+      </time>
+    </span>
+  
+</div>
+
+<div class="mt-1">
+  
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-chart"></i>
+      495 字
+    </span>
+  
+
+  
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-clock-fill"></i>
+      
+      
+      2 分钟
+    </span>
+  
+
+  
+  
+    
+      <!-- 不蒜子统计文章PV -->
+      <span id="busuanzi_container_page_pv" style="display: none">
+        <i class="iconfont icon-eye" aria-hidden="true"></i>
+        <span id="busuanzi_value_page_pv"></span> 次
+      </span>
+    
+  
+</div>
+
+            
+          </div>
+
+          
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    
+      
+<meta name="referrer" content="no-referrer" />
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="d-none d-lg-block col-lg-2"></div>
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div class="py-5" id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">生活周报-Nov-29-to-Dec-5</h1>
+            
+              <p class="note note-info">
+                
+                  本文最后更新于：2022年1月18日 下午
+                
+              </p>
+            
+            <div class="markdown-body">
+              <h1 id="时讯"><a href="#时讯" class="headerlink" title="时讯"></a>时讯</h1><ol>
+<li>2022 国考过审 200 万人，实际参考人数 140 万，计划录取 3 万。</li>
+<li>吉野家被曝食品质量问题</li>
+<li>日本封国，因担心 O 病毒进入</li>
+<li>世界首个活体机器人生娃</li>
+<li>美国纽约开设自助毒品注射场所</li>
+<li>外媒称找到马航 MH370 的具体位置，位于 4300 米左右的海底</li>
+<li>阿里股价持续走低，蒸发了一个茅台的市值</li>
+<li>华南理工偷姐事件</li>
+</ol>
+<h1 id="小事"><a href="#小事" class="headerlink" title="小事"></a>小事</h1><p>生活的点滴记录</p>
+<ol>
+<li>最近西安的天气很好</li>
+<li>考完了国考，感觉很难，行测 比我模拟的时候花的时间更长，蒙的题也更多</li>
+<li>一人之下第四季完结，然后我开始刷漫画，花了一晚上+一早上看了 200 章，把一人之下刷完了（到了最近更新的章节，不过我觉得纳森篇我不是很感兴趣，画的外国人我都有点分不出来了）</li>
+<li>吃了很多也没涨多少肉，可能是中午不午休的缘故，</li>
+</ol>
+<h1 id="本周收藏"><a href="#本周收藏" class="headerlink" title="本周收藏"></a>本周收藏</h1><h2 id="文章"><a href="#文章" class="headerlink" title="文章"></a>文章</h2><p>看到了哪些好文？</p>
+<ol>
+<li><a target="_blank" rel="noopener" href="https://www.zhihu.com/question/46383007/answer/2253126254">都说现在经济下行，大家收入下降，那么钱都到哪里去了？</a></li>
+<li><a target="_blank" rel="noopener" href="https://www.zhihu.com/question/20873070/answer/502820256">程序员如何优雅地使用 macOS？</a></li>
+<li><a target="_blank" rel="noopener" href="https://www.zhihu.com/question/411884459/answer/2223150151">你们有哪些极简的人生建议？</a></li>
+<li>​<a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/435467555">Python 的@装饰器是干什么用的？</a></li>
+</ol>
+<h2 id="剧集"><a href="#剧集" class="headerlink" title="剧集"></a>剧集</h2><p>追了哪些剧？</p>
+<ol>
+<li>一人之下 4–在舍友的影响下成功入坑</li>
+<li>仙王的日常生活</li>
+<li>人生一串</li>
+</ol>
+<h2 id="摘录"><a href="#摘录" class="headerlink" title="摘录"></a>摘录</h2><p>深度思考<br>最近没看啥书，不可以这样了。</p>
+<h2 id="知识"><a href="#知识" class="headerlink" title="知识"></a>知识</h2><p>又学了哪些新知识?</p>
+<ol>
+<li>公平性相关算法设计</li>
+<li>AR 的 presence</li>
+</ol>
+<h2 id="思考"><a href="#思考" class="headerlink" title="思考"></a>思考</h2><p>关于人生，关于体验<br>艺无止境，功不唐捐。<br><img src="https://cdn.nlark.com/yuque/0/2021/jpeg/1629942/1638624149670-be918faa-dd12-4743-943c-8140bf8e3cde.jpeg#clientId=u412fb68c-ed46-4&crop=0&crop=0&crop=1&crop=1&from=drop&id=u8dfb97fd&margin=%5Bobject%20Object%5D&name=1638624127903.jpg.jpg&originHeight=994&originWidth=1000&originalType=binary%E2%88%B6=1&rotation=0&showTitle=false&size=183688&status=done&style=none&taskId=u2a58af41-2237-41c0-9899-e95f8d19f9f&title=" srcset="/img/loading.gif" lazyload alt="1638624127903.jpg.jpg"></p>
+
+            </div>
+            <hr>
+            <div>
+              <div class="post-metas mb-3">
+                
+                  <div class="post-meta mr-3">
+                    <i class="iconfont icon-category"></i>
+                    
+                      <a class="hover-with-bg" href="/categories/%E5%91%A8%E6%8A%A5/">周报</a>
+                    
+                  </div>
+                
+                
+              </div>
+              
+                <p class="note note-warning">
+                  
+                    本博客所有文章除特别声明外，均采用 <a target="_blank" href="https://creativecommons.org/licenses/by-sa/4.0/deed.zh" rel="nofollow noopener noopener">CC BY-SA 4.0 协议</a> ，转载请注明出处！
+                  
+                </p>
+              
+              
+                <div class="post-prevnext">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2021-Year-end-Summary/">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">2021-Year-end-Summary</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/%E7%94%9F%E6%B4%BB%E5%91%A8%E6%8A%A5-Sep-20-to-Oct-1/">
+                        <span class="hidden-mobile">生活周报-Sep-20-to-Oct-1</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+              <!-- Comments -->
+              <article class="comments" id="comments" lazyload>
+                
+                  
+                
+                
+  <div id="valine"></div>
+  <script type="text/javascript">
+    Fluid.utils.loadComments('#valine', function() {
+      Fluid.utils.createScript('https://cdn.jsdelivr.net/npm/valine@1/dist/Valine.min.js', function() {
+        var options = Object.assign(
+          {"appId":"jApqS8Xxcc1eST53AyiAisFx-gzGzoHsz","appKey":"iyngroaUslATD8V4nOgOHowr","path":"window.location.pathname","placeholder":"说点什么呗~","avatar":"retro","meta":["nick","mail","link"],"requiredFields":["mail"],"pageSize":10,"lang":"zh-CN","highlight":false,"recordIP":false,"serverURLs":"","emojiCDN":null,"emojiMaps":null,"enableQQ":true},
+          {
+            el: "#valine",
+            path: window.location.pathname
+          }
+        )
+        new Valine(options);
+        Fluid.utils.waitElementVisible('#valine .vcontent', () => {
+          Fluid.plugins.initFancyBox('#valine .vcontent img:not(.vemoji)');
+        })
+      });
+    });
+  </script>
+  <noscript>Please enable JavaScript to view the comments</noscript>
+
+
+              </article>
+            
+          </article>
+        </div>
+      </div>
+    </div>
+    
+      <div class="d-none d-lg-block col-lg-2 toc-container" id="toc-ctn">
+        <div id="toc">
+  <p class="toc-header"><i class="iconfont icon-list"></i>&nbsp;目录</p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+      </div>
+    
+  </div>
+</div>
+
+<!-- Custom -->
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v"
+                 for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+
+    
+  </main>
+
+  <footer class="text-center mt-5 py-3">
+  <div class="footer-content">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" integrity="sha512-SfTiTlX6kk+qitfevl/7LibUOeJWlt9rbyDn92a1DqWOw9vWG2MFoays0sgObmWazO5BQPiFucnnEAjpAB+/Sw==" crossorigin="anonymous" referrerpolicy="no-referrer">
+     <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+  </div>
+  
+  <div class="statistics">
+    
+    
+
+    
+      
+        <!-- 不蒜子统计PV -->
+        <span id="busuanzi_container_site_pv" style="display: none">
+            总访问量 
+            <span id="busuanzi_value_site_pv"></span>
+             次
+          </span>
+      
+      
+        <!-- 不蒜子统计UV -->
+        <span id="busuanzi_container_site_uv" style="display: none">
+            总访客数 
+            <span id="busuanzi_value_site_uv"></span>
+             人
+          </span>
+      
+    
+  </div>
+
+
+  
+  <!-- 备案信息 -->
+  <div class="beian">
+    <span>
+      <a href="http://beian.miit.gov.cn/" target="_blank" rel="nofollow noopener">
+        陕ICP备19023179号
+      </a>
+    </span>
+    
+  </div>
+
+
+  <div class="cdn"><a href="https://www.upyun.com/?utm_source=lianmeng&amp;utm_medium=referral" target="_blank"><img width="70px" class="entered loading" src="/img/upyun.png" srcset="/img/loading.gif" lazyload data-ll-status="loading"><span></span></a></div>
+  
+</footer>
+
+
+  <!-- SCRIPTS -->
+  
+  <script  src="https://cdn.jsdelivr.net/npm/nprogress@0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/nprogress@0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://cdn.jsdelivr.net/npm/jquery@3/dist/jquery.min.js" ></script>
+<script  src="https://cdn.jsdelivr.net/npm/bootstrap@4/dist/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+<!-- Plugins -->
+
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+  
+
+
+
+  
+    <script  src="https://cdn.jsdelivr.net/npm/tocbot@4/dist/tocbot.min.js" ></script>
+  
+  
+    <script  src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3/dist/jquery.fancybox.min.js" ></script>
+  
+  
+    <script  src="https://cdn.jsdelivr.net/npm/anchor-js@4/anchor.min.js" ></script>
+  
+  
+    <script defer src="https://cdn.jsdelivr.net/npm/clipboard@2/dist/clipboard.min.js" ></script>
+  
+
+
+
+  <script defer src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" ></script>
+
+
+
+
+  <script  src="https://cdn.jsdelivr.net/npm/typed.js@2/lib/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var title = document.getElementById('subtitle').title;
+      
+      typing(title)
+      
+    })(window, document);
+  </script>
+
+
+
+
+
+  
+
+  
+    <!-- MathJax -->
+    <script>
+      MathJax = {
+        tex: {
+          inlineMath: [['$', '$'], ['\\(', '\\)']]
+        },
+        loader: {
+          load: ['ui/lazy']
+        },
+        options: {
+          renderActions: {
+            findScript: [10, doc => {
+              document.querySelectorAll('script[type^="math/tex"]').forEach(node => {
+                const display = !!node.type.match(/; *mode=display/);
+                const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display);
+                const text = document.createTextNode('');
+                node.parentNode.replaceChild(text, node);
+                math.start = { node: text, delim: '', n: 0 };
+                math.end = { node: text, delim: '', n: 0 };
+                doc.math.push(math);
+              });
+            }, '', false],
+            insertedScript: [200, () => {
+              document.querySelectorAll('mjx-container').forEach(node => {
+                let target = node.parentNode;
+                if (target.nodeName.toLowerCase() === 'li') {
+                  target.parentNode.classList.add('has-jax');
+                }
+              });
+            }, '', false]
+          }
+        }
+      };
+    </script>
+
+    <script async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js" ></script>
+
+  
+
+
+
+
+
+
+
+
+
+
+
+<!-- 主题的启动项 保持在最底部 -->
+<script  src="/js/boot.js" ></script>
+
+
+</body>
+</html>
