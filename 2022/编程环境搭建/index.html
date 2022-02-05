@@ -1,0 +1,763 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/favicon.png">
+  <link rel="icon" href="/img/favicon.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="description" content="一个菜鸡白帽子的小站">
+  <meta name="author" content="M@tr1x">
+  <meta name="keywords" content="CTF,白帽子,Pwn,Web">
+  <meta name="description" content="写在前面，本文主要基于https:&#x2F;&#x2F;f5soft.site&#x2F;zh&#x2F;notes&#x2F;2021&#x2F;0214&#x2F; 一文写成，用于记录安装过程中遇到的各种问题，便于日后快速复盘。 安装 python通过 Homebrew 安装 python3.9。系统自带 python2.7 和 python3.8.9,这个作者说安装一下原生支持 arm 的 python,于是我就安装了。通过 1brew install py">
+<meta property="og:type" content="article">
+<meta property="og:title" content="编程环境搭建">
+<meta property="og:url" content="https://www.blog.hackerjerry.top/2022/%E7%BC%96%E7%A8%8B%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA/index.html">
+<meta property="og:site_name" content="M@tr1xの日常">
+<meta property="og:description" content="写在前面，本文主要基于https:&#x2F;&#x2F;f5soft.site&#x2F;zh&#x2F;notes&#x2F;2021&#x2F;0214&#x2F; 一文写成，用于记录安装过程中遇到的各种问题，便于日后快速复盘。 安装 python通过 Homebrew 安装 python3.9。系统自带 python2.7 和 python3.8.9,这个作者说安装一下原生支持 arm 的 python,于是我就安装了。通过 1brew install py">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2022/png/1629942/1644062541079-c7a63b17-c596-481e-89fc-2e78de862d95.png#crop=0&crop=0&crop=1&crop=1&id=pUMSX&originHeight=674&originWidth=1434&originalType=binary%E2%88%B6=1&rotation=0&showTitle=false&status=done&style=none&title=">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2022/png/1629942/1644062541291-32f78767-b268-40cb-a8a3-7ee831486c64.png#crop=0&crop=0&crop=1&crop=1&id=MRnLV&originHeight=852&originWidth=1698&originalType=binary%E2%88%B6=1&rotation=0&showTitle=false&status=done&style=none&title=">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2022/png/1629942/1644062541453-80d31bf3-847b-4ebb-ad3e-5e2ae156ff6d.png#crop=0&crop=0&crop=1&crop=1&id=Lp3x7&originHeight=424&originWidth=1708&originalType=binary%E2%88%B6=1&rotation=0&showTitle=false&status=done&style=none&title=">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2022/png/1629942/1644062541562-605a738a-5482-4757-8967-9478682d10c7.png#crop=0&crop=0&crop=1&crop=1&id=G6Syu&originHeight=322&originWidth=1302&originalType=binary%E2%88%B6=1&rotation=0&showTitle=false&status=done&style=none&title=">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2022/png/1629942/1644062541663-f6cc2982-a295-408a-88f3-6136dc8faa70.png#crop=0&crop=0&crop=1&crop=1&id=cFViy&originHeight=1436&originWidth=2198&originalType=binary%E2%88%B6=1&rotation=0&showTitle=false&status=done&style=none&title=">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2022/png/1629942/1644062541913-5319b75a-dff9-46f5-9dd2-9e36c75d4c9d.png#crop=0&crop=0&crop=1&crop=1&id=gh3sH&originHeight=1266&originWidth=2000&originalType=binary%E2%88%B6=1&rotation=0&showTitle=false&status=done&style=none&title=">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2022/png/1629942/1644062542072-624b1beb-a718-460e-a69a-c5cff8ab8be2.png#crop=0&crop=0&crop=1&crop=1&id=rrLvh&originHeight=738&originWidth=1862&originalType=binary%E2%88%B6=1&rotation=0&showTitle=false&status=done&style=none&title=">
+<meta property="article:published_time" content="2022-02-05T12:02:22.000Z">
+<meta property="article:modified_time" content="2022-02-05T12:22:49.135Z">
+<meta property="article:author" content="M@tr1x">
+<meta property="article:tag" content="踩坑教程">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://cdn.nlark.com/yuque/0/2022/png/1629942/1644062541079-c7a63b17-c596-481e-89fc-2e78de862d95.png#crop=0&crop=0&crop=1&crop=1&id=pUMSX&originHeight=674&originWidth=1434&originalType=binary%E2%88%B6=1&rotation=0&showTitle=false&status=done&style=none&title=">
+  
+  <title>编程环境搭建 - M@tr1xの日常</title>
+
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4/dist/css/bootstrap.min.css" />
+
+
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/github-markdown-css@4/github-markdown.min.css" />
+  <link  rel="stylesheet" href="/lib/hint/hint.min.css" />
+
+  
+    
+    
+      
+      <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@10/styles/github-gist.min.css" />
+    
+  
+
+  
+    <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3/dist/jquery.fancybox.min.css" />
+  
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_ba1fz6golrf.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_kmeydafke9r.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+<!-- 自定义样式保持在最底部 -->
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    var CONFIG = {"hostname":"www.blog.hackerjerry.top","root":"/","version":"1.8.12","typing":{"enable":true,"typeSpeed":70,"cursorChar":"|","loop":false},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"right","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"copy_btn":true,"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":1},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname"}},"search_path":"/local-search.xml"};
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+<meta name="generator" content="Hexo 5.1.1"><link rel="alternate" href="/atom.xml" title="M@tr1xの日常" type="application/atom+xml">
+</head>
+
+
+<body>
+  <header style="height: 70vh;">
+    <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>M@tr1xの日常</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                首页
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                归档
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                分类
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                标签
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/links/">
+                <i class="iconfont icon-link-fill"></i>
+                友链
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/bangumis/">
+                <i class="fa-fw fa fa-film"></i>
+                追番
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/artalk/">
+                <i class="iconfont icon-comment"></i>
+                说说
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                关于
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              &nbsp;<i class="iconfont icon-search"></i>&nbsp;
+            </a>
+          </li>
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">&nbsp;<i
+                class="iconfont icon-dark" id="color-toggle-icon"></i>&nbsp;</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+    <div class="banner" id="banner" parallax=true
+         style="background: url('/img/default.png') no-repeat center center;
+           background-size: cover;">
+      <div class="full-bg-img">
+        <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+          <div class="page-header text-center fade-in-up">
+            <span class="h2" id="subtitle" title="编程环境搭建">
+              
+            </span>
+
+            
+              <div class="mt-3">
+  
+  
+    <span class="post-meta">
+      <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+      <time datetime="2022-02-05 20:02" pubdate>
+        2022年2月5日 晚上
+      </time>
+    </span>
+  
+</div>
+
+<div class="mt-1">
+  
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-chart"></i>
+      8.8k 字
+    </span>
+  
+
+  
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-clock-fill"></i>
+      
+      
+      28 分钟
+    </span>
+  
+
+  
+  
+    
+      <!-- 不蒜子统计文章PV -->
+      <span id="busuanzi_container_page_pv" style="display: none">
+        <i class="iconfont icon-eye" aria-hidden="true"></i>
+        <span id="busuanzi_value_page_pv"></span> 次
+      </span>
+    
+  
+</div>
+
+            
+          </div>
+
+          
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    
+      
+<meta name="referrer" content="no-referrer" />
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="d-none d-lg-block col-lg-2"></div>
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div class="py-5" id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">编程环境搭建</h1>
+            
+              <p class="note note-info">
+                
+                  本文最后更新于：2022年2月5日 晚上
+                
+              </p>
+            
+            <div class="markdown-body">
+              <p>写在前面，本文主要基于<a target="_blank" rel="noopener" href="https://f5soft.site/zh/notes/2021/0214/">https://f5soft.site/zh/notes/2021/0214/</a> 一文写成，用于记录安装过程中遇到的各种问题，便于日后快速复盘。</p>
+<h1 id="安装-python"><a href="#安装-python" class="headerlink" title="安装 python"></a>安装 python</h1><p>通过 Homebrew 安装 python3.9。<br>系统自带 python2.7 和 python3.8.9,这个作者说安装一下原生支持 arm 的 python,于是我就安装了。<br>通过</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs Bash">brew install python3<br></code></pre></td></tr></table></figure>
+
+<p>即可安装 arm 版本的 3.9.1，其路径在<code>/opt/homebrew/bin/python3</code>。<br><img src="https://cdn.nlark.com/yuque/0/2022/png/1629942/1644062541079-c7a63b17-c596-481e-89fc-2e78de862d95.png#crop=0&crop=0&crop=1&crop=1&id=pUMSX&originHeight=674&originWidth=1434&originalType=binary%E2%88%B6=1&rotation=0&showTitle=false&status=done&style=none&title=" srcset="/img/loading.gif" lazyload><br>安装好之后，需要通过<code>pip3</code>安装一些基本的第三方库。由于这里是 macos-arm64 平台，因此很多库都没有来得及提供该平台的 wheel，导致很多库都需要通过手动编译安装，而且编译过程往往出错。下面是常用库的 arm 版本的安装方法整理：</p>
+<table>
+<thead>
+<tr>
+<th>库名称</th>
+<th>pip3 install 是否需要编译，编译是否成功</th>
+<th>安装方法</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>numpy</td>
+<td>需要编译，安装成功</td>
+<td></td>
+</tr>
+<tr>
+<td>scipy</td>
+<td>不知道是不是高铁上网不好，pip 失败</td>
+<td>brew install scipy</td>
+</tr>
+<tr>
+<td>matplotlib</td>
+<td>需要编译，安装成功</td>
+<td></td>
+</tr>
+<tr>
+<td>pandas</td>
+<td>成功</td>
+<td></td>
+</tr>
+<tr>
+<td>sympy</td>
+<td>成功</td>
+<td></td>
+</tr>
+<tr>
+<td>cv2</td>
+<td>无相应轮子</td>
+<td>brew install opencv (花了巨长时间下载）python 里面 import cv2 即可验证</td>
+</tr>
+<tr>
+<td>pycrypto</td>
+<td>编译成功</td>
+<td></td>
+</tr>
+<tr>
+<td>requests</td>
+<td>编译成功</td>
+<td></td>
+</tr>
+<tr>
+<td>jupyter</td>
+<td>编译成功</td>
+<td></td>
+</tr>
+<tr>
+<td>scapy</td>
+<td>编译成功</td>
+<td></td>
+</tr>
+<tr>
+<td>regex</td>
+<td>直接安装</td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+</tbody></table>
+<p>首先是 numpy，我一开始使用</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs Bash">matr1x@matr1xdeMacBook-Air ~ % pip3 install numpy<br></code></pre></td></tr></table></figure>
+
+<p>调用的是系统自带的 python3.8 的 pip3，然后它被安装在了<br><img src="https://cdn.nlark.com/yuque/0/2022/png/1629942/1644062541291-32f78767-b268-40cb-a8a3-7ee831486c64.png#crop=0&crop=0&crop=1&crop=1&id=MRnLV&originHeight=852&originWidth=1698&originalType=binary%E2%88%B6=1&rotation=0&showTitle=false&status=done&style=none&title=" srcset="/img/loading.gif" lazyload><br>然后，我发现其实 brew 下也是有 pip3 和 pip3.9 的，应该是 pip3 的顺序系统的比较靠前，然后我使用了</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs Bash">matr1x@matr1xdeMacBook-Air ~ % <span class="hljs-built_in">echo</span> <span class="hljs-string">&#x27;eval &quot;$(/opt/homebrew/bin/brew shellenv)&quot;&#x27;</span> &gt;&gt; ~/.zprofile<br>matr1x@matr1xdeMacBook-Air ~ % <span class="hljs-built_in">eval</span> <span class="hljs-string">&quot;<span class="hljs-subst">$(/opt/homebrew/bin/brew shellenv)</span>&quot;</span><br></code></pre></td></tr></table></figure>
+
+<p>此时发现</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs Bash">matr1x@matr1xdeMacBook-Air ~ % <span class="hljs-built_in">which</span> pip3<br>/opt/homebrew/bin/pip3<br></code></pre></td></tr></table></figure>
+
+<p>再次运行<br><img src="https://cdn.nlark.com/yuque/0/2022/png/1629942/1644062541453-80d31bf3-847b-4ebb-ad3e-5e2ae156ff6d.png#crop=0&crop=0&crop=1&crop=1&id=Lp3x7&originHeight=424&originWidth=1708&originalType=binary%E2%88%B6=1&rotation=0&showTitle=false&status=done&style=none&title=" srcset="/img/loading.gif" lazyload><br>此时查看路径<br><img src="https://cdn.nlark.com/yuque/0/2022/png/1629942/1644062541562-605a738a-5482-4757-8967-9478682d10c7.png#crop=0&crop=0&crop=1&crop=1&id=G6Syu&originHeight=322&originWidth=1302&originalType=binary%E2%88%B6=1&rotation=0&showTitle=false&status=done&style=none&title=" srcset="/img/loading.gif" lazyload></p>
+<h1 id="安装-conda"><a href="#安装-conda" class="headerlink" title="安装 conda"></a>安装 conda</h1><p>由于 Anaconda 没有支持 arm，但是 miniforge 已经支持。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs Bash">brew install --cask miniforge<br></code></pre></td></tr></table></figure>
+
+<p>自动链接，查看结果</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br></pre></td><td class="code"><pre><code class="hljs Bash">matr1x@matr1xdeMacBook-Air ~ % conda list<br><span class="hljs-comment"># packages in environment at /opt/homebrew/Caskroom/miniforge/base:</span><br><span class="hljs-comment">#</span><br><span class="hljs-comment"># Name                    Version                   Build  Channel</span><br>brotlipy                  0.7.0           py39h5161555_1003    conda-forge<br>ca-certificates           2021.10.8            h4653dfc_0    conda-forge<br>certifi                   2021.10.8        py39h2804cbe_1    conda-forge<br>cffi                      1.15.0           py39h52b1de0_0    conda-forge<br>charset-normalizer        2.0.9              pyhd8ed1ab_0    conda-forge<br>colorama                  0.4.4              pyh9f0ad1d_0    conda-forge<br>conda                     4.11.0           py39h2804cbe_0    conda-forge<br>conda-package-handling    1.7.3            py39h5161555_1    conda-forge<br>cryptography              36.0.0           py39hfb8cd70_0    conda-forge<br>idna                      3.1                pyhd3deb0d_0    conda-forge<br>libffi                    3.4.2                h3422bc3_5    conda-forge<br>libzlib                   1.2.11            hee7b306_1013    conda-forge<br>ncurses                   6.2                  h9aa5885_4    conda-forge<br>openssl                   1.1.1l               h3422bc3_0    conda-forge<br>pip                       21.3.1             pyhd8ed1ab_0    conda-forge<br>pycosat                   0.6.3           py39h5161555_1009    conda-forge<br>pycparser                 2.21               pyhd8ed1ab_0    conda-forge<br>pyopenssl                 21.0.0             pyhd8ed1ab_0    conda-forge<br>pysocks                   1.7.1            py39h2804cbe_4    conda-forge<br>python                    3.9.7           h54d631c_3_cpython    conda-forge<br>python_abi                3.9                      2_cp39    conda-forge<br>readline                  8.1                  hedafd6a_0    conda-forge<br>requests                  2.26.0             pyhd8ed1ab_1    conda-forge<br>ruamel_yaml               0.15.80         py39h5161555_1006    conda-forge<br>setuptools                59.4.0           py39h2804cbe_0    conda-forge<br>six                       1.16.0             pyh6c4a22f_0    conda-forge<br>sqlite                    3.37.0               h72a2b83_0    conda-forge<br>tk                        8.6.11               he1e0b03_1    conda-forge<br>tqdm                      4.62.3             pyhd8ed1ab_0    conda-forge<br>tzdata                    2021e                he74cb21_0    conda-forge<br>urllib3                   1.26.7             pyhd8ed1ab_0    conda-forge<br>wheel                     0.37.0             pyhd8ed1ab_1    conda-forge<br>xz                        5.2.5                h642e427_1    conda-forge<br>yaml                      0.2.5                h642e427_0    conda-forge<br>zlib                      1.2.11            hee7b306_1013    conda-forge<br></code></pre></td></tr></table></figure>
+
+<p>可以看到和 pip3 的相比少了很多库。暂时没找到相应的简单方法，只能创建虚拟环境的时候再下一遍了。</p>
+<h1 id="安装-tensorflow2-4"><a href="#安装-tensorflow2-4" class="headerlink" title="安装 tensorflow2.4"></a>安装 tensorflow2.4</h1><p>亲测有效，但无法调用 GPU。<br><a target="_blank" rel="noopener" href="https://_www.cnblogs.com_practitioners_p_15514567/">https://www.cnblogs.com/practitioners/p/15514567.html</a><br>先创建 yml，注意，用 vscode 创建。（系统自带的文本编辑器只能导出 trf 格式的文件，很离谱）</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><code class="hljs Bash">name: apple_tensorflow<br>  channels:<br>    - conda-forge<br>    - nodefaults<br>  dependencies:<br>    - grpcio<br>    - h5py<br>    - ipython<br>    - numpy<br>    - pip=20.2.4<br>    - python=3.8<br>    - scipy<br>    - termcolor<br>    - typeguard<br>    - wheel<br>    - absl-py<br>    - astunparse<br>    - python-flatbuffers<br>    - gast<br>    - google-pasta<br>    - keras-preprocessing<br>    - opt_einsum<br>    - protobuf<br>    - tensorboard<br>    - tensorflow-estimator<br>    - termcolor<br>    - typing_extensions<br>    - wrapt<br></code></pre></td></tr></table></figure>
+
+<p>然后</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs Bash">conda env create --file=/Users/matr1x/Documents/env.yml  --name=tensorflow<br></code></pre></td></tr></table></figure>
+
+<p>之后激活并安装</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs Bash">(base) matr1x@matr1xdeMacBook-Air ~ % conda activate tensorflow<br>(tensorflow) matr1x@matr1xdeMacBook-Air ~ % pip install --upgrade --force --no-dependencies https://github.com/apple/tensorflow_macos/releases/download/v0.1alpha3/tensorflow_macos-0.1a3-cp38-cp38-macosx_11_0_arm64.whl https://github.com/apple/tensorflow_macos/releases/download/v0.1alpha3/tensorflow_addons_macos-0.1a3-cp38-cp38-macosx_11_0_arm64.whl<br></code></pre></td></tr></table></figure>
+
+<p>测试</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br></pre></td><td class="code"><pre><code class="hljs Python">(tensorflow) matr1x@matr1xdeMacBook-Air ~ % python<br>Python <span class="hljs-number">3.8</span><span class="hljs-number">.12</span> | packaged by conda-forge | (default, Oct <span class="hljs-number">12</span> <span class="hljs-number">2021</span>, <span class="hljs-number">21</span>:<span class="hljs-number">21</span>:<span class="hljs-number">17</span>)<br>[Clang <span class="hljs-number">11.1</span><span class="hljs-number">.0</span> ] on darwin<br>Type <span class="hljs-string">&quot;help&quot;</span>, <span class="hljs-string">&quot;copyright&quot;</span>, <span class="hljs-string">&quot;credits&quot;</span> <span class="hljs-keyword">or</span> <span class="hljs-string">&quot;license&quot;</span> <span class="hljs-keyword">for</span> more information.<br><span class="hljs-meta">&gt;&gt;&gt; </span><span class="hljs-keyword">import</span> tensorflow <span class="hljs-keyword">as</span> tf<br><span class="hljs-meta">&gt;&gt;&gt; </span>print(tf.__version__)<br><span class="hljs-number">2.4</span><span class="hljs-number">.0</span>-rc0<br><span class="hljs-meta">&gt;&gt;&gt; </span><span class="hljs-keyword">from</span> tensorflow.keras <span class="hljs-keyword">import</span> layers<br><span class="hljs-meta">&gt;&gt;&gt; </span><span class="hljs-keyword">from</span> tensorflow.keras <span class="hljs-keyword">import</span> models<br><span class="hljs-meta">&gt;&gt;&gt; </span>model = models.Sequential()<br><span class="hljs-meta">&gt;&gt;&gt; </span>model.add(layers.Conv2D(<span class="hljs-number">32</span>, (<span class="hljs-number">3</span>, <span class="hljs-number">3</span>), activation=<span class="hljs-string">&#x27;relu&#x27;</span>, input_shape=(<span class="hljs-number">28</span>, <span class="hljs-number">28</span>, <span class="hljs-number">1</span>)))<br><span class="hljs-meta">&gt;&gt;&gt; </span>model.add(layers.MaxPooling2D((<span class="hljs-number">2</span>, <span class="hljs-number">2</span>)))<br><span class="hljs-meta">&gt;&gt;&gt; </span>model.add(layers.Conv2D(<span class="hljs-number">64</span>, (<span class="hljs-number">3</span>, <span class="hljs-number">3</span>), activation=<span class="hljs-string">&#x27;relu&#x27;</span>))<br><span class="hljs-meta">&gt;&gt;&gt; </span>model.add(layers.MaxPooling2D((<span class="hljs-number">2</span>, <span class="hljs-number">2</span>)))<br><span class="hljs-meta">&gt;&gt;&gt; </span>model.add(layers.Conv2D(<span class="hljs-number">64</span>, (<span class="hljs-number">3</span>, <span class="hljs-number">3</span>), activation=<span class="hljs-string">&#x27;relu&#x27;</span>))<br><span class="hljs-meta">&gt;&gt;&gt; </span>model.add(layers.Flatten())<br><span class="hljs-meta">&gt;&gt;&gt; </span>model.add(layers.Dense(<span class="hljs-number">64</span>, activation=<span class="hljs-string">&#x27;relu&#x27;</span>))<br><span class="hljs-meta">&gt;&gt;&gt; </span>model.add(layers.Dense(<span class="hljs-number">10</span>, activation=<span class="hljs-string">&#x27;softmax&#x27;</span>))<br><span class="hljs-meta">&gt;&gt;&gt; </span>model.summary()<br>Model: <span class="hljs-string">&quot;sequential&quot;</span><br>_________________________________________________________________<br>Layer (type)                 Output Shape              Param <span class="hljs-comment">#</span><br>=================================================================<br>conv2d (Conv2D)              (<span class="hljs-literal">None</span>, <span class="hljs-number">26</span>, <span class="hljs-number">26</span>, <span class="hljs-number">32</span>)        <span class="hljs-number">320</span><br>_________________________________________________________________<br>max_pooling2d (MaxPooling2D) (<span class="hljs-literal">None</span>, <span class="hljs-number">13</span>, <span class="hljs-number">13</span>, <span class="hljs-number">32</span>)        <span class="hljs-number">0</span><br>_________________________________________________________________<br>conv2d_1 (Conv2D)            (<span class="hljs-literal">None</span>, <span class="hljs-number">11</span>, <span class="hljs-number">11</span>, <span class="hljs-number">64</span>)        <span class="hljs-number">18496</span><br>_________________________________________________________________<br>max_pooling2d_1 (MaxPooling2 (<span class="hljs-literal">None</span>, <span class="hljs-number">5</span>, <span class="hljs-number">5</span>, <span class="hljs-number">64</span>)          <span class="hljs-number">0</span><br>_________________________________________________________________<br>conv2d_2 (Conv2D)            (<span class="hljs-literal">None</span>, <span class="hljs-number">3</span>, <span class="hljs-number">3</span>, <span class="hljs-number">64</span>)          <span class="hljs-number">36928</span><br>_________________________________________________________________<br>flatten (Flatten)            (<span class="hljs-literal">None</span>, <span class="hljs-number">576</span>)               <span class="hljs-number">0</span><br>_________________________________________________________________<br>dense (Dense)                (<span class="hljs-literal">None</span>, <span class="hljs-number">64</span>)                <span class="hljs-number">36928</span><br>_________________________________________________________________<br>dense_1 (Dense)              (<span class="hljs-literal">None</span>, <span class="hljs-number">10</span>)                <span class="hljs-number">650</span><br>=================================================================<br>Total params: <span class="hljs-number">93</span>,<span class="hljs-number">322</span><br>Trainable params: <span class="hljs-number">93</span>,<span class="hljs-number">322</span><br>Non-trainable params: <span class="hljs-number">0</span><br>_________________________________________________________________<br><span class="hljs-meta">&gt;&gt;&gt; </span><span class="hljs-keyword">from</span> tensorflow.keras.datasets <span class="hljs-keyword">import</span> mnist<br><span class="hljs-meta">&gt;&gt;&gt; </span><span class="hljs-keyword">from</span> tensorflow.keras.utils <span class="hljs-keyword">import</span> to_categorical<br><span class="hljs-meta">&gt;&gt;&gt; </span>(train_images, train_labels), (test_images, test_labels) = mnist.load_data()<br><span class="hljs-meta">&gt;&gt;&gt; </span>train_images = train_images.reshape((<span class="hljs-number">60000</span>, <span class="hljs-number">28</span>, <span class="hljs-number">28</span>, <span class="hljs-number">1</span>))<br><span class="hljs-meta">&gt;&gt;&gt; </span>train_images = train_images.astype(<span class="hljs-string">&#x27;float32&#x27;</span>) / <span class="hljs-number">255</span><br><span class="hljs-meta">&gt;&gt;&gt; </span>test_images = test_images.reshape((<span class="hljs-number">10000</span>, <span class="hljs-number">28</span>, <span class="hljs-number">28</span>, <span class="hljs-number">1</span>))<br><span class="hljs-meta">&gt;&gt;&gt; </span>test_images = test_images.astype(<span class="hljs-string">&#x27;float32&#x27;</span>) / <span class="hljs-number">255</span><br><span class="hljs-meta">&gt;&gt;&gt; </span>train_labels = to_categorical(train_labels)<br><span class="hljs-meta">&gt;&gt;&gt; </span>test_labels = to_categorical(test_labels)<br><span class="hljs-meta">&gt;&gt;&gt; </span>model.compile(optimizer=<span class="hljs-string">&#x27;rmsprop&#x27;</span>,<br><span class="hljs-meta">... </span>              loss=<span class="hljs-string">&#x27;categorical_crossentropy&#x27;</span>,<br><span class="hljs-meta">... </span>              metrics=[<span class="hljs-string">&#x27;accuracy&#x27;</span>])<br><span class="hljs-meta">&gt;&gt;&gt; </span>model.fit(train_images, train_labels, epochs=<span class="hljs-number">5</span>, batch_size=<span class="hljs-number">64</span>)<br></code></pre></td></tr></table></figure>
+
+<p><img src="https://cdn.nlark.com/yuque/0/2022/png/1629942/1644062541663-f6cc2982-a295-408a-88f3-6136dc8faa70.png#crop=0&crop=0&crop=1&crop=1&id=cFViy&originHeight=1436&originWidth=2198&originalType=binary%E2%88%B6=1&rotation=0&showTitle=false&status=done&style=none&title=" srcset="/img/loading.gif" lazyload><br>模型是训练出来了，但是不能调用 gpu。<br><a target="_blank" rel="noopener" href="https://www.jianshu.com/p/0b5342f4af95">https://www.jianshu.com/p/0b5342f4af95</a> 这篇文章也提到了，不过说 tf2.5 可以调用 gpu，我先不管了，这个能用就行。<br>而关于 2.5 的 tf，可以查看<a target="_blank" rel="noopener" href="https://makeoptim.com/deep-learning/tensorflow-metal">https://makeoptim.com/deep-learning/tensorflow-metal</a><br>and <a target="_blank" rel="noopener" href="https://_www.icode9.com_content-4-1210377/">https://www.icode9.com/content-4-1210377.html</a><br>不过得升级到 mac os 12+</p>
+<h1 id="安装-java"><a href="#安装-java" class="headerlink" title="安装 java"></a>安装 java</h1><p>首先退出 conda 环境</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs Bash">conda deactivate<br></code></pre></td></tr></table></figure>
+
+<p>可在官网下载全部的 JDK8 ～ JDK16 的 macos-arm64 版本的 JDK。<br><a target="_blank" rel="noopener" href="https://www.azul.com/downloads/zulu-community/?package=jdk">https://www.azul.com/downloads/zulu-community/?package=jdk</a></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><code class="hljs Bash">(base) matr1x@matr1xdeMacBook-Air ~ % <span class="hljs-built_in">which</span> java<br>/usr/bin/java<br>(base) matr1x@matr1xdeMacBook-Air ~ % file /usr/bin/java<br>/usr/bin/java: Mach-O universal binary with 2 architectures: [x86_64:Mach-O 64-bit executable x86_64] [arm64e:Mach-O 64-bit executable arm64e]<br>/usr/bin/java (<span class="hljs-keyword">for</span> architecture x86_64):  Mach-O 64-bit executable x86_64<br>/usr/bin/java (<span class="hljs-keyword">for</span> architecture arm64e):  Mach-O 64-bit executable arm64e<br>(base) matr1x@matr1xdeMacBook-Air ~ % file /usr/bin/javac<br>/usr/bin/javac: Mach-O universal binary with 2 architectures: [x86_64:Mach-O 64-bit executable x86_64] [arm64e:Mach-O 64-bit executable arm64e]<br>/usr/bin/javac (<span class="hljs-keyword">for</span> architecture x86_64):  Mach-O 64-bit executable x86_64<br>/usr/bin/javac (<span class="hljs-keyword">for</span> architecture arm64e):  Mach-O 64-bit executable arm64e<br></code></pre></td></tr></table></figure>
+
+<p>下载后安装即可。</p>
+<h1 id="安装-nodejs"><a href="#安装-nodejs" class="headerlink" title="安装 nodejs"></a>安装 nodejs</h1><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs Bash">brew install node<br>(base) matr1x@matr1xdeMacBook-Air ~ % node -v<br>v17.4.0<br></code></pre></td></tr></table></figure>
+
+<h1 id="安装-PHP"><a href="#安装-PHP" class="headerlink" title="安装 PHP"></a>安装 PHP</h1><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs Bash">brew install php<br></code></pre></td></tr></table></figure>
+
+<h1 id="Terminal-美化"><a href="#Terminal-美化" class="headerlink" title="Terminal 美化"></a>Terminal 美化</h1><p>非常简单。 1.下载字体，安装，并将终端字体改为它。</p>
+<ul>
+<li><a href="%5Bhttps://github.com/romkatv/powerlevel10k-media/raw/master/MesloLGS%5D(https://github.com/romkatv/powerlevel10k-media/raw/master/MesloLGS">MesloLGS NF Regular.ttf</a> NF Regular.ttf)</li>
+<li><a href="%5Bhttps://github.com/romkatv/powerlevel10k-media/raw/master/MesloLGS%5D(https://github.com/romkatv/powerlevel10k-media/raw/master/MesloLGS">MesloLGS NF Bold.ttf</a> NF Bold.ttf)</li>
+</ul>
+<ol start="2">
+<li>brew install romkatv/powerlevel10k/powerlevel10k</li>
+<li>echo “source $(brew –prefix)/opt/powerlevel10k/powerlevel10k.zsh-theme” &gt;&gt;~/.zshrc</li>
+<li>p10k configure</li>
+</ol>
+<p><img src="https://cdn.nlark.com/yuque/0/2022/png/1629942/1644062541913-5319b75a-dff9-46f5-9dd2-9e36c75d4c9d.png#crop=0&crop=0&crop=1&crop=1&id=gh3sH&originHeight=1266&originWidth=2000&originalType=binary%E2%88%B6=1&rotation=0&showTitle=false&status=done&style=none&title=" srcset="/img/loading.gif" lazyload></p>
+<h1 id="安装-oh-my-zsh"><a href="#安装-oh-my-zsh" class="headerlink" title="安装 oh-my-zsh"></a>安装 oh-my-zsh</h1><p>上网搜一下官网，找到命令，安装即可。</p>
+<blockquote>
+<p>由于被墙，因此推荐国内镜像安装。</p>
+</blockquote>
+<p><a target="_blank" rel="noopener" href="https://blog.csdn.net/qq_39530754/article/details/104714976">https://blog.csdn.net/qq_39530754/article/details/104714976</a><br>重新安装主题：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs Git">git clone --depth&#x3D;1 https:&#x2F;&#x2F;gitee.com&#x2F;romkatv&#x2F;powerlevel10k.git $&#123;ZSH_CUSTOM:-$HOME&#x2F;.oh-my-zsh&#x2F;custom&#125;&#x2F;themes&#x2F;powerlevel10k<br></code></pre></td></tr></table></figure>
+
+<p>配置</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs Git">vim ~.&#x2F;zshrc<br>修改<br>ZSH_THEME&#x3D;&quot;powerlevel10k&#x2F;powerlevel10k&quot;<br></code></pre></td></tr></table></figure>
+
+<h2 id="安装插件"><a href="#安装插件" class="headerlink" title="安装插件"></a>安装插件</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs Git">git clone https:&#x2F;&#x2F;github.com&#x2F;zsh-users&#x2F;zsh-autosuggestions $&#123;ZSH_CUSTOM:-~&#x2F;.oh-my-zsh&#x2F;custom&#125;&#x2F;plugins&#x2F;zsh-autosuggestions<br>git clone https:&#x2F;&#x2F;github.com&#x2F;zsh-users&#x2F;zsh-syntax-highlighting $&#123;ZSH_CUSTOM:-~&#x2F;.oh-my-zsh&#x2F;custom&#125;&#x2F;plugins&#x2F;zsh-syntax-highlighting<br></code></pre></td></tr></table></figure>
+
+<p>如果暂时无法 clone，将网址替换成镜像地址再次尝试。</p>
+<ul>
+<li><a href="https://link.zhihu.com/?target=https://github.com.cnpmjs.org">github.com.cnpmjs.org</a></li>
+<li><a href="https://link.zhihu.com/?target=https://hub.fastgit.org">https://hub.fastgit.org</a><blockquote>
+<p>GitHub raw 域名并非 <a href="https://link.zhihu.com/?target=http://github.com">http://github.com</a> 而是 <a href="https://link.zhihu.com/?target=http://raw.githubusercontent.com">http://raw.githubusercontent.com</a>，上方的 GitHub 加速如果不能加速这个域名，那么可以使用 Static CDN 提供的反代服务。<br>将 <a href="https://link.zhihu.com/?target=http://raw.githubusercontent.com">http://raw.githubusercontent.com</a> 替换为 <a href="https://link.zhihu.com/?target=http://raw.staticdn.net">http://raw.staticdn.net</a> 即可加速。</p>
+</blockquote>
+</li>
+</ul>
+<p><img src="https://cdn.nlark.com/yuque/0/2022/png/1629942/1644062542072-624b1beb-a718-460e-a69a-c5cff8ab8be2.png#crop=0&crop=0&crop=1&crop=1&id=rrLvh&originHeight=738&originWidth=1862&originalType=binary%E2%88%B6=1&rotation=0&showTitle=false&status=done&style=none&title=" srcset="/img/loading.gif" lazyload></p>
+
+            </div>
+            <hr>
+            <div>
+              <div class="post-metas mb-3">
+                
+                  <div class="post-meta mr-3">
+                    <i class="iconfont icon-category"></i>
+                    
+                      <a class="hover-with-bg" href="/categories/mac/">mac</a>
+                    
+                      <a class="hover-with-bg" href="/categories/mac/m1/">m1</a>
+                    
+                  </div>
+                
+                
+                  <div class="post-meta">
+                    <i class="iconfont icon-tags"></i>
+                    
+                      <a class="hover-with-bg" href="/tags/%E8%B8%A9%E5%9D%91%E6%95%99%E7%A8%8B/">踩坑教程</a>
+                    
+                  </div>
+                
+              </div>
+              
+                <p class="note note-warning">
+                  
+                    本博客所有文章除特别声明外，均采用 <a target="_blank" href="https://creativecommons.org/licenses/by-sa/4.0/deed.zh" rel="nofollow noopener noopener">CC BY-SA 4.0 协议</a> ，转载请注明出处！
+                  
+                </p>
+              
+              
+                <div class="post-prevnext">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2022/%E5%AE%89%E8%A3%85vscode%E5%B9%B6%E9%85%8D%E7%BD%AE%E7%8E%AF%E5%A2%83/">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">安装vscode并配置环境</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2022/%E5%AE%89%E8%A3%85arm%E7%89%88Homebrew/">
+                        <span class="hidden-mobile">安装arm版Homebrew</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+              <!-- Comments -->
+              <article class="comments" id="comments" lazyload>
+                
+                  
+                
+                
+  <div id="valine"></div>
+  <script type="text/javascript">
+    Fluid.utils.loadComments('#valine', function() {
+      Fluid.utils.createScript('https://cdn.jsdelivr.net/npm/valine@1/dist/Valine.min.js', function() {
+        var options = Object.assign(
+          {"appId":"jApqS8Xxcc1eST53AyiAisFx-gzGzoHsz","appKey":"iyngroaUslATD8V4nOgOHowr","path":"window.location.pathname","placeholder":"说点什么呗~","avatar":"retro","meta":["nick","mail","link"],"requiredFields":["mail"],"pageSize":10,"lang":"zh-CN","highlight":false,"recordIP":false,"serverURLs":"","emojiCDN":null,"emojiMaps":null,"enableQQ":true},
+          {
+            el: "#valine",
+            path: window.location.pathname
+          }
+        )
+        new Valine(options);
+        Fluid.utils.waitElementVisible('#valine .vcontent', () => {
+          Fluid.plugins.initFancyBox('#valine .vcontent img:not(.vemoji)');
+        })
+      });
+    });
+  </script>
+  <noscript>Please enable JavaScript to view the comments</noscript>
+
+
+              </article>
+            
+          </article>
+        </div>
+      </div>
+    </div>
+    
+      <div class="d-none d-lg-block col-lg-2 toc-container" id="toc-ctn">
+        <div id="toc">
+  <p class="toc-header"><i class="iconfont icon-list"></i>&nbsp;目录</p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+      </div>
+    
+  </div>
+</div>
+
+<!-- Custom -->
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v"
+                 for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+
+    
+  </main>
+
+  <footer class="text-center mt-5 py-3">
+  <div class="footer-content">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" integrity="sha512-SfTiTlX6kk+qitfevl/7LibUOeJWlt9rbyDn92a1DqWOw9vWG2MFoays0sgObmWazO5BQPiFucnnEAjpAB+/Sw==" crossorigin="anonymous" referrerpolicy="no-referrer">
+     <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+  </div>
+  
+  <div class="statistics">
+    
+    
+
+    
+      
+        <!-- 不蒜子统计PV -->
+        <span id="busuanzi_container_site_pv" style="display: none">
+            总访问量 
+            <span id="busuanzi_value_site_pv"></span>
+             次
+          </span>
+      
+      
+        <!-- 不蒜子统计UV -->
+        <span id="busuanzi_container_site_uv" style="display: none">
+            总访客数 
+            <span id="busuanzi_value_site_uv"></span>
+             人
+          </span>
+      
+    
+  </div>
+
+
+  
+  <!-- 备案信息 -->
+  <div class="beian">
+    <span>
+      <a href="http://beian.miit.gov.cn/" target="_blank" rel="nofollow noopener">
+        陕ICP备19023179号
+      </a>
+    </span>
+    
+  </div>
+
+
+  <div class="cdn"><a href="https://www.upyun.com/?utm_source=lianmeng&amp;utm_medium=referral" target="_blank"><img width="70px" class="entered loading" src="/img/upyun.png" srcset="/img/loading.gif" lazyload data-ll-status="loading"><span></span></a></div>
+  
+</footer>
+
+
+  <!-- SCRIPTS -->
+  
+  <script  src="https://cdn.jsdelivr.net/npm/nprogress@0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/nprogress@0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://cdn.jsdelivr.net/npm/jquery@3/dist/jquery.min.js" ></script>
+<script  src="https://cdn.jsdelivr.net/npm/bootstrap@4/dist/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+<!-- Plugins -->
+
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+  
+
+
+
+  
+    <script  src="https://cdn.jsdelivr.net/npm/tocbot@4/dist/tocbot.min.js" ></script>
+  
+  
+    <script  src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3/dist/jquery.fancybox.min.js" ></script>
+  
+  
+    <script  src="https://cdn.jsdelivr.net/npm/anchor-js@4/anchor.min.js" ></script>
+  
+  
+    <script defer src="https://cdn.jsdelivr.net/npm/clipboard@2/dist/clipboard.min.js" ></script>
+  
+
+
+
+  <script defer src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" ></script>
+
+
+
+
+  <script  src="https://cdn.jsdelivr.net/npm/typed.js@2/lib/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var title = document.getElementById('subtitle').title;
+      
+      typing(title)
+      
+    })(window, document);
+  </script>
+
+
+
+
+
+  
+
+  
+    <!-- MathJax -->
+    <script>
+      MathJax = {
+        tex: {
+          inlineMath: [['$', '$'], ['\\(', '\\)']]
+        },
+        loader: {
+          load: ['ui/lazy']
+        },
+        options: {
+          renderActions: {
+            findScript: [10, doc => {
+              document.querySelectorAll('script[type^="math/tex"]').forEach(node => {
+                const display = !!node.type.match(/; *mode=display/);
+                const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display);
+                const text = document.createTextNode('');
+                node.parentNode.replaceChild(text, node);
+                math.start = { node: text, delim: '', n: 0 };
+                math.end = { node: text, delim: '', n: 0 };
+                doc.math.push(math);
+              });
+            }, '', false],
+            insertedScript: [200, () => {
+              document.querySelectorAll('mjx-container').forEach(node => {
+                let target = node.parentNode;
+                if (target.nodeName.toLowerCase() === 'li') {
+                  target.parentNode.classList.add('has-jax');
+                }
+              });
+            }, '', false]
+          }
+        }
+      };
+    </script>
+
+    <script async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js" ></script>
+
+  
+
+
+
+
+
+
+
+
+
+
+
+<!-- 主题的启动项 保持在最底部 -->
+<script  src="/js/boot.js" ></script>
+
+
+</body>
+</html>

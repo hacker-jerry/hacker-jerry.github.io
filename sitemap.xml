@@ -590,14 +590,35 @@
   </url>
   
   <url>
-    <loc>https://www.blog.hackerjerry.top/2022/Mac%E5%85%BC%E5%AE%B9%E6%B5%8B%E8%AF%84/</loc>
+    <loc>https://www.blog.hackerjerry.top/2022/Mac%20air%20M1%E5%85%BC%E5%AE%B9%E6%B5%8B%E8%AF%84/</loc>
     
     <lastmod>2022-02-05</lastmod>
     
   </url>
   
   <url>
-    <loc>https://www.blog.hackerjerry.top/tags/index.html</loc>
+    <loc>https://www.blog.hackerjerry.top/2022/Mac%20air%20M1%E7%BB%AD%E8%88%AA%E8%AF%84%E6%B5%8B/</loc>
+    
+    <lastmod>2022-02-05</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://www.blog.hackerjerry.top/2022/%E5%AE%89%E8%A3%85arm%E7%89%88Homebrew/</loc>
+    
+    <lastmod>2022-02-05</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://www.blog.hackerjerry.top/2022/%E7%BC%96%E7%A8%8B%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA/</loc>
+    
+    <lastmod>2022-02-05</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://www.blog.hackerjerry.top/2022/%E5%AE%89%E8%A3%85vscode%E5%B9%B6%E9%85%8D%E7%BD%AE%E7%8E%AF%E5%A2%83/</loc>
     
     <lastmod>2022-02-05</lastmod>
     
@@ -633,6 +654,13 @@
   
   <url>
     <loc>https://www.blog.hackerjerry.top/link/index.html</loc>
+    
+    <lastmod>2022-02-05</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://www.blog.hackerjerry.top/tags/index.html</loc>
     
     <lastmod>2022-02-05</lastmod>
     
@@ -943,6 +971,13 @@
   
   <url>
     <loc>https://www.blog.hackerjerry.top/tags/%E5%8C%BA%E5%9D%97%E9%93%BE/</loc>
+    <lastmod>2022-02-05</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://www.blog.hackerjerry.top/tags/%E8%B8%A9%E5%9D%91%E6%95%99%E7%A8%8B/</loc>
     <lastmod>2022-02-05</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
