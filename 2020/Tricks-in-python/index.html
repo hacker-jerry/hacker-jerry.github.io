@@ -24,7 +24,7 @@
 <meta property="og:description" content="装饰器-@classmethod 和@staticmethod将方法定义成类方法和静态方法。 https:&#x2F;&#x2F;zhuanlan.zhihu.com&#x2F;p&#x2F;28010894可以看看这篇文章 生成器通过函数方式创建通过yield关键字将一个函数变成generator。例如：函数的定义： 1234567def fib(max):    n, a, b &#x3D; 0, 0, 1    while n &lt;">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2020-11-28T09:43:42.000Z">
-<meta property="article:modified_time" content="2022-02-05T12:22:52.727Z">
+<meta property="article:modified_time" content="2022-02-07T08:56:42.374Z">
 <meta property="article:author" content="M@tr1x">
 <meta property="article:tag" content="python">
 <meta name="twitter:card" content="summary_large_image">
@@ -283,7 +283,7 @@
             
               <p class="note note-info">
                 
-                  本文最后更新于：2022年2月5日 晚上
+                  本文最后更新于：2022年2月7日 下午
                 
               </p>
             
@@ -308,6 +308,20 @@
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Student</span>(<span class="hljs-params">object</span>):</span><br>    <span class="hljs-comment">#构造函数</span><br>    <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">__init__</span>(<span class="hljs-params">self, name, score</span>):</span><br>        self.__name = name<br>        self.__score = score<br>    <span class="hljs-comment">#get方法</span><br>    <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">get_name</span>(<span class="hljs-params">self</span>):</span><br>        <span class="hljs-keyword">return</span> self.__name<br>    <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">get_score</span>(<span class="hljs-params">self</span>):</span><br>        <span class="hljs-keyword">return</span> self.__score<br>     <span class="hljs-comment">#set方法</span><br>    <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">set_score</span>(<span class="hljs-params">self, score</span>):</span><br>        <span class="hljs-comment">#参数检查</span><br>        <span class="hljs-keyword">if</span> <span class="hljs-number">0</span> &lt;= score &lt;= <span class="hljs-number">100</span>:<br>            self.__score = score<br>        <span class="hljs-keyword">else</span>:<br>            <span class="hljs-keyword">raise</span> ValueError(<span class="hljs-string">&#x27;bad score&#x27;</span>)<br></code></pre></td></tr></table></figure>
 
             </div>
+            <div style="text-align:right"> <!-- 自己添加的“分享到”模块：开始。用的是 social-share.js。让所有的分享按钮右对齐-->
+	<div class="social-share-container" style="margin-top: 15px;"> <!-- 生成一组分享按钮，用的是样式3（圆形主题） -->
+		 <!--如果博客语言是中文，就显示“点击分享到：”，非中文一律显示“Share it:”-->
+			分享到：
+		
+	</div>
+	<script src="https://cdn.bootcss.com/jquery/2.2.4/jquery.min.js"></script> <!-- 加载 jQuery 库 -->
+	<script src="https://cdn.jsdelivr.net/gh/slince/social-share.js/dist/social-share.min.js"></script> <!-- 加载 social-share.js 的 js 库，用绝对路径，借助 jsDelivr 的 CDN，从 GitHub 加载，另外还要加载 social-share.js 的 CSS，也是要用绝对路径，可以修改 `_config.fluid.yml` 的 `custom_css` 加载，也可以修改 `themes/fluid/layout/_partial/css.ejs` 加载。-->
+	<script> <!-- 执行 js 代码，new 一个新对象，container3 代表带圆框的图标，详见 social-share.js 在 GitHub 的文档 -->
+		new SocialShare('.social-share-container', {
+			theme: 'dark-square',
+		});
+	</script>
+</div> <!-- 自己添加的“分享到”模块：结束。-->	
             <hr>
             <div>
               <div class="post-metas mb-3">

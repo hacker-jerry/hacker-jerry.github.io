@@ -33,7 +33,7 @@
 <meta property="og:image" content="https://cdn.nlark.com/yuque/0/2021/png/1629942/1618128016114-6971d3ca-2137-4bbc-a82c-98505999e543.png#align=left&display=inline&height=62&margin=%5Bobject%20Object%5D&name=image.png&originHeight=124&originWidth=1131&size=180774&status=done&style=none&width=565.5">
 <meta property="og:image" content="https://cdn.nlark.com/yuque/0/2021/png/1629942/1618128064981-d60ade96-4891-4eab-9150-1c1fe32d3e1f.png#align=left&display=inline&height=150&margin=%5Bobject%20Object%5D&name=image.png&originHeight=299&originWidth=1066&size=320679&status=done&style=none&width=533">
 <meta property="article:published_time" content="2021-04-10T02:43:22.000Z">
-<meta property="article:modified_time" content="2022-02-05T12:22:51.715Z">
+<meta property="article:modified_time" content="2022-02-07T08:56:41.506Z">
 <meta property="article:author" content="M@tr1x">
 <meta property="article:tag" content="CTF,白帽子,Pwn,Web">
 <meta name="twitter:card" content="summary_large_image">
@@ -293,7 +293,7 @@
             
               <p class="note note-info">
                 
-                  本文最后更新于：2022年2月5日 晚上
+                  本文最后更新于：2022年2月7日 下午
                 
               </p>
             
@@ -319,6 +319,20 @@
 <p>仔细看数据抓包，有一对 ARP 包：<br><img src="https://cdn.nlark.com/yuque/0/2021/png/1629942/1618127872003-dd2d8b5b-7109-4df7-9d92-d907317974eb.png#align=left&display=inline&height=215&margin=%5Bobject%20Object%5D&name=image.png&originHeight=430&originWidth=1547&size=653510&status=done&style=none&width=773.5" srcset="/img/loading.gif" lazyload alt="image.png"><br>就是在发 ICMP 包之前，系统先发了一个 ARP 包！<br>上面的 ARP 请求包大概意思是：我是 192.168.1.99，我的 MAC 是 aabb.cc00.3000，我想问 192.168.1.1 你的 MAC 是多少，收到请回复收到请回复。<br>在 ARP 请求的过程中，SW 已经学到了 PC 和 R1 的接口 MAC 地址，MAC 地址表项已经形成。<br><img src="https://cdn.nlark.com/yuque/0/2021/png/1629942/1618127946335-3d26191d-d89f-49f9-a331-2fc558f5e4cd.png#align=left&display=inline&height=148&margin=%5Bobject%20Object%5D&name=image.png&originHeight=295&originWidth=747&size=233011&status=done&style=none&width=373.5" srcset="/img/loading.gif" lazyload alt="image.png"><br>那么，他是怎么形成的呢？<br>第一步：<br>当 SW 通过 e0/0 端口收到 PC 发来的 ARP 广播包，PC 首先查看自己的 MAC 地址表项，看看数据帧的源 MAC 是否存在于我的 MAC 地址表中，如果没有，那么就直接把 ARP 广播包的源 MAC（aabb.cc00.3000）和接收端口 e0/0 对应起来，形成第一个 MAC 地址表的条目。如果有对应的 MAC 地址条目，SW 就看已经存在的条目和当前的收包端口是否一致，如果不一致就更新 MAC 地址表里面的条目，如果一致就直接泛洪转发这个广播数据帧。<br>第二步：SW 通过 e0/1 端口把这个数据帧发给 R1，R1 收到之后，形成 ARP 表项。<br><img src="https://cdn.nlark.com/yuque/0/2021/png/1629942/1618128016114-6971d3ca-2137-4bbc-a82c-98505999e543.png#align=left&display=inline&height=62&margin=%5Bobject%20Object%5D&name=image.png&originHeight=124&originWidth=1131&size=180774&status=done&style=none&width=565.5" srcset="/img/loading.gif" lazyload alt="image.png"><br>R1 拆开外面帧头看到目的 MAC 是自己（广播包本网段内所有人均可接收），R1 就继续拆包，拆开 ARP 头部，看到请求的 MAC 是自己的 IP 地址对应的 MAC，所以 R1 就响应这个 ARP 得请求包。<br><img src="https://cdn.nlark.com/yuque/0/2021/png/1629942/1618128064981-d60ade96-4891-4eab-9150-1c1fe32d3e1f.png#align=left&display=inline&height=150&margin=%5Bobject%20Object%5D&name=image.png&originHeight=299&originWidth=1066&size=320679&status=done&style=none&width=533" srcset="/img/loading.gif" lazyload alt="image.png"><br>第三步：响应的 ARP Reply 包发送到 SW 的 e0/1 口，SW1 把单播响应包源 MAC（aabb.cc00.1000）和自己的接收端口 e0/1 口对应起来，形成另外一条 MAC 地址表条目，然后查看到数据帧的目的 MAC 是 aabb.cc00.3000，SW 直接查找自己的 MAC 地址表，发现有对应的条目，直接通过 e0/0 口转发，PC 就收到了响应，获取到了 R1 的 e0/0 接口，也就是 PC 网关的 MAC。</p>
 
             </div>
+            <div style="text-align:right"> <!-- 自己添加的“分享到”模块：开始。用的是 social-share.js。让所有的分享按钮右对齐-->
+	<div class="social-share-container" style="margin-top: 15px;"> <!-- 生成一组分享按钮，用的是样式3（圆形主题） -->
+		 <!--如果博客语言是中文，就显示“点击分享到：”，非中文一律显示“Share it:”-->
+			分享到：
+		
+	</div>
+	<script src="https://cdn.bootcss.com/jquery/2.2.4/jquery.min.js"></script> <!-- 加载 jQuery 库 -->
+	<script src="https://cdn.jsdelivr.net/gh/slince/social-share.js/dist/social-share.min.js"></script> <!-- 加载 social-share.js 的 js 库，用绝对路径，借助 jsDelivr 的 CDN，从 GitHub 加载，另外还要加载 social-share.js 的 CSS，也是要用绝对路径，可以修改 `_config.fluid.yml` 的 `custom_css` 加载，也可以修改 `themes/fluid/layout/_partial/css.ejs` 加载。-->
+	<script> <!-- 执行 js 代码，new 一个新对象，container3 代表带圆框的图标，详见 social-share.js 在 GitHub 的文档 -->
+		new SocialShare('.social-share-container', {
+			theme: 'dark-square',
+		});
+	</script>
+</div> <!-- 自己添加的“分享到”模块：结束。-->	
             <hr>
             <div>
               <div class="post-metas mb-3">

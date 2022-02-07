@@ -27,7 +27,7 @@
 <meta property="og:image" content="https://cdn.nlark.com/yuque/0/2021/png/1629942/1617344622341-e1babb6a-2494-437c-93cb-30da90e11894.png#align=left&display=inline&height=143&margin=%5Bobject%20Object%5D&name=image.png&originHeight=286&originWidth=601&size=27035&status=done&style=none&width=300.5">
 <meta property="og:image" content="https://cdn.nlark.com/yuque/0/2021/png/1629942/1617344635243-979b77ee-3516-4c3b-a112-a45caad93fdb.png#align=left&display=inline&height=133&margin=%5Bobject%20Object%5D&name=image.png&originHeight=266&originWidth=779&size=50465&status=done&style=none&width=389.5">
 <meta property="article:published_time" content="2021-04-02T01:17:05.000Z">
-<meta property="article:modified_time" content="2022-02-05T12:22:52.027Z">
+<meta property="article:modified_time" content="2022-02-07T08:56:41.770Z">
 <meta property="article:author" content="M@tr1x">
 <meta property="article:tag" content="CTF,白帽子,Pwn,Web">
 <meta name="twitter:card" content="summary_large_image">
@@ -287,7 +287,7 @@
             
               <p class="note note-info">
                 
-                  本文最后更新于：2022年2月5日 晚上
+                  本文最后更新于：2022年2月7日 下午
                 
               </p>
             
@@ -410,6 +410,20 @@
 <figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><code class="hljs go"><span class="hljs-comment">// 数组</span><br>b := [...]<span class="hljs-keyword">int</span>&#123;<span class="hljs-number">2</span>, <span class="hljs-number">3</span>, <span class="hljs-number">5</span>, <span class="hljs-number">7</span>, <span class="hljs-number">11</span>, <span class="hljs-number">13</span>&#125;<br><span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-title">boo</span><span class="hljs-params">(tt [6]<span class="hljs-keyword">int</span>)</span></span> &#123;<br>    tt[<span class="hljs-number">0</span>], tt[<span class="hljs-built_in">len</span>(tt)<span class="hljs-number">-1</span>] = tt[<span class="hljs-built_in">len</span>(tt)<span class="hljs-number">-1</span>], tt[<span class="hljs-number">0</span>]<br>&#125;<br>boo(b)<br>fmt.Println(b) <span class="hljs-comment">// [2 3 5 7 11 13]</span><br><span class="hljs-comment">// 切片</span><br>p := []<span class="hljs-keyword">int</span>&#123;<span class="hljs-number">2</span>, <span class="hljs-number">3</span>, <span class="hljs-number">5</span>, <span class="hljs-number">7</span>, <span class="hljs-number">11</span>, <span class="hljs-number">13</span>&#125;<br><span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-title">poo</span><span class="hljs-params">(tt []<span class="hljs-keyword">int</span>)</span></span> &#123;<br>    tt[<span class="hljs-number">0</span>], tt[<span class="hljs-built_in">len</span>(tt)<span class="hljs-number">-1</span>] = tt[<span class="hljs-built_in">len</span>(tt)<span class="hljs-number">-1</span>], tt[<span class="hljs-number">0</span>]<br>&#125;<br>poo(p)<br>fmt.Println(p)  <span class="hljs-comment">// [13 3 5 7 11 2]</span><br></code></pre></td></tr></table></figure>
 
             </div>
+            <div style="text-align:right"> <!-- 自己添加的“分享到”模块：开始。用的是 social-share.js。让所有的分享按钮右对齐-->
+	<div class="social-share-container" style="margin-top: 15px;"> <!-- 生成一组分享按钮，用的是样式3（圆形主题） -->
+		 <!--如果博客语言是中文，就显示“点击分享到：”，非中文一律显示“Share it:”-->
+			分享到：
+		
+	</div>
+	<script src="https://cdn.bootcss.com/jquery/2.2.4/jquery.min.js"></script> <!-- 加载 jQuery 库 -->
+	<script src="https://cdn.jsdelivr.net/gh/slince/social-share.js/dist/social-share.min.js"></script> <!-- 加载 social-share.js 的 js 库，用绝对路径，借助 jsDelivr 的 CDN，从 GitHub 加载，另外还要加载 social-share.js 的 CSS，也是要用绝对路径，可以修改 `_config.fluid.yml` 的 `custom_css` 加载，也可以修改 `themes/fluid/layout/_partial/css.ejs` 加载。-->
+	<script> <!-- 执行 js 代码，new 一个新对象，container3 代表带圆框的图标，详见 social-share.js 在 GitHub 的文档 -->
+		new SocialShare('.social-share-container', {
+			theme: 'dark-square',
+		});
+	</script>
+</div> <!-- 自己添加的“分享到”模块：结束。-->	
             <hr>
             <div>
               <div class="post-metas mb-3">
