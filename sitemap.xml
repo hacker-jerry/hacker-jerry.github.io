@@ -625,6 +625,20 @@
   </url>
   
   <url>
+    <loc>https://www.blog.hackerjerry.top/2022/%E7%94%9F%E6%B4%BB%E5%91%A8%E6%8A%A5-Jan-31-to-Feb-6/</loc>
+    
+    <lastmod>2022-02-07</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://www.blog.hackerjerry.top/tags/index.html</loc>
+    
+    <lastmod>2022-02-07</lastmod>
+    
+  </url>
+  
+  <url>
     <loc>https://www.blog.hackerjerry.top/about/index.html</loc>
     
     <lastmod>2022-02-07</lastmod>
@@ -654,13 +668,6 @@
   
   <url>
     <loc>https://www.blog.hackerjerry.top/link/index.html</loc>
-    
-    <lastmod>2022-02-07</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>https://www.blog.hackerjerry.top/tags/index.html</loc>
     
     <lastmod>2022-02-07</lastmod>
     
@@ -1162,6 +1169,13 @@
   
   <url>
     <loc>https://www.blog.hackerjerry.top/categories/%E7%9F%A5%E4%B9%8E/</loc>
+    <lastmod>2022-02-07</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://www.blog.hackerjerry.top/categories/%E7%94%9F%E6%B4%BB%E5%91%A8%E6%8A%A5/</loc>
     <lastmod>2022-02-07</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
