@@ -13,17 +13,15 @@
   <meta http-equiv="x-ua-compatible" content="ie=edge">
   
   <meta name="theme-color" content="#2f4154">
-  <meta name="description" content="tags: []categories: []cover: “”​
-
-这里记录一下 AI 作品赛里接触到的随机森林算法。">
+  <meta name="description" content="这里记录一下 AI 作品赛里接触到的随机森林算法。">
   <meta name="author" content="M@tr1x">
   <meta name="keywords" content="CTF,白帽子,Pwn,Web">
-  <meta name="description" content="tags: []categories: []cover: “”​  这里记录一下 AI 作品赛里接触到的随机森林算法。">
+  <meta name="description" content="这里记录一下 AI 作品赛里接触到的随机森林算法。">
 <meta property="og:type" content="article">
 <meta property="og:title" content="机器学习之随机森林">
 <meta property="og:url" content="https://www.blog.hackerjerry.top/2021/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E4%B9%8B%E9%9A%8F%E6%9C%BA%E6%A3%AE%E6%9E%97/index.html">
 <meta property="og:site_name" content="M@tr1xの日常">
-<meta property="og:description" content="tags: []categories: []cover: “”​  这里记录一下 AI 作品赛里接触到的随机森林算法。">
+<meta property="og:description" content="这里记录一下 AI 作品赛里接触到的随机森林算法。">
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="https://cdn.nlark.com/yuque/0/2021/png/1629942/1617972363693-baaf94c2-5e47-47ff-86d7-e1bc85cd37a1.png#height=588&id=XYnoX&name=image.png&originHeight=732&originWidth=837&originalType=binary%E2%88%B6=1&size=369303&status=done&style=none&width=672">
 <meta property="og:image" content="https://cdn.nlark.com/yuque/0/2021/svg/1629942/1618020812451-b0b3a075-5dcb-42d8-bf97-78aa34e4b86e.svg#height=18&id=jf86o&originHeight=18&originWidth=19&originalType=binary%E2%88%B6=1&size=0&status=done&style=none&width=19">
@@ -48,7 +46,7 @@
 <meta property="og:image" content="https://cdn.nlark.com/yuque/0/2021/png/1629942/1618021152004-95c115e7-19c1-41fa-8768-49351b990a23.png#height=162&id=iOtB0&margin=%5Bobject%20Object%5D&name=image.png&originHeight=323&originWidth=799&originalType=binary%E2%88%B6=1&size=117004&status=done&style=none&width=399.5">
 <meta property="og:image" content="https://cdn.nlark.com/yuque/0/2021/png/1629942/1617974379540-03a43f68-4899-4b4d-b3c9-02806cba1744.png#height=271&id=ImDoE&margin=%5Bobject%20Object%5D&name=image.png&originHeight=542&originWidth=777&originalType=binary%E2%88%B6=1&size=81703&status=done&style=none&width=388.5">
 <meta property="article:published_time" content="2021-04-09T12:33:30.000Z">
-<meta property="article:modified_time" content="2022-02-13T04:11:57.865Z">
+<meta property="article:modified_time" content="2022-03-28T07:37:42.137Z">
 <meta property="article:author" content="M@tr1x">
 <meta property="article:tag" content="CTF,白帽子,Pwn,Web">
 <meta name="twitter:card" content="summary_large_image">
@@ -267,7 +265,7 @@
   
     <span class="post-meta mr-2">
       <i class="iconfont icon-chart"></i>
-      4.8k 字
+      4.7k 字
     </span>
   
 
@@ -317,14 +315,12 @@
             
               <p class="note note-info">
                 
-                  本文最后更新于：2022年2月13日 中午
+                  本文最后更新于：2022年3月28日 下午
                 
               </p>
             
             <div class="markdown-body">
-              <p>tags: []<br>categories: []<br>cover: “”<br>​</p>
-<hr>
-<p>这里记录一下 AI 作品赛里接触到的随机森林算法。</p>
+              <p>这里记录一下 AI 作品赛里接触到的随机森林算法。</p>
 <a id="more"></a>
 
 <h1 id="决策树"><a href="#决策树" class="headerlink" title="决策树"></a>决策树</h1><p>随机森林由许多决策树（decision tree）组成，我们可以将决策树视为一系列关于数据的是/否问题，从而最终得出一个预测类别（或回归情况下的连续值）。 这是一个可解释的模型，因为它非常像我们人类进行分类的过程：在我们做出决定之前（在理想世界中），我们会对可用数据进行一系列的询问。<br>当我们训练决策树时到底发生了什么？可视化可以帮助我们更好地理解决策树，这可以通过 Scikit-Learn 的一个功能来实现（详细信息，请查看 notebook 或这篇文章）。<br><img src="https://cdn.nlark.com/yuque/0/2021/png/1629942/1617972363693-baaf94c2-5e47-47ff-86d7-e1bc85cd37a1.png#height=588&id=XYnoX&name=image.png&originHeight=732&originWidth=837&originalType=binary%E2%88%B6=1&size=369303&status=done&style=none&width=672" srcset="/img/loading.gif" lazyload alt="image.png"><br>除叶子节点（彩色终端节点）外，所有节点都有 5 个部分：</p>
@@ -337,7 +333,7 @@
 </ul>
 <p><strong>决策树的特征选择</strong>一般有 3 种量化方法：<strong>信息增益、信息增益率、基尼指数</strong>。</p>
 <h2 id="信息增益"><a href="#信息增益" class="headerlink" title="信息增益"></a>信息增益</h2><p>在信息论中，<strong>熵</strong>表示随机变量不确定性的度量。假设随机变量 X 有有限个取值，取值 <img src="https://cdn.nlark.com/yuque/0/2021/svg/1629942/1618020812451-b0b3a075-5dcb-42d8-bf97-78aa34e4b86e.svg#height=18&id=jf86o&originHeight=18&originWidth=19&originalType=binary%E2%88%B6=1&size=0&status=done&style=none&width=19" srcset="/img/loading.gif" lazyload> 对应的概率为 <img src="https://cdn.nlark.com/yuque/0/2021/svg/1629942/1618020812589-b6f620aa-d6a0-4990-8de0-93dcf01f721e.svg#height=18&id=fdcbK&originHeight=18&originWidth=19&originalType=binary%E2%88%B6=1&size=0&status=done&style=none&width=19" srcset="/img/loading.gif" lazyload> ，则 X 的熵定义为：<br><img src="https://cdn.nlark.com/yuque/0/2021/svg/1629942/1618020812637-4cffb5ec-a16b-4f43-a641-7df43094a5a3.svg#height=62&id=X43jp&originHeight=62&originWidth=196&originalType=binary%E2%88%B6=1&size=0&status=done&style=none&width=196" srcset="/img/loading.gif" lazyload><br>如果某件事<strong>一定发生</strong>（太阳东升西落）或<strong>一定不发生</strong>（钓鱼岛是日本的），则概率为 1 或 0，对应的<strong>熵均为 0</strong>。<br>如果某件事可能发生可能不发生（天要下雨，娘要嫁人），概率介于 0 到 1 之间，熵大于 0。<br>由此可见，<strong>熵越大，随机性越大，结果越不确定</strong>。<br>我们再来看一看<strong>条件熵</strong> <img src="https://cdn.nlark.com/yuque/0/2021/svg/1629942/1618020812831-53a78260-e1f7-4fe9-bd8b-1b6cbdd6d85d.svg#height=26&id=PpyfP&originHeight=26&originWidth=74&originalType=binary%E2%88%B6=1&size=0&status=done&style=none&width=74" srcset="/img/loading.gif" lazyload> ，<strong>表示引入随机变量 Y 对于消除 X 不确定性的程度</strong>。假如 X、Y 相互独立，则 X 的条件熵和熵有相同的值；否则条件熵一定小于熵。<br>明确了这两个概念，理解信息增益就比较方便了。现在我们有一份数据集 D（例如贷款信息登记表）和特征 A（例如年龄），则<strong>A 的信息增益就是 D 本身的熵与特征 A 给定条件下 D 的条件熵之差</strong>，即：<br><img src="https://cdn.nlark.com/yuque/0/2021/svg/1629942/1618020812551-89aeeb77-f470-4d5c-8da4-ec55baca3dff.svg#height=26&id=EE8pQ&originHeight=26&originWidth=248&originalType=binary%E2%88%B6=1&size=0&status=done&style=none&width=248" srcset="/img/loading.gif" lazyload><br>数据集 D 的熵是一个常量。信息增益越大，表示条件熵 <img src="https://cdn.nlark.com/yuque/0/2021/svg/1629942/1618020812738-fffb9065-834c-444d-9a51-8881c89e799f.svg#height=26&id=tYvso&originHeight=26&originWidth=74&originalType=binary%E2%88%B6=1&size=0&status=done&style=none&width=74" srcset="/img/loading.gif" lazyload> 越小，A 消除 D 的不确定性的功劳越大。<br>所以要<strong>优先选择信息增益大的特征，它们具有更强的分类能力。</strong>由此生成决策树，称为<strong>ID3 算法</strong>。</p>
-<h2 id="信息增益率"><a href="#信息增益率" class="headerlink" title="信息增益率"></a><strong>信息增益率</strong></h2><p>当某个特征具有多种候选值时，信息增益容易偏大，造成误差。引入信息增益率可以校正这一问题。<br>信息增益率 <img src="https://cdn.nlark.com/yuque/0/2021/svg/1629942/1618020812748-d95f3fa5-1a2f-4372-ad0b-78d11ef80423.svg#height=18&id=QMRXL&originHeight=18&originWidth=23&originalType=binary%E2%88%B6=1&size=0&status=done&style=none&width=23" srcset="/img/loading.gif" lazyload> 为信息增益与数据集 D 的熵之比：<br><img src="https://cdn.nlark.com/yuque/0/2021/svg/1629942/1618020812852-34299e55-7911-4a19-a1bc-be76774d1af0.svg#height=59&id=lstWO&originHeight=59&originWidth=186&originalType=binary%E2%88%B6=1&size=0&status=done&style=none&width=186" srcset="/img/loading.gif" lazyload><br>同样，我们<strong>优先选择信息增益率最大的特征，</strong>由此生成决策树，称为<strong>C4.5 算法。</strong><br><strong>​</strong></p>
+<h2 id="信息增益率"><a href="#信息增益率" class="headerlink" title="信息增益率"></a><strong>信息增益率</strong></h2><p>当某个特征具有多种候选值时，信息增益容易偏大，造成误差。引入信息增益率可以校正这一问题。<br>信息增益率 <img src="https://cdn.nlark.com/yuque/0/2021/svg/1629942/1618020812748-d95f3fa5-1a2f-4372-ad0b-78d11ef80423.svg#height=18&id=QMRXL&originHeight=18&originWidth=23&originalType=binary%E2%88%B6=1&size=0&status=done&style=none&width=23" srcset="/img/loading.gif" lazyload> 为信息增益与数据集 D 的熵之比：<br><img src="https://cdn.nlark.com/yuque/0/2021/svg/1629942/1618020812852-34299e55-7911-4a19-a1bc-be76774d1af0.svg#height=59&id=lstWO&originHeight=59&originWidth=186&originalType=binary%E2%88%B6=1&size=0&status=done&style=none&width=186" srcset="/img/loading.gif" lazyload><br>同样，我们<strong>优先选择信息增益率最大的特征，</strong>由此生成决策树，称为<strong>C4.5 算法。</strong></p>
 <h2 id="基尼不纯度（Gini-Impurity）"><a href="#基尼不纯度（Gini-Impurity）" class="headerlink" title="基尼不纯度（Gini Impurity）"></a><strong>基尼不纯度（Gini Impurity）</strong></h2><p>节点的基尼不纯度是指，根据节点中样本的分布对样本分类时，从节点中随机选择的样本被分错的概率。<br>如，在根节点中，根据节点中的样本标签有 44.4％的可能性错误地对某个随机选择的数据点进行分类。可以      使用以下等式得出这个值：</p>
 <p><img src="https://cdn.nlark.com/yuque/0/2021/png/1629942/1617972513293-5c77b524-1b14-46a9-8bdc-5efe40377391.png#height=56&id=dVbT7&originHeight=242&originWidth=757&originalType=binary%E2%88%B6=1&size=0&status=done&style=none&width=176" srcset="/img/loading.gif" lazyload><br>节点 n 的基尼不纯度是<strong>1 减去每个类（二元分类任务中是 2）的样本比例的平方和</strong>。</p>
 <p>例如根节点的基尼不纯度：<br><img src="https://cdn.nlark.com/yuque/0/2021/png/1629942/1617972664572-fbc01cef-2c7e-4e45-931d-3a11327035a4.png#height=73&id=NEETK&originHeight=73&originWidth=1080&originalType=binary%E2%88%B6=1&size=0&status=done&style=none&width=1080" srcset="/img/loading.gif" lazyload></p>
@@ -356,7 +352,7 @@
 <p><img src="https://cdn.nlark.com/yuque/0/2021/png/1629942/1618020986002-5cc6c40b-f548-44b0-a517-eaecf2615307.png#height=281&id=iUL7X&margin=%5Bobject%20Object%5D&name=image.png&originHeight=561&originWidth=731&originalType=binary%E2%88%B6=1&size=122786&status=done&style=none&width=365.5" srcset="/img/loading.gif" lazyload alt="image.png"><br>假设树 T 有|T|个叶子节点，某一个叶子节点 t 上有 <img src="https://cdn.nlark.com/yuque/0/2021/svg/1629942/1618021002264-6488bff2-9519-4ecc-bbdd-6f2f86c34189.svg#height=23&id=p7K03&originHeight=23&originWidth=24&originalType=binary%E2%88%B6=1&size=0&status=done&style=none&width=24" srcset="/img/loading.gif" lazyload> 个样本，其中 k 类的样本有 <img src="https://cdn.nlark.com/yuque/0/2021/svg/1629942/1618021002341-9e586245-0eb4-43f1-ab4b-e9d2f1514bd9.svg#height=23&id=Jvs0Y&originHeight=23&originWidth=32&originalType=binary%E2%88%B6=1&size=0&status=done&style=none&width=32" srcset="/img/loading.gif" lazyload> 个，<img src="https://cdn.nlark.com/yuque/0/2021/svg/1629942/1618021002330-b42005d2-d60f-4e39-927c-852a31a4810e.svg#height=26&id=W8yRc&originHeight=26&originWidth=56&originalType=binary%E2%88%B6=1&size=0&status=done&style=none&width=56" srcset="/img/loading.gif" lazyload> 为叶子节点 t 的熵， <img src="https://cdn.nlark.com/yuque/0/2021/svg/1629942/1618021002461-670ab097-97d8-4674-b83a-a27eed267988.svg#height=21&id=Ihqmy&originHeight=21&originWidth=52&originalType=binary%E2%88%B6=1&size=0&status=done&style=none&width=52" srcset="/img/loading.gif" lazyload> 是参数，则决策树的<strong>损失函数</strong>定义为：<br><img src="https://cdn.nlark.com/yuque/0/2021/svg/1629942/1618021002388-eb487e2e-6368-4459-b65e-92652294e8b5.svg#height=69&id=GEe9U&originHeight=69&originWidth=264&originalType=binary%E2%88%B6=1&size=0&status=done&style=none&width=264" srcset="/img/loading.gif" lazyload><br>其中熵为：<br><img src="https://cdn.nlark.com/yuque/0/2021/svg/1629942/1618021002407-578e900c-5b42-4014-a24e-f93208a1d529.svg#height=57&id=M7VkN&originHeight=57&originWidth=246&originalType=binary%E2%88%B6=1&size=0&status=done&style=none&width=246" srcset="/img/loading.gif" lazyload><br><strong>损失函数第一项为训练误差，第二项为模型复杂度，</strong>用参数 <img src="https://cdn.nlark.com/yuque/0/2021/svg/1629942/1618021002545-b6955ef3-85ad-4594-9a5e-f5a27be46475.svg#height=15&id=JPvdT&originHeight=15&originWidth=13&originalType=binary%E2%88%B6=1&size=0&status=done&style=none&width=13" srcset="/img/loading.gif" lazyload> 来衡量二者的比重。</p>
 <h2 id="CART-算法"><a href="#CART-算法" class="headerlink" title="CART 算法"></a>CART 算法</h2><p>CART 表示分类回归决策树，同样由特征选择、树的生成及剪枝组成，可以处理分类和回归任务。<br>相比之下，<strong>ID3 和 C4.5 算法只能处理分类任务</strong>。<br>CART 假设决策树是二叉树，内部结点特征的取值为“是”和“否”，依次递归地二分每个特征。<br>CART 对<strong>回归树</strong>采用<strong>平方误差</strong>最小化准则<strong>，</strong>对<strong>分类树</strong>用<strong>基尼指数</strong>最小化准则。</p>
 <h2 id="过拟合–为什么森林比一棵树更好"><a href="#过拟合–为什么森林比一棵树更好" class="headerlink" title="过拟合–为什么森林比一棵树更好"></a>过拟合–为什么森林比一棵树更好</h2><p><strong>因为这棵树是在训练数据上没有犯错，我们没有限制最大深度（树的层数），因此泛化能力差。</strong><br>过拟合发生在当我们有一个非常灵活的模型（模型具有高能力）时，其本质上是通过紧密拟合来记住训练数据。这样的问题是模型不仅学到了训练数据中的实际关系，还学习了存在的噪声。灵活的模型具有高方差<strong>（variance）</strong>，因为学到的参数（例如决策树的结构）将随着训练数据的不同而变化很大。</p>
-<p>当我们<strong>不限制最大深度时决策树容易过拟合的原因</strong>是它<strong>具有无限的灵活性</strong>，这意味着它可以持续生长，直到它为每个单独的观察点都生成一个叶节点，<strong>达到完美地分类</strong>。<br>如果返回到之前决策树的图像并将最大深度限制为 2（仅进行一次拆分），则分类不再 100％正确。我们减少了决策树的方差，但代价是增加了偏差。<br><strong>限制树的深度</strong>可以<strong>减少方差（好）</strong>并且<strong>增加偏差（坏）</strong>，一种替代方案是，我们可以将许多决策树组合成一个称为随机森林的集成模型（ensemble model）。<br>​</p>
+<p>当我们<strong>不限制最大深度时决策树容易过拟合的原因</strong>是它<strong>具有无限的灵活性</strong>，这意味着它可以持续生长，直到它为每个单独的观察点都生成一个叶节点，<strong>达到完美地分类</strong>。<br>如果返回到之前决策树的图像并将最大深度限制为 2（仅进行一次拆分），则分类不再 100％正确。我们减少了决策树的方差，但代价是增加了偏差。<br><strong>限制树的深度</strong>可以<strong>减少方差（好）</strong>并且<strong>增加偏差（坏）</strong>，一种替代方案是，我们可以将许多决策树组合成一个称为随机森林的集成模型（ensemble model）。</p>
 <h1 id="随机森林"><a href="#随机森林" class="headerlink" title="随机森林"></a>随机森林</h1><p>我们将使用<strong>CART 决策树</strong>作为<strong>弱学习器的 bagging 方法</strong>称为<strong>随机森林</strong>。<br>bagging 是一种在原始数据集上，通过<strong>有放回抽样</strong>分别选出 k 个新数据集，来训练分类器的集成算法。分类器之间没有依赖关系。<br><img src="https://cdn.nlark.com/yuque/0/2021/png/1629942/1618021152004-95c115e7-19c1-41fa-8768-49351b990a23.png#height=162&id=iOtB0&margin=%5Bobject%20Object%5D&name=image.png&originHeight=323&originWidth=799&originalType=binary%E2%88%B6=1&size=117004&status=done&style=none&width=399.5" srcset="/img/loading.gif" lazyload alt="image.png"><br>随机森林是由许多决策树组成的模型。这个模型不是简单地平均所有树（我们可以称之为“森林”）的预测，而是使用了两个关键概念，名字中的随机二字也是由此而来：</p>
 <ul>
 <li>在构建树时对训练数据点进行随机抽样</li>
@@ -391,14 +387,13 @@
 <blockquote>
 <p>从这里我们可以知道：每棵树的训练集都是不同的，而且里面包含重复的训练样本</p>
 </blockquote>
-<p>2）如果每个样本的特征维度为 M，指定一个常数 m&lt;&lt;M，随机地从 M 个特征中选取 m 个特征子集，每次树进行分裂时，从这 m 个特征中选择最优的；<br>​</p>
+<p>2）如果每个样本的特征维度为 M，指定一个常数 m&lt;&lt;M，随机地从 M 个特征中选取 m 个特征子集，每次树进行分裂时，从这 m 个特征中选择最优的；</p>
 <h2 id="这两种随机有什么好处？"><a href="#这两种随机有什么好处？" class="headerlink" title="这两种随机有什么好处？"></a><strong>这两种随机有什么好处？</strong></h2><p>两个随机性的引入对随机森林的分类性能至关重要。由于它们的引入，使得随机森林不容易陷入过拟合，并且具有很好得抗噪能力（比如：对缺省值不敏感）。</p>
 <h2 id="随机森林分类的错误率和什么有关？"><a href="#随机森林分类的错误率和什么有关？" class="headerlink" title="随机森林分类的错误率和什么有关？"></a><strong>随机森林分类的错误率和什么有关？</strong></h2><ul>
 <li>森林中任意两棵树的相关性：相关性越大，错误率越大；</li>
 <li>森林中每棵树的分类能力：每棵树的分类能力越强，整个森林的错误率越低。</li>
 </ul>
-<p>​</p>
-<p>减小特征选择个数 m，树的相关性和分类能力也会相应的降低；增大 m，两者也会随之增大。所以关键问题是如何选择最优的 m（或者是范围），这也是随机森林唯一的一个参数。<br>​</p>
+<p>减小特征选择个数 m，树的相关性和分类能力也会相应的降低；增大 m，两者也会随之增大。所以关键问题是如何选择最优的 m（或者是范围），这也是随机森林唯一的一个参数。</p>
 
             </div>
             <div style="text-align:right"> <!-- 自己添加的“分享到”模块：开始。用的是 social-share.js。让所有的分享按钮右对齐-->
@@ -581,7 +576,7 @@
   </div>
 
 
-  <div class="cdn"><a href="https://www.upyun.com/?utm_source=lianmeng&amp;utm_medium=referral" target="_blank"><img width="70px" class="entered loading" src="/img/upyun.png" srcset="/img/loading.gif" lazyload data-ll-status="loading"><span></span></a></div>
+  <div class="cdn">本站由 <a href="https://www.upyun.com/?utm_source=lianmeng&amp;utm_medium=referral" target="_blank"><img width="60px" class="entered loading" src="/img/upyun.png" srcset="/img/loading.gif" lazyload data-ll-status="loading"><span></span></a> 提供CDN加速/云存储服务</div>
   
 </footer>
 
