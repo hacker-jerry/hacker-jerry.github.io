@@ -239,20 +239,25 @@
     <article class="col-12 col-md-12 mx-auto index-info">
       <h1 class="index-header">
         
-        <a href="/2020/Solving-Nonlinear-equations-and-equations/" target="_self">
-          Solving-Nonlinear-equations-and-equations
+        <a href="/2020/SecCrpytoExp-2/" target="_self">
+          SecCrpytoExp-2
         </a>
       </h1>
 
       <p class="index-excerpt">
-        <a href="/2020/Solving-Nonlinear-equations-and-equations/" target="_self">
+        <a href="/2020/SecCrpytoExp-2/" target="_self">
           
           
             
           
           
 
-解非线性方程和方程组fzero 命令解三次方程语法语法x = fzero(fun,x0), starts at x0 and tries to solve the equations fun(x) = 0(尝试求出 fun(x) = 0 的点 x。此解是 fun(x) 变号的位置 ) - fzero 无法求函数（例如 x^2）的根。x = fzero(fun,x0,options)使用 opt
+Elgamal 密码首先用到了几个强大的库（避免重复造轮子）
+12import sympyfrom Crypto.Util import number
+
+sympy用于计算原根，它是一个强大的符号计算的 python 库。不仅可以像 mathematica 一样进行符号计算，也内置了很多的 OI 实用算法，包括图论、计算几何、数论、多项式等等很多方面。
+
+更多用法可以看这里 https://2
         </a>
       </p>
 
@@ -260,8 +265,221 @@
         
           <div class="post-meta mr-3">
             <i class="iconfont icon-date"></i>
-            <time datetime="2020-09-10 17:01" pubdate>
-              2020-09-10
+            <time datetime="2020-11-06 17:49" pubdate>
+              2020-11-06
+            </time>
+          </div>
+        
+        
+          <div class="post-meta mr-3">
+            <i class="iconfont icon-category"></i>
+            
+              <a href="/categories/crypto/">crypto</a>
+            
+          </div>
+        
+        
+          <div class="post-meta">
+            <i class="iconfont icon-tags"></i>
+            
+              <a href="/tags/crypto/">crypto</a>
+            
+          </div>
+        
+      </div>
+    </article>
+  </div>
+
+  <div class="row mx-auto index-card">
+    
+    
+    <article class="col-12 col-md-12 mx-auto index-info">
+      <h1 class="index-header">
+        
+        <a href="/2020/RE-Dll-export-table/" target="_self">
+          RE-Dll-export-table
+        </a>
+      </h1>
+
+      <p class="index-excerpt">
+        <a href="/2020/RE-Dll-export-table/" target="_self">
+          
+          
+            
+          
+          
+
+#
+首先查看 EXPORT Table 的 RVA 是 0x00092250通过 winhex 验证正确由于 0x92250 在 rdata 节中，所以首个 IMAGE_EXPORT_DESCRIPTOR 结构的 RAW=0x92250-0x80000+0x65000=0x77250通过 winhex 跳转到这里1.Name 成员解析  首先解析导出表重要的成员Nmae: 在导出表一行位置处.
+        </a>
+      </p>
+
+      <div class="index-btm post-metas">
+        
+          <div class="post-meta mr-3">
+            <i class="iconfont icon-date"></i>
+            <time datetime="2020-10-23 17:04" pubdate>
+              2020-10-23
+            </time>
+          </div>
+        
+        
+          <div class="post-meta mr-3">
+            <i class="iconfont icon-category"></i>
+            
+              <a href="/categories/RE/">RE</a>
+            
+          </div>
+        
+        
+          <div class="post-meta">
+            <i class="iconfont icon-tags"></i>
+            
+              <a href="/tags/RE/">RE</a>
+            
+              <a href="/tags/PEview/">PEview</a>
+            
+          </div>
+        
+      </div>
+    </article>
+  </div>
+
+  <div class="row mx-auto index-card">
+    
+    
+    <article class="col-12 col-md-12 mx-auto index-info">
+      <h1 class="index-header">
+        
+        <a href="/2020/Write-in-autumn/" target="_self">
+          Write-in-autumn
+        </a>
+      </h1>
+
+      <p class="index-excerpt">
+        <a href="/2020/Write-in-autumn/" target="_self">
+          
+          
+            
+          
+          写在西安的第三个秋天。
+        </a>
+      </p>
+
+      <div class="index-btm post-metas">
+        
+          <div class="post-meta mr-3">
+            <i class="iconfont icon-date"></i>
+            <time datetime="2020-10-17 19:51" pubdate>
+              2020-10-17
+            </time>
+          </div>
+        
+        
+          <div class="post-meta mr-3">
+            <i class="iconfont icon-category"></i>
+            
+              <a href="/categories/%E6%96%87%E8%89%BA/">文艺</a>
+            
+          </div>
+        
+        
+          <div class="post-meta">
+            <i class="iconfont icon-tags"></i>
+            
+              <a href="/tags/%E9%9A%8F%E7%AC%94/">随笔</a>
+            
+              <a href="/tags/%E7%A2%8E%E7%A2%8E%E5%BF%B5/">碎碎念</a>
+            
+          </div>
+        
+      </div>
+    </article>
+  </div>
+
+  <div class="row mx-auto index-card">
+    
+    
+    <article class="col-12 col-md-12 mx-auto index-info">
+      <h1 class="index-header">
+        
+        <a href="/2020/SCE-Cryptography-Experiment/" target="_self">
+          SCE-Cryptography-Experiment
+        </a>
+      </h1>
+
+      <p class="index-excerpt">
+        <a href="/2020/SCE-Cryptography-Experiment/" target="_self">
+          
+          
+            
+          
+          
+
+生成 RSA 大素数对1234567891011121314from Crypto.PublicKey import RSARSAkey = RSA.generate(1024)&quot;&quot;&quot;RsaKey(n=1358287182875775047943450195800829272333823298004366507697783191309052108912994136
+        </a>
+      </p>
+
+      <div class="index-btm post-metas">
+        
+          <div class="post-meta mr-3">
+            <i class="iconfont icon-date"></i>
+            <time datetime="2020-09-26 16:23" pubdate>
+              2020-09-26
+            </time>
+          </div>
+        
+        
+          <div class="post-meta mr-3">
+            <i class="iconfont icon-category"></i>
+            
+              <a href="/categories/crypto/">crypto</a>
+            
+          </div>
+        
+        
+          <div class="post-meta">
+            <i class="iconfont icon-tags"></i>
+            
+              <a href="/tags/crypto/">crypto</a>
+            
+              <a href="/tags/rsa/">rsa</a>
+            
+          </div>
+        
+      </div>
+    </article>
+  </div>
+
+  <div class="row mx-auto index-card">
+    
+    
+    <article class="col-12 col-md-12 mx-auto index-info">
+      <h1 class="index-header">
+        
+        <a href="/2020/Unconstrained-Optimization/" target="_self">
+          Unconstrained-Optimization
+        </a>
+      </h1>
+
+      <p class="index-excerpt">
+        <a href="/2020/Unconstrained-Optimization/" target="_self">
+          
+          
+            
+          
+          
+
+无约束优化单变量优化(最小值)`fminbnd’命令–查找单变量函数在定区间上的最小值x = fminbnd(fun,x1,x2) 返回一个值 x，该值是 fun 中描述的标量值函数在区间 x1 &lt; x &lt; x2 中的局部最小值。x = fminbnd(fun,x1,x2,options) 如 options = optimset(‘Display’,’iter’)在常微分方程中有
+        </a>
+      </p>
+
+      <div class="index-btm post-metas">
+        
+          <div class="post-meta mr-3">
+            <i class="iconfont icon-date"></i>
+            <time datetime="2020-09-14 16:50" pubdate>
+              2020-09-14
             </time>
           </div>
         
@@ -279,7 +497,7 @@
             
               <a href="/tags/matlab/">matlab</a>
             
-              <a href="/tags/%E9%9D%9E%E7%BA%BF%E6%80%A7%E6%96%B9%E7%A8%8B/">非线性方程</a>
+              <a href="/tags/%E6%97%A0%E7%BA%A6%E6%9D%9F%E4%BC%98%E5%8C%96/">无约束优化</a>
             
           </div>
         
@@ -293,23 +511,22 @@
     <article class="col-12 col-md-12 mx-auto index-info">
       <h1 class="index-header">
         
-        <a href="/2020/Integer-programming/" target="_self">
-          Integer-programming
+        <a href="/2020/Differential-Equations/" target="_self">
+          Differential-Equations
         </a>
       </h1>
 
       <p class="index-excerpt">
-        <a href="/2020/Integer-programming/" target="_self">
+        <a href="/2020/Differential-Equations/" target="_self">
           
           
             
           
           
 
-整数规划线性规划 LP 问题
-各变量可以是小数来逼近最值
-
-123456789model:max 5*x1+8*x2;x1+x2&lt;6;5*x1+9*x2&lt;&#x3D;45;end输出 Objective value:             41.25000 X1        2.250000            0.000000 X2        3.750000     
+非刚性常微分方程形如类的方程,反求出 y 的值,并最终画出原函数图像
+ode23 – 求解非刚性微分方程 - 低阶方法语法[t,y] = ode23(odefun,tspan,y0)[t,y] = ode23(odefun,tspan,y0,options)[t,y,te,ye,ie] = ode23(odefun,tspan,y0,options)sol = ode23(___)
+说明[t,
         </a>
       </p>
 
@@ -317,7 +534,7 @@
         
           <div class="post-meta mr-3">
             <i class="iconfont icon-date"></i>
-            <time datetime="2020-09-10 16:55" pubdate>
+            <time datetime="2020-09-10 17:04" pubdate>
               2020-09-10
             </time>
           </div>
@@ -334,228 +551,7 @@
           <div class="post-meta">
             <i class="iconfont icon-tags"></i>
             
-              <a href="/tags/lingo/">lingo</a>
-            
-              <a href="/tags/%E6%95%B4%E6%95%B0%E8%A7%84%E5%88%92/">整数规划</a>
-            
-          </div>
-        
-      </div>
-    </article>
-  </div>
-
-  <div class="row mx-auto index-card">
-    
-    
-    <article class="col-12 col-md-12 mx-auto index-info">
-      <h1 class="index-header">
-        
-        <a href="/2020/Constraint-Optimization/" target="_self">
-          Constraint-Optimization
-        </a>
-      </h1>
-
-      <p class="index-excerpt">
-        <a href="/2020/Constraint-Optimization/" target="_self">
-          
-          
-            
-          
-          
-
-约束优化matlab 有几种命令可以求解
-
-linprog求一次线性规划
-
-quadprog求二次规划问题
-
-
-
-书上的方法是将二次规划问题改写成极小化标准形式，获得二次型黑塞矩阵（我没看懂），留一个坑黑塞矩阵：是一个多元函数的二阶偏导数构成的方阵，描述了函数的局部曲率。
-
-一些概念重温黑塞矩阵说白了应该就是对每个变量分别求两次偏导得到的对称正定矩阵。
-linprog语法x = linprog
-        </a>
-      </p>
-
-      <div class="index-btm post-metas">
-        
-          <div class="post-meta mr-3">
-            <i class="iconfont icon-date"></i>
-            <time datetime="2020-09-10 16:51" pubdate>
-              2020-09-10
-            </time>
-          </div>
-        
-        
-          <div class="post-meta mr-3">
-            <i class="iconfont icon-category"></i>
-            
-              <a href="/categories/%E6%95%B0%E5%AD%A6%E5%BB%BA%E6%A8%A1/">数学建模</a>
-            
-          </div>
-        
-        
-          <div class="post-meta">
-            <i class="iconfont icon-tags"></i>
-            
-              <a href="/tags/%E7%BA%A6%E6%9D%9F%E4%BC%98%E5%8C%96/">约束优化</a>
-            
-              <a href="/tags/lingo/">lingo</a>
-            
-          </div>
-        
-      </div>
-    </article>
-  </div>
-
-  <div class="row mx-auto index-card">
-    
-    
-    <article class="col-12 col-md-12 mx-auto index-info">
-      <h1 class="index-header">
-        
-        <a href="/2020/Experience-in-Mathematical-Modeling/" target="_self">
-          Experience-in-Mathematical-Modeling
-        </a>
-      </h1>
-
-      <p class="index-excerpt">
-        <a href="/2020/Experience-in-Mathematical-Modeling/" target="_self">
-          
-          
-            
-          
-          Here's something encrypted, password is required to continue reading.
-        </a>
-      </p>
-
-      <div class="index-btm post-metas">
-        
-          <div class="post-meta mr-3">
-            <i class="iconfont icon-date"></i>
-            <time datetime="2020-09-10 16:49" pubdate>
-              2020-09-10
-            </time>
-          </div>
-        
-        
-          <div class="post-meta mr-3">
-            <i class="iconfont icon-category"></i>
-            
-              <a href="/categories/%E6%95%B0%E5%AD%A6%E5%BB%BA%E6%A8%A1/">数学建模</a>
-            
-          </div>
-        
-        
-          <div class="post-meta">
-            <i class="iconfont icon-tags"></i>
-            
-              <a href="/tags/%E6%95%B0%E6%A8%A1%E7%BB%8F%E9%AA%8C/">数模经验</a>
-            
-          </div>
-        
-      </div>
-    </article>
-  </div>
-
-  <div class="row mx-auto index-card">
-    
-    
-    <article class="col-12 col-md-12 mx-auto index-info">
-      <h1 class="index-header">
-        
-        <a href="/2020/FAQ-and-their-solutions/" target="_self">
-          FAQ-and-their-solutions
-        </a>
-      </h1>
-
-      <p class="index-excerpt">
-        <a href="/2020/FAQ-and-their-solutions/" target="_self">
-          
-          
-            
-          
-          Here's something encrypted, password is required to continue reading.
-        </a>
-      </p>
-
-      <div class="index-btm post-metas">
-        
-          <div class="post-meta mr-3">
-            <i class="iconfont icon-date"></i>
-            <time datetime="2020-09-09 14:52" pubdate>
-              2020-09-09
-            </time>
-          </div>
-        
-        
-          <div class="post-meta mr-3">
-            <i class="iconfont icon-category"></i>
-            
-              <a href="/categories/%E6%95%B0%E5%AD%A6%E5%BB%BA%E6%A8%A1/">数学建模</a>
-            
-          </div>
-        
-        
-          <div class="post-meta">
-            <i class="iconfont icon-tags"></i>
-            
-              <a href="/tags/%E6%95%B0%E6%A8%A1/">数模</a>
-            
-          </div>
-        
-      </div>
-    </article>
-  </div>
-
-  <div class="row mx-auto index-card">
-    
-    
-    <article class="col-12 col-md-12 mx-auto index-info">
-      <h1 class="index-header">
-        
-        <a href="/2020/Sklearn-Draws-in-authority-Examples/" target="_self">
-          Sklearn-Draws-in-authority-Examples
-        </a>
-      </h1>
-
-      <p class="index-excerpt">
-        <a href="/2020/Sklearn-Draws-in-authority-Examples/" target="_self">
-          
-          
-            
-          
-          Here's something encrypted, password is required to continue reading.
-        </a>
-      </p>
-
-      <div class="index-btm post-metas">
-        
-          <div class="post-meta mr-3">
-            <i class="iconfont icon-date"></i>
-            <time datetime="2020-09-08 20:45" pubdate>
-              2020-09-08
-            </time>
-          </div>
-        
-        
-          <div class="post-meta mr-3">
-            <i class="iconfont icon-category"></i>
-            
-              <a href="/categories/python/">python</a>
-            
-          </div>
-        
-        
-          <div class="post-meta">
-            <i class="iconfont icon-tags"></i>
-            
-              <a href="/tags/%E7%BB%98%E5%9B%BE/">绘图</a>
-            
-              <a href="/tags/sklearn/">sklearn</a>
-            
-              <a href="/tags/%E8%AF%84%E4%BB%B7%E6%8C%87%E6%A0%87/">评价指标</a>
+              <a href="/tags/%E5%BE%AE%E5%88%86%E6%96%B9%E7%A8%8B/">微分方程</a>
             
           </div>
         
@@ -567,7 +563,7 @@ linprog语法x = linprog
 
   <nav aria-label="navigation">
     <span class="pagination" id="pagination">
-      <a class="extend prev" rel="prev" href="/page/9/#board"><i class="iconfont icon-arrowleft"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/8/#board">8</a><a class="page-number" href="/page/9/#board">9</a><span class="page-number current">10</span><a class="page-number" href="/page/11/#board">11</a><a class="page-number" href="/page/12/#board">12</a><a class="page-number" href="/page/13/#board">13</a><a class="extend next" rel="next" href="/page/11/#board"><i class="iconfont icon-arrowright"></i></a>
+      <a class="extend prev" rel="prev" href="/page/9/#board"><i class="iconfont icon-arrowleft"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/8/#board">8</a><a class="page-number" href="/page/9/#board">9</a><span class="page-number current">10</span><a class="page-number" href="/page/11/#board">11</a><a class="page-number" href="/page/12/#board">12</a><span class="space">&hellip;</span><a class="page-number" href="/page/14/#board">14</a><a class="extend next" rel="next" href="/page/11/#board"><i class="iconfont icon-arrowright"></i></a>
     </span>
   </nav>
 
