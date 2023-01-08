@@ -1575,7 +1575,7 @@ post-custom {
   float: right;
 }
 .markdown-body p {
-  margin-bottom: 1px;
+  margin-bottom: 12px;
 }
 @-moz-keyframes post-prev-anim {
   0% {
