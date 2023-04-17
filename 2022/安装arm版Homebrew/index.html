@@ -23,14 +23,14 @@
 <meta property="og:site_name" content="M@tr1xの日常">
 <meta property="og:description" content="参考文献 https:&#x2F;&#x2F;www.bilibili.com&#x2F;read&#x2F;cv14064572  实际安装第一步：设置中科大源 1HOMEBREW_CORE_GIT_REMOTE&#x3D;https:&#x2F;&#x2F;mirrors.ustc.edu.cn&#x2F;homebrew-core.git  第二步：安装 1&#x2F;bin&#x2F;bash -c &quot;$(curl -fsSL https:&#x2F;&#x2F;cdn.jsdelivr.net&#x2F;">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="https://www.blog.hackerjerry.top/2022/%E5%AE%89%E8%A3%85arm%E7%89%88Homebrew/image/%E6%88%AA%E5%B1%8F2022-01-26%20%E4%B8%8B%E5%8D%885.22.38.png#crop=0&crop=0&crop=1&crop=1&id=vhAiJ&originalType=binary%E2%88%B6=1&rotation=0&showTitle=false&status=done&style=none&title=">
-<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2022/png/1629942/1644062507699-aaeeb80c-f3dc-4b2a-8a9d-35961a6382ea.png#crop=0&crop=0&crop=1&crop=1&id=rPzAA&originHeight=92&originWidth=1260&originalType=binary%E2%88%B6=1&rotation=0&showTitle=false&status=done&style=none&title=">
+<meta property="og:image" content="https://www.blog.hackerjerry.top/2022/%E5%AE%89%E8%A3%85arm%E7%89%88Homebrew/image/%E6%88%AA%E5%B1%8F2022-01-26%20%E4%B8%8B%E5%8D%885.22.38.png#id=vhAiJ&originalType=binary%E2%88%B6=1&rotation=0&showTitle=false&status=done&style=none&title=">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2022/png/1629942/1644062507699-aaeeb80c-f3dc-4b2a-8a9d-35961a6382ea.png#id=rPzAA&originHeight=92&originWidth=1260&originalType=binary%E2%88%B6=1&rotation=0&showTitle=false&status=done&style=none&title=">
 <meta property="article:published_time" content="2022-02-05T12:01:47.000Z">
-<meta property="article:modified_time" content="2023-01-08T08:10:27.529Z">
+<meta property="article:modified_time" content="2023-04-17T11:57:02.730Z">
 <meta property="article:author" content="M@tr1x">
 <meta property="article:tag" content="踩坑教程">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:image" content="https://www.blog.hackerjerry.top/2022/%E5%AE%89%E8%A3%85arm%E7%89%88Homebrew/image/%E6%88%AA%E5%B1%8F2022-01-26%20%E4%B8%8B%E5%8D%885.22.38.png#crop=0&crop=0&crop=1&crop=1&id=vhAiJ&originalType=binary%E2%88%B6=1&rotation=0&showTitle=false&status=done&style=none&title=">
+<meta name="twitter:image" content="https://www.blog.hackerjerry.top/2022/%E5%AE%89%E8%A3%85arm%E7%89%88Homebrew/image/%E6%88%AA%E5%B1%8F2022-01-26%20%E4%B8%8B%E5%8D%885.22.38.png#id=vhAiJ&originalType=binary%E2%88%B6=1&rotation=0&showTitle=false&status=done&style=none&title=">
   
   <title>安装arm版Homebrew - M@tr1xの日常</title>
 
@@ -295,7 +295,7 @@
             
               <p class="note note-info">
                 
-                  本文最后更新于：2023年1月8日 下午
+                  本文最后更新于：2023年4月17日 晚上
                 
               </p>
             
@@ -309,13 +309,13 @@
 <p>第二步：安装</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs Bash">/bin/bash -c <span class="hljs-string">&quot;<span class="hljs-subst">$(curl -fsSL https://cdn.jsdelivr.net/gh/ineo6/homebrew-install/install.sh)</span>&quot;</span><br></code></pre></td></tr></table></figure>
 
-<p><img src="image/%E6%88%AA%E5%B1%8F2022-01-26%20%E4%B8%8B%E5%8D%885.22.38.png#crop=0&crop=0&crop=1&crop=1&id=vhAiJ&originalType=binary%E2%88%B6=1&rotation=0&showTitle=false&status=done&style=none&title=" srcset="/img/loading.gif" lazyload><br>第三步：添加配置文件</p>
+<p><img src="image/%E6%88%AA%E5%B1%8F2022-01-26%20%E4%B8%8B%E5%8D%885.22.38.png#id=vhAiJ&originalType=binary%E2%88%B6=1&rotation=0&showTitle=false&status=done&style=none&title=" srcset="/img/loading.gif" lazyload><br>第三步：添加配置文件</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs Bash"><span class="hljs-built_in">cd</span> ~<br>touch .zshrc<br>open -e .zshrc<br>复制进去<br><span class="hljs-built_in">export</span> PATH=/opt/homebrew/bin:<span class="hljs-variable">$PATH</span><br></code></pre></td></tr></table></figure>
 
 <p>最后更新一下配置文件：</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs Bash"><span class="hljs-built_in">source</span> ~/.zshrc<br></code></pre></td></tr></table></figure>
 
-<p><img src="https://cdn.nlark.com/yuque/0/2022/png/1629942/1644062507699-aaeeb80c-f3dc-4b2a-8a9d-35961a6382ea.png#crop=0&crop=0&crop=1&crop=1&id=rPzAA&originHeight=92&originWidth=1260&originalType=binary%E2%88%B6=1&rotation=0&showTitle=false&status=done&style=none&title=" srcset="/img/loading.gif" lazyload><br>大功告成。最后，brew update 就好</p>
+<p><img src="https://cdn.nlark.com/yuque/0/2022/png/1629942/1644062507699-aaeeb80c-f3dc-4b2a-8a9d-35961a6382ea.png#id=rPzAA&originHeight=92&originWidth=1260&originalType=binary%E2%88%B6=1&rotation=0&showTitle=false&status=done&style=none&title=" srcset="/img/loading.gif" lazyload><br>大功告成。最后，brew update 就好</p>
 <h1 id="更换源"><a href="#更换源" class="headerlink" title="更换源"></a>更换源</h1><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs Bash"><span class="hljs-comment"># 替换brew.git</span><br><span class="hljs-built_in">cd</span> <span class="hljs-string">&quot;<span class="hljs-subst">$(brew --repo)</span>&quot;</span><br>git remote <span class="hljs-built_in">set</span>-url origin https://mirrors.tuna.tsinghua.edu.cn/git/homebrew/brew.git<br><span class="hljs-comment"># 替换homebrew-core.git</span><br><span class="hljs-built_in">cd</span> <span class="hljs-string">&quot;<span class="hljs-subst">$(brew --repo)</span>/Library/Taps/homebrew/homebrew-core&quot;</span><br>git remote <span class="hljs-built_in">set</span>-url origin https://mirrors.tuna.tsinghua.edu.cn/git/homebrew/homebrew-core.git<br><span class="hljs-comment"># 刷新源</span><br>brew update<br></code></pre></td></tr></table></figure>
 
 <h1 id="碎碎念"><a href="#碎碎念" class="headerlink" title="碎碎念"></a>碎碎念</h1><p><a target="_blank" rel="noopener" href="https://blog.csdn.net/liaowenxiong/article/details/119008586">https://blog.csdn.net/liaowenxiong/article/details/119008586</a><br>文章作者说 brew cask 已经集成到 brew 里面了，所以就不需要独立安装它了，但是！我安了之后还是显示 command not found，好迷啊。</p>

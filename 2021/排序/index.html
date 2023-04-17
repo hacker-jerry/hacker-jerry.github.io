@@ -23,13 +23,13 @@
 <meta property="og:site_name" content="M@tr1xの日常">
 <meta property="og:description" content="把各类排序做一遍梳理。">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2021/gif/1629942/1624000947793-fff1bd3e-dd53-4884-bbc8-918dec271a9c.gif#height=387&id=u26cb77fa&margin=%5Bobject%20Object%5D&originHeight=538&originWidth=955&originalType=binary%E2%88%B6=1&status=done&style=none&width=687">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2021/gif/1629942/1624000947793-fff1bd3e-dd53-4884-bbc8-918dec271a9c.gif#height=387&id=u26cb77fa&originHeight=538&originWidth=955&originalType=binary%E2%88%B6=1&status=done&style=none&width=687">
 <meta property="article:published_time" content="2021-06-18T07:20:40.000Z">
-<meta property="article:modified_time" content="2023-01-08T08:10:27.529Z">
+<meta property="article:modified_time" content="2023-04-17T11:57:02.730Z">
 <meta property="article:author" content="M@tr1x">
 <meta property="article:tag" content="CTF,白帽子,Pwn,Web">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:image" content="https://cdn.nlark.com/yuque/0/2021/gif/1629942/1624000947793-fff1bd3e-dd53-4884-bbc8-918dec271a9c.gif#height=387&id=u26cb77fa&margin=%5Bobject%20Object%5D&originHeight=538&originWidth=955&originalType=binary%E2%88%B6=1&status=done&style=none&width=687">
+<meta name="twitter:image" content="https://cdn.nlark.com/yuque/0/2021/gif/1629942/1624000947793-fff1bd3e-dd53-4884-bbc8-918dec271a9c.gif#height=387&id=u26cb77fa&originHeight=538&originWidth=955&originalType=binary%E2%88%B6=1&status=done&style=none&width=687">
   
   <title>排序 - M@tr1xの日常</title>
 
@@ -294,7 +294,7 @@
             
               <p class="note note-info">
                 
-                  本文最后更新于：2023年1月8日 下午
+                  本文最后更新于：2023年4月17日 晚上
                 
               </p>
             
@@ -319,7 +319,7 @@
 <figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs cpp"><span class="hljs-keyword">template</span> &lt;<span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">T</span>&gt;</span><br><span class="hljs-class"><span class="hljs-title">void</span> <span class="hljs-title">Swap</span>(<span class="hljs-title">T</span> &amp; <span class="hljs-title">x</span>, <span class="hljs-title">T</span> &amp; <span class="hljs-title">y</span>)</span><br><span class="hljs-class">&#123;</span><br>    T tmp = x;<br>    x = y;<br>    y = tmp;<br>&#125;<br></code></pre></td></tr></table></figure>
 
 <p>就像这样，它用 T 代替了普通函数定义中的数据类型，代表一种泛化类型。<br>T 是类型参数，代表类型。<br>编译器由模板自动生成函数时，会用具体的类型名对模板中所有的类型参数进行替换，其他部分则原封不动地保留。同一个类型参数只能替换为同一种类型。编译器在编译到调用函数模板的语句时，会根据实参的类型判断该如何替换模板中的类型参数。</p>
-<h1 id="选择排序"><a href="#选择排序" class="headerlink" title="选择排序"></a>选择排序</h1><p>首先，找到数组中最小的元素，拎出来，将它和数组的第一个元素交换位置，第二步，在剩下的元素中继续寻找最小的元素，拎出来，和数组的第二个元素交换位置，如此循环，直到整个数组排序完成。<br><img src="https://cdn.nlark.com/yuque/0/2021/gif/1629942/1624000947793-fff1bd3e-dd53-4884-bbc8-918dec271a9c.gif#height=387&id=u26cb77fa&margin=%5Bobject%20Object%5D&originHeight=538&originWidth=955&originalType=binary%E2%88%B6=1&status=done&style=none&width=687" srcset="/img/loading.gif" lazyload></p>
+<h1 id="选择排序"><a href="#选择排序" class="headerlink" title="选择排序"></a>选择排序</h1><p>首先，找到数组中最小的元素，拎出来，将它和数组的第一个元素交换位置，第二步，在剩下的元素中继续寻找最小的元素，拎出来，和数组的第二个元素交换位置，如此循环，直到整个数组排序完成。<br><img src="https://cdn.nlark.com/yuque/0/2021/gif/1629942/1624000947793-fff1bd3e-dd53-4884-bbc8-918dec271a9c.gif#height=387&id=u26cb77fa&originHeight=538&originWidth=955&originalType=binary%E2%88%B6=1&status=done&style=none&width=687" srcset="/img/loading.gif" lazyload></p>
 <figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><code class="hljs cpp"> <span class="hljs-keyword">int</span> length = <span class="hljs-keyword">sizeof</span>(num)/<span class="hljs-keyword">sizeof</span>(num[<span class="hljs-number">0</span>]);<br><span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">SelectSort</span><span class="hljs-params">(<span class="hljs-keyword">int</span> num[],<span class="hljs-keyword">int</span> length)</span></span>&#123;<br><br>    <span class="hljs-keyword">for</span>(<span class="hljs-keyword">int</span> i = <span class="hljs-number">0</span>;i &lt; length;i++)&#123;<br>        <span class="hljs-keyword">int</span> min = i;<span class="hljs-comment">//只需要记录最小值的位置即可！</span><br>        <span class="hljs-keyword">for</span>(<span class="hljs-keyword">int</span> j = i+<span class="hljs-number">1</span>; j &lt; length;j++)&#123;<br>            <span class="hljs-keyword">if</span> (num[min] &gt; num[j])&#123;<br>                min = j;<span class="hljs-comment">//更新最小位置</span><br>            &#125;<br>        &#125;<br>        <span class="hljs-keyword">if</span>(i!=min)&#123;<br>            <span class="hljs-keyword">int</span> temp = num[min];<br>            num[min] = num[i];<br>            num[i] = temp;<br>        &#125;<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
 
 <p>双层循环，时间复杂度和冒泡一模一样，都是 O(n2)。</p>

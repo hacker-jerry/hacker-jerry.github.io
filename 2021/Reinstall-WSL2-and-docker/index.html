@@ -23,15 +23,15 @@
 <meta property="og:site_name" content="M@tr1xの日常">
 <meta property="og:description" content="装机一时爽，重装 xxx。">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2021/png/1629942/1615692482824-96994f4c-6ca6-4b13-9497-54d104220e14.png#align=left&display=inline&height=132&margin=%5Bobject%20Object%5D&name=image.png&originHeight=264&originWidth=517&size=267348&status=done&style=none&width=258.5">
-<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2021/png/1629942/1615709708737-5cb2e732-1240-45a9-83ed-0fe0287a7fd2.png#align=left&display=inline&height=423&margin=%5Bobject%20Object%5D&name=image.png&originHeight=845&originWidth=1453&size=1899574&status=done&style=none&width=726.5">
-<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2021/png/1629942/1615710515875-b7251d8c-1514-4775-8d5e-c801cbcae2dc.png#align=left&display=inline&height=398&margin=%5Bobject%20Object%5D&name=image.png&originHeight=796&originWidth=1319&size=148374&status=done&style=none&width=659.5">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2021/png/1629942/1615692482824-96994f4c-6ca6-4b13-9497-54d104220e14.png#align=left&display=inline&height=132&name=image.png&originHeight=264&originWidth=517&size=267348&status=done&style=none&width=258.5">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2021/png/1629942/1615709708737-5cb2e732-1240-45a9-83ed-0fe0287a7fd2.png#align=left&display=inline&height=423&name=image.png&originHeight=845&originWidth=1453&size=1899574&status=done&style=none&width=726.5">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2021/png/1629942/1615710515875-b7251d8c-1514-4775-8d5e-c801cbcae2dc.png#align=left&display=inline&height=398&name=image.png&originHeight=796&originWidth=1319&size=148374&status=done&style=none&width=659.5">
 <meta property="article:published_time" content="2021-03-14T02:40:01.000Z">
-<meta property="article:modified_time" content="2023-01-08T08:10:27.533Z">
+<meta property="article:modified_time" content="2023-04-17T11:57:02.734Z">
 <meta property="article:author" content="M@tr1x">
 <meta property="article:tag" content="CTF,白帽子,Pwn,Web">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:image" content="https://cdn.nlark.com/yuque/0/2021/png/1629942/1615692482824-96994f4c-6ca6-4b13-9497-54d104220e14.png#align=left&display=inline&height=132&margin=%5Bobject%20Object%5D&name=image.png&originHeight=264&originWidth=517&size=267348&status=done&style=none&width=258.5">
+<meta name="twitter:image" content="https://cdn.nlark.com/yuque/0/2021/png/1629942/1615692482824-96994f4c-6ca6-4b13-9497-54d104220e14.png#align=left&display=inline&height=132&name=image.png&originHeight=264&originWidth=517&size=267348&status=done&style=none&width=258.5">
   
   <title>Reinstall-WSL2-and-docker - M@tr1xの日常</title>
 
@@ -296,7 +296,7 @@
             
               <p class="note note-info">
                 
-                  本文最后更新于：2023年1月8日 下午
+                  本文最后更新于：2023年4月17日 晚上
                 
               </p>
             
@@ -304,7 +304,7 @@
               <p>装机一时爽，重装 xxx。</p>
 <a id="more"></a>
 
-<h1 id="装-wsl2"><a href="#装-wsl2" class="headerlink" title="装 wsl2"></a>装 wsl2</h1><p>首先，这个不要在 MS 里安装，因为默认是 C 盘，当然，如果你 C 盘很大但我没说。<br>如果安在 C 盘可以通过导出到别的盘，就是有点耗时间。<br>在这里，参考<a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/263089007">https://zhuanlan.zhihu.com/p/263089007</a>，可以直接下载对应的安装包，然后自定义路径，非常方便了。<br>然后安装镜像快照，防止由于 upgrade 导致的崩溃。<br>我尝试安装了了 timeshift<br><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/94105263">https://zhuanlan.zhihu.com/p/94105263</a><br><a target="_blank" rel="noopener" href="https://prpr.fr/2020/04/01/2020-04-01-1/">https://prpr.fr/2020/04/01/2020-04-01-1/</a><br>但是在使用命令行的时候，检查不到盘符？？<br><img src="https://cdn.nlark.com/yuque/0/2021/png/1629942/1615692482824-96994f4c-6ca6-4b13-9497-54d104220e14.png#align=left&display=inline&height=132&margin=%5Bobject%20Object%5D&name=image.png&originHeight=264&originWidth=517&size=267348&status=done&style=none&width=258.5" srcset="/img/loading.gif" lazyload alt="image.png"><br>尬住，于是我又好一顿查。<br>在 wsl 的官方仓库中，有人在 2017 年就提出了这个问题<a target="_blank" rel="noopener" href="https://github.com/microsoft/WSL/issues/2147">https://github.com/microsoft/WSL/issues/2147</a>，但是官方的回答是，没有计划。无 fuck 说。<br>网上找了一顿，没有相关教程，随作罢，只能<strong>禁用 upgrade!!!!!</strong></p>
+<h1 id="装-wsl2"><a href="#装-wsl2" class="headerlink" title="装 wsl2"></a>装 wsl2</h1><p>首先，这个不要在 MS 里安装，因为默认是 C 盘，当然，如果你 C 盘很大但我没说。<br>如果安在 C 盘可以通过导出到别的盘，就是有点耗时间。<br>在这里，参考<a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/263089007">https://zhuanlan.zhihu.com/p/263089007</a>，可以直接下载对应的安装包，然后自定义路径，非常方便了。<br>然后安装镜像快照，防止由于 upgrade 导致的崩溃。<br>我尝试安装了了 timeshift<br><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/94105263">https://zhuanlan.zhihu.com/p/94105263</a><br><a target="_blank" rel="noopener" href="https://prpr.fr/2020/04/01/2020-04-01-1/">https://prpr.fr/2020/04/01/2020-04-01-1/</a><br>但是在使用命令行的时候，检查不到盘符？？<br><img src="https://cdn.nlark.com/yuque/0/2021/png/1629942/1615692482824-96994f4c-6ca6-4b13-9497-54d104220e14.png#align=left&display=inline&height=132&name=image.png&originHeight=264&originWidth=517&size=267348&status=done&style=none&width=258.5" srcset="/img/loading.gif" lazyload alt="image.png"><br>尬住，于是我又好一顿查。<br>在 wsl 的官方仓库中，有人在 2017 年就提出了这个问题<a target="_blank" rel="noopener" href="https://github.com/microsoft/WSL/issues/2147">https://github.com/microsoft/WSL/issues/2147</a>，但是官方的回答是，没有计划。无 fuck 说。<br>网上找了一顿，没有相关教程，随作罢，只能<strong>禁用 upgrade!!!!!</strong></p>
 <p>然后需要，添加源！而非全部替换成阿里的。</p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs python">sudo nano /etc/apt/sources.list<br></code></pre></td></tr></table></figure>
 
@@ -312,7 +312,7 @@
 
 <h1 id="su-root-认证失败如何解决"><a href="#su-root-认证失败如何解决" class="headerlink" title="su root 认证失败如何解决"></a>su root 认证失败如何解决</h1><p>刚开始安装虚拟机操作系统时，可能会遇到 su root 认证失败的情况，这是因为 root 没有初始化，初始化的步骤如下：ctr+Alt+T 打开终端，然后输入 sudo passwd(不是 password) root，之后会提示 Enter new UNIX password: 输入新密码，然后提示 Retype new UNIX password: 再次输入上次输入的密码就 OK 了<br>————————————————<br>版权声明：本文为 CSDN 博主「四季帆」的原创文章，遵循 CC 4.0 BY-SA 版权协议，转载请附上原文出处链接及本声明。<br>原文链接：<a target="_blank" rel="noopener" href="https://blog.csdn.net/qq_41076734/article/details/79518361">https://blog.csdn.net/qq_41076734/article/details/79518361</a></p>
 <h1 id="安装-docker"><a href="#安装-docker" class="headerlink" title="安装 docker"></a>安装 docker</h1><p><a target="_blank" rel="noopener" href="https://www.jianshu.com/p/a20c2d58eaac?utm_campaign=haruki">https://www.jianshu.com/p/a20c2d58eaac?utm_campaign=haruki</a></p>
-<h1 id="终端快捷键"><a href="#终端快捷键" class="headerlink" title="终端快捷键"></a>终端快捷键</h1><p><img src="https://cdn.nlark.com/yuque/0/2021/png/1629942/1615709708737-5cb2e732-1240-45a9-83ed-0fe0287a7fd2.png#align=left&display=inline&height=423&margin=%5Bobject%20Object%5D&name=image.png&originHeight=845&originWidth=1453&size=1899574&status=done&style=none&width=726.5" srcset="/img/loading.gif" lazyload alt="image.png"><br>分屏快捷键如下：</p>
+<h1 id="终端快捷键"><a href="#终端快捷键" class="headerlink" title="终端快捷键"></a>终端快捷键</h1><p><img src="https://cdn.nlark.com/yuque/0/2021/png/1629942/1615709708737-5cb2e732-1240-45a9-83ed-0fe0287a7fd2.png#align=left&display=inline&height=423&name=image.png&originHeight=845&originWidth=1453&size=1899574&status=done&style=none&width=726.5" srcset="/img/loading.gif" lazyload alt="image.png"><br>分屏快捷键如下：</p>
 <ul>
 <li>水平分屏：Alt + Shift + 减号</li>
 <li>垂直分屏：Alt + Shift + 加号</li>
@@ -323,7 +323,7 @@
 </blockquote>
 </li>
 </ul>
-<h1 id="运行-GUI-程序"><a href="#运行-GUI-程序" class="headerlink" title="运行 GUI 程序"></a>运行 GUI 程序</h1><p>VcXsrv 差评，步骤太多，关键还有问题，它透不过防火墙，因为防火墙里就找不到这个东西！！！！<br>明显人就傻了。<br>但是，机智如我，在 b 站找到了新的教程，MobaXterm，新宠，无敌。<br><a target="_blank" rel="noopener" href="https://www.bilibili.com/read/cv6585580/">https://www.bilibili.com/read/cv6585580/</a><br>效果如下：<br><img src="https://cdn.nlark.com/yuque/0/2021/png/1629942/1615710515875-b7251d8c-1514-4775-8d5e-c801cbcae2dc.png#align=left&display=inline&height=398&margin=%5Bobject%20Object%5D&name=image.png&originHeight=796&originWidth=1319&size=148374&status=done&style=none&width=659.5" srcset="/img/loading.gif" lazyload alt="image.png"><br>真的简单，巨省事儿。谢谢作者！</p>
+<h1 id="运行-GUI-程序"><a href="#运行-GUI-程序" class="headerlink" title="运行 GUI 程序"></a>运行 GUI 程序</h1><p>VcXsrv 差评，步骤太多，关键还有问题，它透不过防火墙，因为防火墙里就找不到这个东西！！！！<br>明显人就傻了。<br>但是，机智如我，在 b 站找到了新的教程，MobaXterm，新宠，无敌。<br><a target="_blank" rel="noopener" href="https://www.bilibili.com/read/cv6585580/">https://www.bilibili.com/read/cv6585580/</a><br>效果如下：<br><img src="https://cdn.nlark.com/yuque/0/2021/png/1629942/1615710515875-b7251d8c-1514-4775-8d5e-c801cbcae2dc.png#align=left&display=inline&height=398&name=image.png&originHeight=796&originWidth=1319&size=148374&status=done&style=none&width=659.5" srcset="/img/loading.gif" lazyload alt="image.png"><br>真的简单，巨省事儿。谢谢作者！</p>
 
             </div>
             <div style="text-align:right"> <!-- 自己添加的“分享到”模块：开始。用的是 social-share.js。让所有的分享按钮右对齐-->
