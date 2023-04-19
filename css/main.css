@@ -1576,6 +1576,7 @@ post-custom {
 }
 .markdown-body p {
   margin-bottom: 12px;
+  font-family: 'LXGW wenkai';
 }
 @-moz-keyframes post-prev-anim {
   0% {
