@@ -9,3 +9,7 @@
   src: local('LXGW wenkai'), url('../fonts/LXGWWenKaiMono-Regular.woff') format('woff');
 }
 
+.h2, h2 {
+  font-size: 3rem;
+  font-family: '方正小标宋_GBK';
+}
