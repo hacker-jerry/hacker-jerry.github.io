@@ -23,14 +23,14 @@
 <meta property="og:site_name" content="M@tr1xの日常">
 <meta property="og:description" content="全局 创建状态树状态数据库的定义如下： 12345678type StateDB struct &amp;#123;	db   Database  &#x2F;&#x2F;操作状态的底层数据库，在实例化 StateDB 时指定 ②。	trie trie.Trie &#x2F;&#x2F;世界状态所在的树实例对象	stateObjects      map[account.Address]*account.StateObject &#x2F;&#x2F;已账户地">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2021/png/1629942/1620032334655-cae41343-4469-4e98-8487-8743491bf5f4.png#clientId=u1d1d90de-5c3e-4&from=paste&height=344&id=ub777611d&name=image.png&originHeight=688&originWidth=1306&originalType=binary&size=308117&status=done&style=none&taskId=u950bfa17-cd9c-4cde-b1d9-eb903342901&width=653">
-<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2021/png/1629942/1620044974426-9a7f13aa-86f6-4206-9cef-74b9cdf360e4.png#clientId=u1d1d90de-5c3e-4&from=paste&height=200&id=u4a6a08ef&name=image.png&originHeight=399&originWidth=969&originalType=binary&size=146076&status=done&style=none&taskId=ude525437-624d-4812-952f-2b51a1576ff&width=484.5">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2021/png/1629942/1620032334655-cae41343-4469-4e98-8487-8743491bf5f4.png#clientId=u1d1d90de-5c3e-4&from=paste&height=344&id=ub777611d&originHeight=688&originWidth=1306&originalType=binary&size=308117&status=done&style=none&taskId=u950bfa17-cd9c-4cde-b1d9-eb903342901&width=653">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2021/png/1629942/1620044974426-9a7f13aa-86f6-4206-9cef-74b9cdf360e4.png#clientId=u1d1d90de-5c3e-4&from=paste&height=200&id=u4a6a08ef&originHeight=399&originWidth=969&originalType=binary&size=146076&status=done&style=none&taskId=ude525437-624d-4812-952f-2b51a1576ff&width=484.5">
 <meta property="article:published_time" content="2021-05-03T08:22:12.000Z">
-<meta property="article:modified_time" content="2023-04-25T10:09:11.888Z">
+<meta property="article:modified_time" content="2023-06-01T07:09:32.259Z">
 <meta property="article:author" content="M@tr1x">
 <meta property="article:tag" content="CTF,白帽子,Pwn,Web">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:image" content="https://cdn.nlark.com/yuque/0/2021/png/1629942/1620032334655-cae41343-4469-4e98-8487-8743491bf5f4.png#clientId=u1d1d90de-5c3e-4&from=paste&height=344&id=ub777611d&name=image.png&originHeight=688&originWidth=1306&originalType=binary&size=308117&status=done&style=none&taskId=u950bfa17-cd9c-4cde-b1d9-eb903342901&width=653">
+<meta name="twitter:image" content="https://cdn.nlark.com/yuque/0/2021/png/1629942/1620032334655-cae41343-4469-4e98-8487-8743491bf5f4.png#clientId=u1d1d90de-5c3e-4&from=paste&height=344&id=ub777611d&originHeight=688&originWidth=1306&originalType=binary&size=308117&status=done&style=none&taskId=u950bfa17-cd9c-4cde-b1d9-eb903342901&width=653">
   
     <style type="text/css">
 @import url("https://cdn.jsdelivr.net/gh/slince/social-share.js/dist/social-share.min.css");
@@ -287,14 +287,14 @@
             
               <p class="note note-info">
                 
-                  本文最后更新于：2023年4月25日 晚上
+                  本文最后更新于：2023年6月1日 下午
                 
               </p>
             
             <div class="markdown-body">
               <a id="more"></a>
 
-<h1 id="全局"><a href="#全局" class="headerlink" title="全局"></a>全局</h1><p><img src="https://cdn.nlark.com/yuque/0/2021/png/1629942/1620032334655-cae41343-4469-4e98-8487-8743491bf5f4.png#clientId=u1d1d90de-5c3e-4&from=paste&height=344&id=ub777611d&name=image.png&originHeight=688&originWidth=1306&originalType=binary&size=308117&status=done&style=none&taskId=u950bfa17-cd9c-4cde-b1d9-eb903342901&width=653" srcset="/img/loading.gif" lazyload alt="image.png"><br><img src="https://cdn.nlark.com/yuque/0/2021/png/1629942/1620044974426-9a7f13aa-86f6-4206-9cef-74b9cdf360e4.png#clientId=u1d1d90de-5c3e-4&from=paste&height=200&id=u4a6a08ef&name=image.png&originHeight=399&originWidth=969&originalType=binary&size=146076&status=done&style=none&taskId=ude525437-624d-4812-952f-2b51a1576ff&width=484.5" srcset="/img/loading.gif" lazyload alt="image.png"></p>
+<h1 id="全局"><a href="#全局" class="headerlink" title="全局"></a>全局</h1><p><img src="https://cdn.nlark.com/yuque/0/2021/png/1629942/1620032334655-cae41343-4469-4e98-8487-8743491bf5f4.png#clientId=u1d1d90de-5c3e-4&from=paste&height=344&id=ub777611d&originHeight=688&originWidth=1306&originalType=binary&size=308117&status=done&style=none&taskId=u950bfa17-cd9c-4cde-b1d9-eb903342901&width=653" srcset="/img/loading.gif" lazyload alt="image.png"><br><img src="https://cdn.nlark.com/yuque/0/2021/png/1629942/1620044974426-9a7f13aa-86f6-4206-9cef-74b9cdf360e4.png#clientId=u1d1d90de-5c3e-4&from=paste&height=200&id=u4a6a08ef&originHeight=399&originWidth=969&originalType=binary&size=146076&status=done&style=none&taskId=ude525437-624d-4812-952f-2b51a1576ff&width=484.5" srcset="/img/loading.gif" lazyload alt="image.png"></p>
 <h1 id="创建状态树"><a href="#创建状态树" class="headerlink" title="创建状态树"></a>创建状态树</h1><p>状态数据库的定义如下：</p>
 <figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs go"><span class="hljs-keyword">type</span> StateDB <span class="hljs-keyword">struct</span> &#123;<br>	db   Database  <span class="hljs-comment">//操作状态的底层数据库，在实例化 StateDB 时指定 ②。</span><br>	trie trie.Trie <span class="hljs-comment">//世界状态所在的树实例对象</span><br>	stateObjects      <span class="hljs-keyword">map</span>[account.Address]*account.StateObject <span class="hljs-comment">//已账户地址为键的账户状态对象，能够在内存中维护使用过的账户</span><br>	stateObjectsDirty <span class="hljs-keyword">map</span>[account.Address]<span class="hljs-keyword">struct</span>&#123;&#125;<span class="hljs-comment">//标记被修改过的账户</span><br>    dbErr  error<br>	lock sync.Mutex<br>&#125;<br></code></pre></td></tr></table></figure>
 
